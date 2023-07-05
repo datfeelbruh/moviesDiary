@@ -1,0 +1,90 @@
+plugins {
+	id 'java'
+	id 'application'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.liquibase.gradle' version '2.2.0'
+}
+
+group = 'sobad.code'
+version = '0.0.1-SNAPSHOT'
+
+application {
+	mainClass = "sobad.code.movies_diary.MoviesDiaryApplication"
+}
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation (
+			'org.springframework.boot:spring-boot-starter-data-jpa',
+			'org.springframework.boot:spring-boot-starter-web',
+			'org.springframework.boot:spring-boot-starter-actuator',
+			'org.springframework.boot:spring-boot-starter-validation',
+			'org.springframework.boot:spring-boot-starter-security',
+			'org.springdoc:springdoc-openapi-ui:1.6.15',
+			'org.liquibase:liquibase-core',
+			'com.querydsl:querydsl-jpa:5.0.0:jakarta',
+			'io.jsonwebtoken:jjwt:0.9.1'
+	)
+	compileOnly (
+			'org.projectlombok:lombok'
+	)
+	developmentOnly (
+			'org.springframework.boot:spring-boot-devtools'
+	)
+	runtimeOnly (
+			'org.postgresql:postgresql',
+			'com.h2database:h2'
+	)
+	annotationProcessor (
+			'org.projectlombok:lombok',
+			'com.querydsl:querydsl-apt:5.0.0:jakarta',
+			'jakarta.persistence:jakarta.persistence-api:3.1.0'
+	)
+	testImplementation (
+			'org.springframework.boot:spring-boot-starter-test',
+			'org.springframework.security:spring-security-test'
+	)
+	liquibaseRuntime(
+			sourceSets.main.output,
+			'org.liquibase:liquibase-core',
+			'info.picocli:picocli:4.7.1',
+			'org.liquibase.ext:liquibase-hibernate6:4.21.1',
+			'org.springframework.boot:spring-boot-starter-data-jpa',
+			'com.h2database:h2',
+	)
+}
+
+liquibase {
+	activities {
+		main {
+			changeLogFile 'src/main/resources/db/changelog/changelog-master.yaml'
+			url 'jdbc:h2:./test'
+			referenceUrl 'hibernate:spring:movies_diary.entities' +
+					'?dialect=org.hibernate.dialect.H2Dialect' +
+					'&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy'
+		}
+	}
+}
+
+
+diffChangelog {
+	dependsOn compileJava
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

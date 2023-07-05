@@ -1,0 +1,24 @@
+{
+  "userRating": 7.0,
+  "review": "Пойдет",
+  "kpId": 1008445,
+  "movieName": "Человек-паук: Вдали от дома",
+  "releaseYear": 2019,
+  "kpRating": 7.424,
+  "imdbRating": 7.4,
+  "posterUrl": "https://st.kp.yandex.net/images/film_big/1008445.jpg",
+  "genres": [
+    {
+      "name": "боевик"
+    },
+    {
+      "name": "фантастика"
+    },
+    {
+      "name": "приключения"
+    },
+    {
+      "name": "комедия"
+    }
+  ]
+}

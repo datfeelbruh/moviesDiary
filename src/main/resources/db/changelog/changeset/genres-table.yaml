@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_genres_table
+      author: sobad
+      changes:
+        - createTable:
+            tableName: genres
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              -  column:
+                   name: name
+                   type: varchar(255)
+                   constraints:
+                     nullable: false
