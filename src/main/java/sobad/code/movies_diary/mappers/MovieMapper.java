@@ -18,8 +18,6 @@ import java.util.HashSet;
 @RequiredArgsConstructor
 public class MovieMapper {
     private final GenreService genreService;
-    private final MovieRatingService movieRatingService;
-    private final UserService userService;
 
     public Movie mapFromRequestDto(MovieDtoRequest movieDtoRequest) {
         return Movie.builder()
@@ -33,27 +31,6 @@ public class MovieMapper {
                 .genres(genreService.getGenres(movieDtoRequest.getGenres()))
                 .build();
     }
-
-//    public MovieDtoResponse mapFromEntityToResponseDto(Movie movie) {
-//       return MovieDtoResponse.builder()
-//                .id(movie.getId())
-//                .movieName(movie.getMovieName())
-//                .kpId(movie.getKpId())
-//                .imdbRating(movie.getImdbRating())
-//                .userRating(movieRatingService.getRatingById(movie.getId(), userService.getCurrentUser().getId()))
-//                .averageRating(
-//                        movieRatingService.calcAverageRating(movie.getId())
-//                                .orElse(movieRatingService.getRatingById(
-//                                        movie.getId(), userService.getCurrentUser().getId())
-//                                )
-//                )
-//                .kpRating(movie.getKpRating())
-//                .releaseYear(movie.getReleaseYear())
-//                .posterUrl(movie.getPosterUrl())
-//                .review(movie.getReview())
-//                .genres(new HashSet<>(movie.getGenres()))
-//                .build();
-//    }
 
     public MovieDtoResponse mapFromEntityToResponseDto(Movie movie) {
         return MovieDtoResponse.builder()

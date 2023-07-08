@@ -1,0 +1,21 @@
+{
+  "userRating": 7.0,
+  "review": "Пойдет",
+  "kpId": 82441,
+  "movieName": "Человек-паук 3: Враг в отражении",
+  "releaseYear": 2007,
+  "kpRating": 7.105,
+  "imdbRating": 6.3,
+  "posterUrl": "https://st.kp.yandex.net/images/film_big/82441.jpg",
+  "genres": [
+    {
+      "name": "фантастика"
+    },
+    {
+      "name": "приключения"
+    },
+    {
+      "name": "боевик"
+    }
+  ]
+}

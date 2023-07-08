@@ -1,5 +1,11 @@
 package sobad.code.movies_diary.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,23 +21,37 @@ import sobad.code.movies_diary.AppError;
 import sobad.code.movies_diary.dto.MovieDtoRequest;
 import sobad.code.movies_diary.dto.MovieDtoResponse;
 
+import sobad.code.movies_diary.dto.jwts.JwtResponse;
 import sobad.code.movies_diary.service.MovieService;
-import sobad.code.movies_diary.service.UserService;
 
 import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/movie")
 @RequiredArgsConstructor
+@Tag(name = "Взаимодействие с фильмами")
 public class MovieController {
     private final MovieService movieService;
-    private final UserService userService;
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addMovie(@RequestBody MovieDtoRequest movieDtoRequest) {
+    public static final String MOVIE_CONTROLLER_CREATE_PATH = "/api/movies";
+    public static final String MOVIE_CONTROLLER_USERNAME_MOVIES_PATH = "/api/movies/{username}";
+    public static final String MOVIE_CONTROLLER_GENRES_PATH = "/api/movies";
+
+    public static final String MOVIE_CONTROLLER_ALL_MOVIES_PATH = "/api/movies/all";
+
+    @Operation(summary = "Добавление фильма пользователю"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Данные добавленнного фильма " +
+                    "для отображение на странице пользователя", content =
+            @Content(schema =
+            @Schema(implementation = MovieDtoResponse.class))
+            )
+    })
+    @PostMapping(MOVIE_CONTROLLER_CREATE_PATH)
+    public ResponseEntity<?> createMovie(@RequestBody MovieDtoRequest movieDtoRequest) {
         try {
-            MovieDtoResponse movie = movieService.addMovie(movieDtoRequest);
+            MovieDtoResponse movie = movieService.createMovie(movieDtoRequest);
             return new ResponseEntity<>(movie, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(
@@ -45,8 +64,16 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<?> findMoviesByUser(@PathVariable String username) {
+    @Operation(summary = "Получение всех фильмов пользователя"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список фильмов пользователя", content =
+            @Content(schema =
+            @Schema(implementation = MovieDtoResponse.class))
+            )
+    })
+    @GetMapping(MOVIE_CONTROLLER_USERNAME_MOVIES_PATH)
+    public ResponseEntity<?> findMoviesByUser(@PathVariable("username") String username) {
         try {
             List<MovieDtoResponse> movies = movieService.getUserMoviesList(username);
             return new ResponseEntity<>(movies, HttpStatus.OK);
@@ -61,7 +88,15 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/movies")
+    @Operation(summary = "Получение всех фильмов в базе приложения"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список фильмов в базе", content =
+            @Content(schema =
+            @Schema(implementation = MovieDtoResponse.class))
+            )
+    })
+    @GetMapping(MOVIE_CONTROLLER_ALL_MOVIES_PATH)
     public ResponseEntity<?> findAllMovies() {
         try {
             List<MovieDtoResponse> movies = movieService.getAllMovies();
@@ -75,7 +110,15 @@ public class MovieController {
         }
     }
 
-    @GetMapping("")
+    @Operation(summary = "Получение всех фильмов из базы по жанру"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список фильмов по жанру", content =
+            @Content(schema =
+            @Schema(implementation = MovieDtoResponse.class))
+            )
+    })
+    @GetMapping(MOVIE_CONTROLLER_GENRES_PATH)
     public ResponseEntity<?> findMoviesByGenre(@RequestParam String genre) {
         List<MovieDtoResponse> movies = movieService.getMoviesListByGenre(genre);
         if (movies.isEmpty()) {

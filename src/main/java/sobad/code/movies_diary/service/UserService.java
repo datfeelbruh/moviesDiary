@@ -9,9 +9,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.movies_diary.dto.PictureDto;
 import sobad.code.movies_diary.dto.RegistrationUserDto;
+import sobad.code.movies_diary.dto.UserDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.repositories.UserRepository;
 
 import java.util.List;
@@ -23,10 +26,28 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final MovieRatingService movieRatingService;
+    private final MovieMapper movieMapper;
     private final PasswordEncoder passwordEncoder;
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public UserDtoResponse getUserProfile(String username) {
+        User user = userRepository.findByUsername(username).get();
+        return UserDtoResponse.builder()
+                .username(username)
+                .movies(user.getMovies().stream()
+                        .map(movieMapper::mapFromEntityToResponseDto)
+                        .peek(e -> {
+                            Double userRating = movieRatingService.getRatingById(e.getId(), user.getId());
+                            e.setUserRating(userRating);
+                            e.setAverageRating(movieRatingService.calcAverageRating(e.getId()).orElse(userRating));
+                        })
+                        .collect(Collectors.toSet())
+                )
+                .build();
     }
 
     @Override

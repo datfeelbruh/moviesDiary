@@ -31,7 +31,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final CollectionPath<Role, QRole> roles = this.<Role, QRole>createCollection("roles", Role.class, QRole.class, PathInits.DIRECT2);
 
-    public final ListPath<MovieRating, QMovieRating> userMovieRatings = this.<MovieRating, QMovieRating>createList("userMovieRatings", MovieRating.class, QMovieRating.class, PathInits.DIRECT2);
+    public final SetPath<MovieRating, QMovieRating> userMovieRatings = this.<MovieRating, QMovieRating>createSet("userMovieRatings", MovieRating.class, QMovieRating.class, PathInits.DIRECT2);
 
     public final StringPath username = createString("username");
 

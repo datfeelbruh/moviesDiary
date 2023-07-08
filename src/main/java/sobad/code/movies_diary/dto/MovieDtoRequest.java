@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class MovieDtoRequest {
+public class MovieDtoRequest implements Dto {
     private Long kpId;
     private String movieName;
     private Integer releaseYear;

@@ -32,13 +32,13 @@ public class ExternalApiService {
     private final KinopoiskMapper mapper;
     private final MovieRepository movieRepository;
 
-    public List<KinopoiskMovieShortInfoDto> findMovieByName(KinopoiskMovieNameDto kinopoiskMovieDtoRequest) {
+    public List<KinopoiskMovieShortInfoDto> findMovieByName(String movieName) {
         String url = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("api.kinopoisk.dev")
                 .path("v1.3/movie")
                 .queryParam("selectFields", "id", "name", "year")
-                .queryParam("name", kinopoiskMovieDtoRequest.getName())
+                .queryParam("name", movieName)
                 .build()
                 .toUriString();
         RestTemplate restTemplate = new RestTemplate();
@@ -52,8 +52,7 @@ public class ExternalApiService {
 
         if (foundMoviesList.isEmpty()) {
             throw new RuntimeException(
-                    String.format("Фильмы с данным названием '%s' не найдены",
-                    kinopoiskMovieDtoRequest.getName())
+                    String.format("Фильмы с данным названием '%s' не найдены", movieName)
             );
         }
 

@@ -5,15 +5,12 @@ import org.springframework.stereotype.Service;
 import sobad.code.movies_diary.dto.MovieDtoRequest;
 import sobad.code.movies_diary.dto.MovieDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
-import sobad.code.movies_diary.entities.MovieRating;
 import sobad.code.movies_diary.entities.User;
-import sobad.code.movies_diary.repositories.dsl.MovieCustomRepository;
 import sobad.code.movies_diary.repositories.dsl.filters.MovieFilter;
 import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.dsl.MovieCustomRepositoryImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +24,7 @@ public class MovieService {
     private final MovieRatingService movieRatingService;
     private final MovieMapper movieMapper;
 
-    public MovieDtoResponse addMovie(MovieDtoRequest movieDtoRequest) {
+    public MovieDtoResponse createMovie(MovieDtoRequest movieDtoRequest) {
         Optional<Movie> movieInDb = movieRepository.findByKpId(movieDtoRequest.getKpId());
         if (movieInDb.isPresent()) {
             Movie movie = movieInDb.get();

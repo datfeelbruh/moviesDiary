@@ -54,7 +54,7 @@ public class AuthService {
                     HttpStatus.BAD_REQUEST);
         }
         User user = userService.createUser(registrationUserDto);
-        return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername()));
+        return new ResponseEntity<>(new UserDto(user.getId(), user.getUsername()), HttpStatus.CREATED);
     }
 
 }
