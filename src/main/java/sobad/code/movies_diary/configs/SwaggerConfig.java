@@ -19,7 +19,7 @@ public class SwaggerConfig {
                 .components(new Components().addSecuritySchemes(
                         "Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info().title("Киноговно API")
-                        .description("Киноговно для чаттерсов")
+                        .description("Я ХОЧУ РАСЩЕПИТЬСЯ НАХУЙ")
                         .version("1.0").contact(new Contact().name("https://github.com/datfeelbruh")
                                 .email("datfeelman@gmail.com")));
     }

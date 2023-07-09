@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="sobad.code.movies_diary.controllers.AuthControllerIT" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-07-09T08:03:09" hostname="DESKTOP-C604IPF" time="0.367">
+  <properties/>
+  <testcase name="authRegisteredUser()" classname="sobad.code.movies_diary.controllers.AuthControllerIT" time="0.152"/>
+  <testcase name="registeringUser()" classname="sobad.code.movies_diary.controllers.AuthControllerIT" time="0.08"/>
+  <testcase name="authUnregisteredUser()" classname="sobad.code.movies_diary.controllers.AuthControllerIT" time="0.133"/>
+  <system-out><![CDATA[Hibernate: select t1_0.id,t1_0.expired,t1_0.revoked,t1_0.token,t1_0.user_id from token t1_0
+Hibernate: delete from token where id=?
+Hibernate: delete from token where id=?
+Hibernate: select m1_0.id,m1_0.movie_id,m1_0.rating,m1_0.user_id from movie_rating m1_0
+Hibernate: select m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review from movies m1_0 left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where m1_0.id=?
+Hibernate: select u1_0.id,m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review,u1_0.password,r1_0.users_id,r1_1.id,r1_1.name,u2_0.user_id,u2_0.id,m2_0.id,g2_0.movies_id,g2_1.id,g2_1.name,m2_0.imdb_rating,m2_0.kp_id,m2_0.kp_rating,m2_0.movie_name,m2_0.poster_url,m2_0.release_year,m2_0.review,u2_0.rating,u1_0.username from users u1_0 left join (users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id) on u1_0.id=m1_0.user_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id left join (user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id) on u1_0.id=r1_0.users_id left join movie_rating u2_0 on u1_0.id=u2_0.user_id left join movies m2_0 on m2_0.id=u2_0.movie_id left join (movie_genres g2_0 join genres g2_1 on g2_1.id=g2_0.genres_id) on m2_0.id=g2_0.movies_id where u1_0.id=?
+Hibernate: select m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review from movies m1_0 left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where m1_0.id=?
+Hibernate: select u1_0.id,m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review,u1_0.password,r1_0.users_id,r1_1.id,r1_1.name,u2_0.user_id,u2_0.id,m2_0.id,g2_0.movies_id,g2_1.id,g2_1.name,m2_0.imdb_rating,m2_0.kp_id,m2_0.kp_rating,m2_0.movie_name,m2_0.poster_url,m2_0.release_year,m2_0.review,u2_0.rating,u1_0.username from users u1_0 left join (users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id) on u1_0.id=m1_0.user_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id left join (user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id) on u1_0.id=r1_0.users_id left join movie_rating u2_0 on u1_0.id=u2_0.user_id left join movies m2_0 on m2_0.id=u2_0.movie_id left join (movie_genres g2_0 join genres g2_1 on g2_1.id=g2_0.genres_id) on m2_0.id=g2_0.movies_id where u1_0.id=?
+Hibernate: delete from movie_rating where id=?
+Hibernate: delete from movie_rating where id=?
+Hibernate: delete from movie_rating where id=?
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0
+Hibernate: select u1_0.user_id,u1_0.id,m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review,u1_0.rating from movie_rating u1_0 left join movies m1_0 on m1_0.id=u1_0.movie_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where u1_0.user_id=?
+Hibernate: select r1_0.users_id,r1_1.id,r1_1.name from user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id where r1_0.users_id=?
+Hibernate: select m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review from users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id where m1_0.user_id=?
+Hibernate: select u1_0.user_id,u1_0.id,m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review,u1_0.rating from movie_rating u1_0 left join movies m1_0 on m1_0.id=u1_0.movie_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where u1_0.user_id=?
+Hibernate: select r1_0.users_id,r1_1.id,r1_1.name from user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id where r1_0.users_id=?
+Hibernate: select m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review from users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id where m1_0.user_id=?
+Hibernate: delete from users_movies where user_id=?
+Hibernate: delete from user_roles where users_id=?
+Hibernate: delete from users_movies where user_id=?
+Hibernate: delete from user_roles where users_id=?
+Hibernate: delete from roles where id=?
+Hibernate: delete from users where id=?
+Hibernate: delete from roles where id=?
+Hibernate: delete from users where id=?
+Hibernate: select m1_0.id,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review from movies m1_0
+Hibernate: select g1_0.movies_id,g1_1.id,g1_1.name from movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id where g1_0.movies_id=?
+Hibernate: select g1_0.movies_id,g1_1.id,g1_1.name from movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id where g1_0.movies_id=?
+Hibernate: delete from movie_genres where movies_id=?
+Hibernate: delete from movie_genres where movies_id=?
+Hibernate: delete from movies where id=?
+Hibernate: delete from movies where id=?
+Hibernate: select g1_0.id,g1_0.name from genres g1_0
+Hibernate: delete from genres where id=?
+Hibernate: delete from genres where id=?
+Hibernate: delete from genres where id=?
+Hibernate: delete from genres where id=?
+Hibernate: select r1_0.id,r1_0.name from roles r1_0
+Hibernate: delete from roles where id=?
+Hibernate: delete from roles where id=?
+Hibernate: insert into roles (id, name) values (default, ?)
+Hibernate: insert into roles (id, name) values (default, ?)
+2023-07-09T11:03:09.267+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.267+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.267+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.267+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.267+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.267+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.267+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.268+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.268+03:00 DEBUG 10640 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [AuthRegistrationRequest(username=sobad, password=sobad, confirmPassword=sobad)]
+Hibernate: insert into roles (id, name) values (default, ?)
+Hibernate: insert into users (id, password, username) values (default, ?, ?)
+Hibernate: insert into user_roles (users_id, roles_id) values (?, ?)
+2023-07-09T11:03:09.328+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2023-07-09T11:03:09.328+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [UserDto(id=7, username=sobad)]
+2023-07-09T11:03:09.329+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.330+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.330+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.330+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.330+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.330+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.330+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.330+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.331+03:00 DEBUG 10640 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [AuthLoginRequest(username=sobad, password=sobad)]
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: select u1_0.user_id,u1_0.id,m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review,u1_0.rating from movie_rating u1_0 left join movies m1_0 on m1_0.id=u1_0.movie_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where u1_0.user_id=?
+Hibernate: select r1_0.users_id,r1_1.id,r1_1.name from user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id where r1_0.users_id=?
+Hibernate: select m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review from users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id where m1_0.user_id=?
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: insert into token (id, expired, revoked, token, user_id) values (default, ?, ?, ?, ?)
+2023-07-09T11:03:09.393+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2023-07-09T11:03:09.393+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [AuthTokenResponse(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzb2JhZCIsImV4cCI6MTY4ODg5MDk4OSwiaWF0I (truncated)...]
+Hibernate: select t1_0.id,t1_0.expired,t1_0.revoked,t1_0.token,t1_0.user_id from token t1_0
+Hibernate: delete from token where id=?
+Hibernate: select m1_0.id,m1_0.movie_id,m1_0.rating,m1_0.user_id from movie_rating m1_0
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0
+Hibernate: select u1_0.user_id,u1_0.id,m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review,u1_0.rating from movie_rating u1_0 left join movies m1_0 on m1_0.id=u1_0.movie_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where u1_0.user_id=?
+Hibernate: select r1_0.users_id,r1_1.id,r1_1.name from user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id where r1_0.users_id=?
+Hibernate: select m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review from users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id where m1_0.user_id=?
+Hibernate: delete from user_roles where users_id=?
+Hibernate: delete from roles where id=?
+Hibernate: delete from users where id=?
+Hibernate: select m1_0.id,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review from movies m1_0
+Hibernate: select g1_0.id,g1_0.name from genres g1_0
+Hibernate: select r1_0.id,r1_0.name from roles r1_0
+Hibernate: delete from roles where id=?
+Hibernate: delete from roles where id=?
+Hibernate: insert into roles (id, name) values (default, ?)
+Hibernate: insert into roles (id, name) values (default, ?)
+2023-07-09T11:03:09.406+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.407+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.407+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.407+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.407+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.407+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.407+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.407+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.408+03:00 DEBUG 10640 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [AuthRegistrationRequest(username=sobad, password=sobad, confirmPassword=sobad)]
+Hibernate: insert into roles (id, name) values (default, ?)
+Hibernate: insert into users (id, password, username) values (default, ?, ?)
+Hibernate: insert into user_roles (users_id, roles_id) values (?, ?)
+2023-07-09T11:03:09.469+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2023-07-09T11:03:09.469+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [UserDto(id=8, username=sobad)]
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: select u1_0.user_id,u1_0.id,m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review,u1_0.rating from movie_rating u1_0 left join movies m1_0 on m1_0.id=u1_0.movie_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where u1_0.user_id=?
+Hibernate: select r1_0.users_id,r1_1.id,r1_1.name from user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id where r1_0.users_id=?
+Hibernate: select m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review from users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id where m1_0.user_id=?
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+Hibernate: select u1_0.user_id,u1_0.id,m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review,u1_0.rating from movie_rating u1_0 left join movies m1_0 on m1_0.id=u1_0.movie_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where u1_0.user_id=?
+Hibernate: select r1_0.users_id,r1_1.id,r1_1.name from user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id where r1_0.users_id=?
+Hibernate: select m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review from users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id where m1_0.user_id=?
+Hibernate: select t1_0.id,t1_0.expired,t1_0.revoked,t1_0.token,t1_0.user_id from token t1_0
+Hibernate: select m1_0.id,m1_0.movie_id,m1_0.rating,m1_0.user_id from movie_rating m1_0
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0
+Hibernate: select u1_0.user_id,u1_0.id,m1_0.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review,u1_0.rating from movie_rating u1_0 left join movies m1_0 on m1_0.id=u1_0.movie_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_0.id=g1_0.movies_id where u1_0.user_id=?
+Hibernate: select r1_0.users_id,r1_1.id,r1_1.name from user_roles r1_0 join roles r1_1 on r1_1.id=r1_0.roles_id where r1_0.users_id=?
+Hibernate: select m1_0.user_id,m1_1.id,g1_0.movies_id,g1_1.id,g1_1.name,m1_1.imdb_rating,m1_1.kp_id,m1_1.kp_rating,m1_1.movie_name,m1_1.poster_url,m1_1.release_year,m1_1.review from users_movies m1_0 join movies m1_1 on m1_1.id=m1_0.movies_id left join (movie_genres g1_0 join genres g1_1 on g1_1.id=g1_0.genres_id) on m1_1.id=g1_0.movies_id where m1_0.user_id=?
+Hibernate: delete from user_roles where users_id=?
+Hibernate: delete from roles where id=?
+Hibernate: delete from users where id=?
+Hibernate: select m1_0.id,m1_0.imdb_rating,m1_0.kp_id,m1_0.kp_rating,m1_0.movie_name,m1_0.poster_url,m1_0.release_year,m1_0.review from movies m1_0
+Hibernate: select g1_0.id,g1_0.name from genres g1_0
+Hibernate: select r1_0.id,r1_0.name from roles r1_0
+Hibernate: delete from roles where id=?
+Hibernate: delete from roles where id=?
+Hibernate: insert into roles (id, name) values (default, ?)
+Hibernate: insert into roles (id, name) values (default, ?)
+2023-07-09T11:03:09.487+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.487+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.487+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.487+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.487+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.487+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.487+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.488+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#registry(AuthRegistrationRequest)
+2023-07-09T11:03:09.488+03:00 DEBUG 10640 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [AuthRegistrationRequest(username=sobad, password=sobad, confirmPassword=sobad)]
+Hibernate: insert into roles (id, name) values (default, ?)
+Hibernate: insert into users (id, password, username) values (default, ?, ?)
+Hibernate: insert into user_roles (users_id, roles_id) values (?, ?)
+2023-07-09T11:03:09.546+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2023-07-09T11:03:09.547+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [UserDto(id=9, username=sobad)]
+2023-07-09T11:03:09.548+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.548+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.548+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.548+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.548+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.548+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.548+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.549+03:00 DEBUG 10640 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to sobad.code.movies_diary.controllers.AuthController#login(AuthLoginRequest)
+2023-07-09T11:03:09.549+03:00 DEBUG 10640 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [AuthLoginRequest(username=datfeel, password=datfeel)]
+Hibernate: select u1_0.id,u1_0.password,u1_0.username from users u1_0 where u1_0.username=?
+2023-07-09T11:03:09.608+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2023-07-09T11:03:09.609+03:00 DEBUG 10640 --- [    Test worker] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [sobad.code.movies_diary.AppError@64b0195e]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
