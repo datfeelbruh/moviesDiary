@@ -26,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_USER_PROFILE;
+import static sobad.code.movies_diary.controller.MovieController.MOVIE_CONTROLLER_USERNAME_MOVIES_PATH;
 import static sobad.code.movies_diary.utils.TestUtils.readFixture;
 import static sobad.code.movies_diary.utils.TestUtils.readJson;
 
@@ -75,7 +75,7 @@ public class UserControllerIT {
         MovieRating movieRating = movieRatingRepository.findByMovieIdAndUserId(movie.getId(), user.getId()).get();
 
         MockHttpServletRequestBuilder requestBuilder = get(
-                USER_CONTROLLER_USER_PROFILE, user.getUsername()
+                MOVIE_CONTROLLER_USERNAME_MOVIES_PATH, user.getUsername()
         );
 
         MockHttpServletResponse responseGet = testUtils.perform(requestBuilder).andReturn().getResponse();
@@ -102,7 +102,7 @@ public class UserControllerIT {
                 movieRatingRepository.findByMovieIdAndUserId(anotherMovie.getId(), anotherUser.getId()).get();
 
         MockHttpServletRequestBuilder anotherRequestBuilder = get(
-                USER_CONTROLLER_USER_PROFILE, anotherUser.getUsername()
+                MOVIE_CONTROLLER_USERNAME_MOVIES_PATH, anotherUser.getUsername()
         );
 
         MockHttpServletResponse anotherResponseGet = testUtils.perform(anotherRequestBuilder).andReturn().getResponse();

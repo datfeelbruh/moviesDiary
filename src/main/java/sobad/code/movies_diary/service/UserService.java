@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
-import sobad.code.movies_diary.dto.UserDto;
+import sobad.code.movies_diary.dto.PictureDto;
+import sobad.code.movies_diary.dto.RegistrationUserDto;
 import sobad.code.movies_diary.dto.UserDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
@@ -66,14 +66,13 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public UserDto createUser(AuthRegistrationRequest newUser) {
+    public User createUser(RegistrationUserDto newUser) {
         User user = User.builder()
                 .username(newUser.getUsername())
                 .password(passwordEncoder.encode(newUser.getPassword()))
                 .roles(List.of(roleService.getUserRole()))
                 .build();
-        userRepository.save(user);
-        return new UserDto(user.getId(), user.getUsername());
+        return userRepository.save(user);
     }
 
     public User getCurrentUser() {
@@ -85,5 +84,9 @@ public class UserService implements UserDetailsService {
         User user = getCurrentUser();
         user.getMovies().add(movie);
         userRepository.save(user);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 }

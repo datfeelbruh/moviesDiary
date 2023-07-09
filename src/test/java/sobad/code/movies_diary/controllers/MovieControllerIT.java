@@ -1,5 +1,6 @@
 package sobad.code.movies_diary.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,8 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import sobad.code.movies_diary.TestConfig;
+import sobad.code.movies_diary.controller.AuthController;
+import sobad.code.movies_diary.dto.MovieDtoRequest;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.MovieRating;
 import sobad.code.movies_diary.entities.User;
@@ -26,11 +30,14 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_ALL_MOVIES_PATH;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_CREATE_PATH;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_GENRES_PATH;
+import static sobad.code.movies_diary.controller.MovieController.MOVIE_CONTROLLER_ALL_MOVIES_PATH;
+import static sobad.code.movies_diary.controller.MovieController.MOVIE_CONTROLLER_CREATE_PATH;
+import static sobad.code.movies_diary.controller.MovieController.MOVIE_CONTROLLER_GENRES_PATH;
+import static sobad.code.movies_diary.controller.MovieController.MOVIE_CONTROLLER_USERNAME_MOVIES_PATH;
 import static sobad.code.movies_diary.utils.TestUtils.ANOTHER_MOVIE;
 import static sobad.code.movies_diary.utils.TestUtils.SAMPLE_MOVIE;
+import static sobad.code.movies_diary.utils.TestUtils.readFixture;
+import static sobad.code.movies_diary.utils.TestUtils.readJson;
 
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
@@ -55,20 +62,19 @@ public class MovieControllerIT {
         testUtils.authSampleUser();
         testUtils.regAnotherUser();
         testUtils.authAnotherUser();
-        testUtils.regSampleMovie();
     }
 
     @Test
     public void createMovie() throws Exception {
         User user = userRepository.findAll().get(0);
         MockHttpServletRequestBuilder request = post(MOVIE_CONTROLLER_CREATE_PATH)
-                .content(TestUtils.writeJson(ANOTHER_MOVIE))
+                .content(TestUtils.writeJson(SAMPLE_MOVIE))
                 .contentType(APPLICATION_JSON);
 
         MockHttpServletResponse response = testUtils.perform(request, user).andReturn().getResponse();
-        assertThat(response.getStatus()).isEqualTo(201);
+        assertThat(response.getStatus()).isEqualTo(200);
 
-        Movie movie = movieRepository.findByKpId(ANOTHER_MOVIE.getKpId()).get();
+        Movie movie = movieRepository.findByKpId(SAMPLE_MOVIE.getKpId()).get();
         MovieRating movieRating = movieRatingRepository.findByMovieIdAndUserId(movie.getId(), user.getId()).get();
         String content = response.getContentAsString(StandardCharsets.UTF_8);
 
@@ -91,8 +97,9 @@ public class MovieControllerIT {
 
     @Test
     public void getAllMovies() throws Exception {
+        testUtils.regSampleMovie();
         testUtils.regAnotherMovie();
-        Integer size = movieRepository.findAll().size();
+
         Movie movie = movieRepository.findByKpId(SAMPLE_MOVIE.getKpId()).get();
         User user = userRepository.findAll().get(0);
         MovieRating movieRating = movieRatingRepository.findByMovieIdAndUserId(movie.getId(), user.getId()).get();

@@ -5,32 +5,33 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import sobad.code.movies_diary.dto.Dto;
 import sobad.code.movies_diary.dto.MovieDtoRequest;
-import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
+import sobad.code.movies_diary.dto.RegistrationUserDto;
 import sobad.code.movies_diary.entities.Role;
 import sobad.code.movies_diary.entities.User;
-import sobad.code.movies_diary.jwts.JwtTokenUtils;
 import sobad.code.movies_diary.repositories.GenreRepository;
 import sobad.code.movies_diary.repositories.MovieRatingRepository;
 import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.RoleRepository;
-import sobad.code.movies_diary.repositories.TokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
-import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REG_PATH;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_CREATE_PATH;
+import static sobad.code.movies_diary.controller.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
+import static sobad.code.movies_diary.controller.AuthController.AUTH_CONTROLLER_REG_PATH;
+import static sobad.code.movies_diary.controller.MovieController.MOVIE_CONTROLLER_CREATE_PATH;
 
 @Component
 public class TestUtils {
@@ -49,34 +50,32 @@ public class TestUtils {
     private RoleRepository roleRepository;
     @Autowired
     private MovieRepository movieRepository;
-    @Autowired
-    private TokenRepository tokenRepository;
 
     private static final ObjectMapper MAPPER = new ObjectMapper()
             .findAndRegisterModules()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    public static final AuthRegistrationRequest SAMPLE_USER_REG = readJson(
+    public static final RegistrationUserDto SAMPLE_USER_REG = readJson(
             readFixture("users/sampleUser.json"),
-            new TypeReference<AuthRegistrationRequest>() {
+            new TypeReference<RegistrationUserDto>() {
             }
     );
 
-    public static final AuthRegistrationRequest SAMPLE_USER_AUTH = readJson(
+    public static final RegistrationUserDto SAMPLE_USER_AUTH = readJson(
             readFixture("auth/sampleAuth.json"),
-            new TypeReference<AuthRegistrationRequest>() {
+            new TypeReference<RegistrationUserDto>() {
             }
     );
 
-    public static final AuthRegistrationRequest ANOTHER_USER_REG = readJson(
+    public static final RegistrationUserDto ANOTHER_USER_REG = readJson(
             readFixture("users/anotherUser.json"),
-            new TypeReference<AuthRegistrationRequest>() {
+            new TypeReference<RegistrationUserDto>() {
             }
     );
 
-    public static final AuthRegistrationRequest ANOTHER_USER_AUTH = readJson(
+    public static final RegistrationUserDto ANOTHER_USER_AUTH = readJson(
             readFixture("auth/anotherAuth.json"),
-            new TypeReference<AuthRegistrationRequest>() {
+            new TypeReference<RegistrationUserDto>() {
             }
     );
 
@@ -97,7 +96,6 @@ public class TestUtils {
         roleRepository.save(new Role("ROLE_ADMIN"));
     }
     public void clearAll() {
-        tokenRepository.deleteAll();
         movieRatingRepository.deleteAll();
         userRepository.deleteAll();
         movieRepository.deleteAll();
@@ -142,7 +140,16 @@ public class TestUtils {
     }
 
     public ResultActions perform(final MockHttpServletRequestBuilder request, User user) throws Exception {
-        final String token = jwtTokenUtils.generateAccessToken(user);
+        List<SimpleGrantedAuthority> roles = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName())).toList();
+
+        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(String.valueOf(roles))
+                .build();
+
+        final String token = jwtTokenUtils.generateToken(userDetails);
         request.header(AUTHORIZATION, "Bearer " + token);
         return mockMvc.perform(request);
     }
