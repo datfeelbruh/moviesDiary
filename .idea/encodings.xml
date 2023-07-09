@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="ISO-8859-1">
+    <file url="file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/ExceptionHandlerFilter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/SwaggerConfig.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controller/AuthController.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controller/UserController.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/AuthController.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/UserController.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

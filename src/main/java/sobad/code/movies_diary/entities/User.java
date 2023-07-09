@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import sobad.code.movies_diary.jwts.Token;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +36,9 @@ public class User extends BaseModel {
     private String username;
     @Column(name = "password")
     private String password;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE

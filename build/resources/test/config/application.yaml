@@ -1,0 +1,29 @@
+jwt:
+  secret: GDFGDFJGDLKVBMNSLKNSDKL
+  lifetime: 30m
+x-api-key: 1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z
+
+base-url: ""
+
+spring:
+  jpa-properties:
+      hibernate-connection:
+        characterEncoding: utf-8
+#spring.jpa.properties.hibernate.connection.CharSet=utf-8
+#spring.jpa.properties.hibernate.connection.useUnicode=true
+
+  jpa:
+    show-sql: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.yaml
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+logging:
+  level:
+    root: INFO

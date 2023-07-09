@@ -1,5 +1,7 @@
 server:
   port: ${PORT:5000}
+  http2:
+    enabled: true
 
 base-url: /api
 
@@ -8,8 +10,11 @@ springdoc:
     path: /api-docs.html
 
 jwt:
-  secret: GDFGDFJGDLKVBMNSLKNSDKL
-  lifetime: 30m
+  secret-key: 'fdsflksdncvkjlsnadklvBJKASBVKJLBASDL'
+  expiration: 1200
+  refresh-token:
+    expiration: 8400
+
 x-api-key: 1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z
 
 spring:
