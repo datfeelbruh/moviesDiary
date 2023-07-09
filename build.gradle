@@ -22,10 +22,16 @@ compileTestJava {
 }
 
 group = 'sobad.code'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 
 application {
 	mainClass = "sobad.code.movies_diary.MoviesDiaryApplication"
+}
+
+jar {
+	manifest {
+		attributes["Main-class"] = "sobad.code.movies_diary.MoviesDiaryApplication"
+	}
 }
 
 java {
