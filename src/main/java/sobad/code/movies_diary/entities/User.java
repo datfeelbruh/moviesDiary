@@ -32,7 +32,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseModel {
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
     @Column(name = "password")
     private String password;

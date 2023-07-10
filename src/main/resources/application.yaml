@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:5000}
+  port: ${PORT:8000}
   http2:
     enabled: true
 
@@ -24,6 +24,9 @@ spring:
     url: "jdbc:postgresql://localhost:5432/movies_diary"
 
   jpa:
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
       ddl-auto: create-drop
       show-sql: true
@@ -38,8 +41,14 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/changelog-master.yaml
+log4j:
+  logger:
+    org:
+      hibernate:
+        SQL: TRACE
+        type: TRACE
 
 logging:
   level:
     root: INFO
-    web: DEBUG
+    web: INFO

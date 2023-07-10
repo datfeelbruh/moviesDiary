@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres:18'
+    container_name: "movies_diary_db"
+    environment:
+      - 'POSTGRES_USER=datfeelbruh'
+      - 'POSTGRES_PASSWORD=asedur81'
+      - 'POSTGRES_DB=movies_diary'
+
+  backend:
+    build: ./
+    container_name: 'backend-app'
+    ports:
+      - 8080:8080

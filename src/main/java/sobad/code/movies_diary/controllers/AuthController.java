@@ -49,7 +49,14 @@ public class AuthController {
     })
     @PostMapping(AUTH_CONTROLLER_REG_PATH)
     public ResponseEntity<?> registry(@RequestBody AuthRegistrationRequest authRegistrationRequest) {
-        return new ResponseEntity<>(authService.registry(authRegistrationRequest), CREATED);
+        try {
+            return new ResponseEntity<>(authService.registry(authRegistrationRequest), CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new AppError(HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                    String.format("Пользователь с таким именем '%s' уже существует!",
+                            authRegistrationRequest.getUsername())),
+                    HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
     @Operation(summary = "Аутентификация пользователя в приложении"
