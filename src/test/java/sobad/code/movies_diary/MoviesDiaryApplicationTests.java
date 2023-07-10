@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class MoviesDiaryApplicationTests {
 
-	@Test
-	void contextLoads() {
-		assertThat(true).isTrue();
-	}
-
+    @Test
+    void contextLoads() {
+        assertThat(true).isTrue();
+    }
 }
+

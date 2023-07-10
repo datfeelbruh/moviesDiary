@@ -38,7 +38,7 @@ public class UserController {
     @Operation(summary = "Получить профиль пользователя"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Данные пользователя", content =
+        @ApiResponse(responseCode = "200", description = "Данные пользователя", content =
             @Content(schema =
             @Schema(implementation = UserDtoResponse.class))
             )
@@ -57,34 +57,5 @@ public class UserController {
                             )),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-    @Operation(summary = "Регистрация пользователя в приложении")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Пользователь", content =
-            @Content(schema =
-            @Schema(implementation = UserDto.class))
-            )
-    })
-    @PostMapping(USER_CONTROLLER_USER_CREATE)
-    public ResponseEntity<?> createNewUser(@RequestBody AuthRegistrationRequest registrationUserDto) {
-        try {
-            UserDto userDto = userService.createUser(registrationUserDto);
-            return new ResponseEntity<>(userDto, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(
-                    new AppError(HttpStatus.BAD_REQUEST.value(),
-                            String.format(
-                                    "Пользователь с таким именем уже существует",
-                                    registrationUserDto.getUsername()
-                            )),
-                    HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping(USER_CONTROLLER_USER_CREATE + "/current")
-    public void current(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String s1 = SecurityContextHolder.getContext().getAuthentication().getName();
-        String s2 = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        response.getWriter().println(s1 + " " + s2);
     }
 }

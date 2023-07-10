@@ -5,13 +5,7 @@ import org.springframework.stereotype.Component;
 import sobad.code.movies_diary.dto.MovieDtoRequest;
 import sobad.code.movies_diary.dto.MovieDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
-import sobad.code.movies_diary.entities.MovieRating;
-import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.service.GenreService;
-import sobad.code.movies_diary.service.MovieRatingService;
-import sobad.code.movies_diary.service.UserService;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 @Component

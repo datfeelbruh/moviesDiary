@@ -42,7 +42,7 @@ public class AuthController {
     @Operation(summary = "Регистрация пользователя в приложении"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Данные пользователя", content =
+        @ApiResponse(responseCode = "201", description = "Данные пользователя", content =
             @Content(schema =
             @Schema(implementation = UserDto.class))
             )
@@ -62,7 +62,7 @@ public class AuthController {
     @Operation(summary = "Аутентификация пользователя в приложении"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Токены аутентификации", content =
+        @ApiResponse(responseCode = "200", description = "Токены аутентификации", content =
             @Content(schema =
             @Schema(implementation = Token.class))
             )
@@ -81,7 +81,7 @@ public class AuthController {
     @Operation(summary = "Получение нового токена доступа"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Токены аутентификации", content =
+        @ApiResponse(responseCode = "200", description = "Токены аутентификации", content =
             @Content(schema =
             @Schema(implementation = Token.class))
             )
@@ -101,7 +101,7 @@ public class AuthController {
     @Operation(summary = "Логаут он и в Африке логаут"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Веселое сообщение :)")
+        @ApiResponse(responseCode = "200", description = "Веселое сообщение :)")
     })
     @GetMapping(AUTH_CONTROLLER_LOGOUT_PATH)
     public void logout(

@@ -1,7 +1,6 @@
 package sobad.code.movies_diary.dto.externalApiDtos;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,5 +1,4 @@
 package sobad.code.movies_diary.controllers;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,12 +28,12 @@ public class ExternalApiController {
 
     @Operation(summary = "Поиск фильмов по названию.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Найденные фильмы", content =
-                @Content(schema =
-                @Schema(implementation = KinopoiskMovieShortInfoDto.class))
+        @ApiResponse(responseCode = "200", description = "Найденные фильмы", content =
+            @Content(schema =
+            @Schema(implementation = KinopoiskMovieShortInfoDto.class))
             )
     })
-    @GetMapping(EXTERNAL_API_CONTROLLER_MOVIES_PATH )
+    @GetMapping(EXTERNAL_API_CONTROLLER_MOVIES_PATH)
     public ResponseEntity<?> findMovieList(@RequestParam String movieName) {
         try {
             List<KinopoiskMovieShortInfoDto> foundMovies = externalApiService.findMovieByName(movieName);
@@ -50,7 +49,7 @@ public class ExternalApiController {
 
     @Operation(summary = "Поиск всей нужной информации по id фильма на кинопоиске.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Найденный фильм", content =
+        @ApiResponse(responseCode = "200", description = "Найденный фильм", content =
             @Content(schema =
             @Schema(implementation = KinopoiskMovieInfoDto.class))
             )

@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
@@ -19,13 +17,11 @@ import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.jwts.JwtTokenUtils;
 import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.repositories.TokenRepository;
-import sobad.code.movies_diary.repositories.UserRepository;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -34,13 +30,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 public class AuthService {
     private final UserService userService;
-    private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
 
     public UserDto registry(AuthRegistrationRequest registrationUserDto) {
-       return userService.createUser(registrationUserDto);
+        return userService.createUser(registrationUserDto);
     }
 
     public AuthTokenResponse authenticate(AuthLoginRequest authLoginRequest) {
@@ -128,8 +123,9 @@ public class AuthService {
 
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUserId(user.getId());
-        if (validUserTokens.isEmpty())
+        if (validUserTokens.isEmpty()) {
             return;
+        }
         validUserTokens.forEach(token -> {
             token.setExpired(true);
             token.setRevoked(true);

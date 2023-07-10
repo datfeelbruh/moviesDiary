@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import sobad.code.movies_diary.dto.externalApiDtos.KinopoiskMovieInfoDto;
-import sobad.code.movies_diary.dto.externalApiDtos.KinopoiskMovieNameDto;
 import sobad.code.movies_diary.dto.externalApiDtos.KinopoiskMovieShortInfoDto;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.mappers.KinopoiskMapper;

@@ -32,16 +32,13 @@ public class MovieController {
     private final MovieService movieService;
 
     public static final String MOVIE_CONTROLLER_CREATE_PATH = "/api/movies";
-    public static final String MOVIE_CONTROLLER_USERNAME_MOVIES_PATH = "/api/movies/{username}";
     public static final String MOVIE_CONTROLLER_GENRES_PATH = "/api/movies/genres";
-
     public static final String MOVIE_CONTROLLER_ALL_MOVIES_PATH = "/api/movies/all";
 
-    @Operation(summary = "Добавление фильма пользователю"
-    )
+    @Operation(summary = "Добавление фильма пользователю")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Данные добавленнного фильма " +
-                    "для отображение на странице пользователя", content =
+        @ApiResponse(responseCode = "200", description = "Данные добавленнного фильма "
+                + "для отображение на странице пользователя", content =
             @Content(schema =
             @Schema(implementation = MovieDtoResponse.class))
             )
@@ -65,7 +62,7 @@ public class MovieController {
     @Operation(summary = "Получение всех фильмов в базе приложения"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Список фильмов в базе", content =
+        @ApiResponse(responseCode = "200", description = "Список фильмов в базе", content =
             @Content(schema =
             @Schema(implementation = MovieDtoResponse.class))
             )
@@ -87,7 +84,7 @@ public class MovieController {
     @Operation(summary = "Получение всех фильмов из базы по жанру"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Список фильмов по жанру", content =
+        @ApiResponse(responseCode = "200", description = "Список фильмов по жанру", content =
             @Content(schema =
             @Schema(implementation = MovieDtoResponse.class))
             )

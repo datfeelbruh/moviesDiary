@@ -1,31 +1,19 @@
 package sobad.code.movies_diary.jwts;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Clock;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.DefaultClock;
-
-import java.security.Key;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import sobad.code.movies_diary.entities.User;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
-import static io.jsonwebtoken.impl.TextCodec.BASE64;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Slf4j

@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_ALL_MOVIES_PATH;
@@ -154,7 +154,8 @@ public class MovieControllerIT {
                 MOVIE_CONTROLLER_GENRES_PATH + "?genre=боевик"
         );
 
-        MockHttpServletResponse anotherGenreResponse = testUtils.perform(anotherRequestBuilder).andReturn().getResponse();
+        MockHttpServletResponse anotherGenreResponse = testUtils.perform(anotherRequestBuilder).andReturn()
+                .getResponse();
         String anotherGenreResponseContent = anotherGenreResponse.getContentAsString(StandardCharsets.UTF_8);
 
         assertThat(anotherGenreResponse.getStatus()).isEqualTo(200);

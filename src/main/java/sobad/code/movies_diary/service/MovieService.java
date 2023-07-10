@@ -80,8 +80,12 @@ public class MovieService {
         userService.addMovieToUser(movie);
 
         MovieDtoResponse response = movieMapper.mapFromEntityToResponseDto(movie);
-        response.setUserRating(movieRatingService.getRatingById(response.getId(), userService.getCurrentUser().getId()));
-        response.setAverageRating(movieRatingService.calcAverageRating(response.getId()).orElse(request.getUserRating()));
+        response.setUserRating(movieRatingService.getRatingById(
+                response.getId(), userService.getCurrentUser().getId())
+        );
+        response.setAverageRating(movieRatingService.calcAverageRating(
+                response.getId()).orElse(request.getUserRating())
+        );
 
         return response;
     }

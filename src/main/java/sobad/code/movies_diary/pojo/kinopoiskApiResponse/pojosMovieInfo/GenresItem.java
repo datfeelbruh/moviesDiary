@@ -5,10 +5,10 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class GenresItem{
-	private String name;
+public class GenresItem {
+    private String name;
 
-	public String getName(){
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 }

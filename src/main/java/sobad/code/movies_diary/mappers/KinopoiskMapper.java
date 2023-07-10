@@ -9,7 +9,6 @@ import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.GenresIt
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieList.DocsItemMoviesList;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
