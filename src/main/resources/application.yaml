@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:8000}
+  port: ${PORT:5000}
   http2:
     enabled: true
 

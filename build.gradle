@@ -78,7 +78,6 @@ dependencies {
 	)
 	testImplementation (
 			'org.springframework.boot:spring-boot-starter-test',
-			'org.springframework.security:spring-security-test',
 			'org.springframework.boot:spring-boot-starter-security'
 	)
 	liquibaseRuntime(

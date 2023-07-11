@@ -20,9 +20,9 @@ import sobad.code.movies_diary.entities.User;
 public class Token extends BaseModel {
     @Column(unique = true)
     private String token;
-    private boolean revoked;
-    private boolean expired;
+    public boolean revoked;
+    public boolean expired;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    public User user;
 }

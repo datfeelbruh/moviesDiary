@@ -3,7 +3,7 @@ jwt:
   lifetime: 30m
 x-api-key: 1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z
 
-base-url: ""
+base-url: /api
 
 spring:
   jpa:
