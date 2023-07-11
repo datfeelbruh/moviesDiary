@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sobad.code.movies_diary.AppError;
@@ -18,12 +20,13 @@ import sobad.code.movies_diary.service.ExternalApiService;
 
 import java.util.List;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Взаимодействие с API кинопоиска")
 public class ExternalApiController {
-    public static final String EXTERNAL_API_CONTROLLER_MOVIES_PATH = "/api/externalApi/movies";
-    public static final String EXTERNAL_API_CONTROLLER_MOVIE_PATH  = "/api/externalApi/movie";
+    public static final String EXTERNAL_API_CONTROLLER_PATH = "/api/externalApi/movies";
     private final ExternalApiService externalApiService;
 
     @Operation(summary = "Поиск фильмов по названию.")
@@ -33,16 +36,16 @@ public class ExternalApiController {
             @Schema(implementation = KinopoiskMovieShortInfoDto.class))
             )
     })
-    @GetMapping(EXTERNAL_API_CONTROLLER_MOVIES_PATH)
-    public ResponseEntity<?> findMovieList(@RequestParam String movieName) {
+    @RequestMapping(value = EXTERNAL_API_CONTROLLER_PATH, method = GET, params = "name")
+    public ResponseEntity<?> findMovieList(@RequestParam String name) {
         try {
-            List<KinopoiskMovieShortInfoDto> foundMovies = externalApiService.findMovieByName(movieName);
+            List<KinopoiskMovieShortInfoDto> foundMovies = externalApiService.findMovieByName(name);
             return new ResponseEntity<>(foundMovies, HttpStatus.OK);
         } catch (Exception e) {
             return  new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
                     String.format(
                             "Фильмы с данным названием '%s' не были найдены",
-                            movieName)),
+                            name)),
                     HttpStatus.BAD_REQUEST);
         }
     }
@@ -54,16 +57,16 @@ public class ExternalApiController {
             @Schema(implementation = KinopoiskMovieInfoDto.class))
             )
     })
-    @GetMapping(EXTERNAL_API_CONTROLLER_MOVIE_PATH)
-    public ResponseEntity<?> findMovieInfo(@RequestParam Long movieKpId) {
+    @RequestMapping(value = EXTERNAL_API_CONTROLLER_PATH, method = GET, params = "kpId")
+    public ResponseEntity<?> findMovieInfo(@RequestParam Long kpId) {
         try {
-            KinopoiskMovieInfoDto movieDtoResponse = externalApiService.findMovieInfoById(movieKpId);
+            KinopoiskMovieInfoDto movieDtoResponse = externalApiService.findMovieInfoById(kpId);
             return new ResponseEntity<>(movieDtoResponse, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
                     String.format(
                             "Фильм с данным id '%s' не найден",
-                            movieKpId)),
+                            kpId)),
                     HttpStatus.BAD_REQUEST);
         }
     }

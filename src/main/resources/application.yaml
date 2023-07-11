@@ -10,18 +10,18 @@ springdoc:
     path: /api-docs.html
 
 jwt:
-  secret-key: 'secret key'
+  secret-key: 'fdsflksdncvkjlsnadklvBJKASBVKJLBASDL'
   expiration: 1200
   refresh-token:
     expiration: 8400
 
-x-api-key: "api-key"
+x-api-key: "1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z"
 
 spring:
   datasource:
-    username: "username"
-    password: "username"
-    url: "db_url"
+    username: "datfeelbruh"
+    password: "asedur81"
+    url: "jdbc:postgresql://localhost:5432/movies_diary"
 
   jpa:
     properties:

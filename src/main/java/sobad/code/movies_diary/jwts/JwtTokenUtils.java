@@ -10,8 +10,8 @@ import java.util.function.Function;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import sobad.code.movies_diary.entities.User;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static java.time.temporal.ChronoUnit.SECONDS;
@@ -26,8 +26,8 @@ public class JwtTokenUtils {
     @Value(("${jwt.refresh-token.expiration}"))
     private long jwtRefreshTokenExpiration;
 
-    public String generateAccessToken(User user) {
-        return buildToken(new HashMap<>(), user, jwtAccessTokenExpiration);
+    public String generateAccessToken(UserDetails userDetails) {
+        return buildToken(new HashMap<>(), userDetails, jwtAccessTokenExpiration);
     }
 
     public String extractUsername(String token) {
@@ -39,34 +39,20 @@ public class JwtTokenUtils {
         return claimsResolver.apply(claims);
     }
 
-    public boolean isTokenValid(String token, User user) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(user.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    public String generateAccessToken(
-            Map<String, Object> extraClaims,
-            User user
-    ) {
-        return buildToken(extraClaims, user, jwtAccessTokenExpiration);
+    public String generateRefreshToken(UserDetails userDetails) {
+        return buildToken(new HashMap<>(), userDetails, jwtRefreshTokenExpiration);
     }
 
-    public String generateRefreshToken(
-            Map<String, Object> extraClaims,
-            User user
-    ) {
-        return buildToken(extraClaims, user, jwtRefreshTokenExpiration);
-    }
-
-    public String generateRefreshToken(User user) {
-        return buildToken(new HashMap<>(), user, jwtRefreshTokenExpiration);
-    }
-
-    public String buildToken(Map<String, Object> claims, User user, Long jwtAccessTokenExpiration) {
+    public String buildToken(Map<String, Object> claims, UserDetails userDetails, Long jwtAccessTokenExpiration) {
         Instant now = Instant.now();
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getUsername())
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(jwtAccessTokenExpiration, SECONDS)))
                 .signWith(HS256, secretKey)

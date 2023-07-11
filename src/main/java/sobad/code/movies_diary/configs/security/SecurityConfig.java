@@ -20,9 +20,9 @@ import sobad.code.movies_diary.jwts.JwtAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
-import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGOUT_PATH;
-import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_CREATE_PATH;
+import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
+import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REG_PATH;
+import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_PATH;
 
 @Configuration
 @EnableWebSecurity
@@ -41,11 +41,11 @@ public class SecurityConfig {
                 .cors().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        MOVIE_CONTROLLER_CREATE_PATH, POST.name(),
-                        AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.name(),
-                        AUTH_CONTROLLER_LOGOUT_PATH, GET.name()
-                ).authenticated()
-                .anyRequest().permitAll()
+                        AUTH_CONTROLLER_REG_PATH, POST.name(),
+                        AUTH_CONTROLLER_LOGIN_PATH, POST.name(),
+                        USER_CONTROLLER_PATH + "/**", GET.name()
+                ).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(

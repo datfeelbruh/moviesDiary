@@ -5,7 +5,8 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import sobad.code.movies_diary.entities.Movie;
-import sobad.code.movies_diary.repositories.dsl.filters.MovieFilter;
+import sobad.code.movies_diary.repositories.dsl.filters.MovieGenreFilter;
+import sobad.code.movies_diary.repositories.dsl.filters.MovieNameFilter;
 
 import static sobad.code.movies_diary.entities.QMovie.movie;
 
@@ -16,11 +17,19 @@ import java.util.List;
 public class MovieCustomRepositoryImpl implements MovieCustomRepository {
     private final EntityManager entityManager;
     @Override
-    public List<Movie> findByFilter(MovieFilter filter) {
+    public List<Movie> findByFilter(MovieGenreFilter filter) {
         return new JPAQuery<Movie>(entityManager)
                 .select(movie)
                 .from(movie)
                 .where(movie.genres.any().name.contains(filter.getGenreName()))
+                .fetch();
+    }
+
+    public List<Movie> findByMovieNameFilter(MovieNameFilter filter) {
+        return new JPAQuery<Movie>(entityManager)
+                .select(movie)
+                .from(movie)
+                .where(movie.movieName.contains(filter.getMovieName()))
                 .fetch();
     }
 

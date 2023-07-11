@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import sobad.code.movies_diary.dto.MovieDtoRequest;
 import sobad.code.movies_diary.dto.MovieDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
-import sobad.code.movies_diary.entities.User;
-import sobad.code.movies_diary.repositories.dsl.filters.MovieFilter;
+import sobad.code.movies_diary.repositories.dsl.filters.MovieGenreFilter;
 import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.dsl.MovieCustomRepositoryImpl;
+import sobad.code.movies_diary.repositories.dsl.filters.MovieNameFilter;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,23 +37,6 @@ public class MovieService {
         return buildResponse(movie, movieDtoRequest);
     }
 
-    public List<MovieDtoResponse> getUserMoviesList(String username) {
-        Optional<User> user = userService.findByUsername(username);
-        if (user.isEmpty()) {
-            throw new RuntimeException();
-        }
-
-        return user.get().getMovies()
-                .stream()
-                .map(movieMapper::mapFromEntityToResponseDto)
-                .peek(e -> {
-                    Double userRating = movieRatingService.getRatingById(e.getId(), user.get().getId());
-                    e.setUserRating(userRating);
-                    e.setAverageRating(movieRatingService.calcAverageRating(e.getId()).orElse(userRating));
-                })
-                .toList();
-    }
-
     public List<MovieDtoResponse> getAllMovies() {
         return movieRepository.findAll()
                 .stream()
@@ -65,8 +48,18 @@ public class MovieService {
 
     }
 
+    public List<MovieDtoResponse> getMoviesByName(String movieName) {
+        return movieCustomRepository.findByMovieNameFilter(new MovieNameFilter(movieName))
+                .stream()
+                .map(movieMapper::mapFromEntityToResponseDto)
+                .peek(e -> {
+                    e.setAverageRating(movieRatingService.calcAverageRating(e.getId()).orElseThrow());
+                })
+                .toList();
+    }
+
     public List<MovieDtoResponse> getMoviesListByGenre(String genreName) {
-        return movieCustomRepository.findByFilter(new MovieFilter(genreName))
+        return movieCustomRepository.findByFilter(new MovieGenreFilter(genreName))
                 .stream()
                 .map(movieMapper::mapFromEntityToResponseDto)
                 .peek(e -> {

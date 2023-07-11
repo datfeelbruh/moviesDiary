@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieFilter {
-    private String genreName;
+public class MovieNameFilter {
+    private String movieName;
 }
