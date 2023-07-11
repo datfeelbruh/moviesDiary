@@ -21,6 +21,8 @@ import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.RoleRepository;
 import sobad.code.movies_diary.repositories.TokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
+import sobad.code.movies_diary.service.UserService;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +32,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REG_PATH;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_CREATE_PATH;
+import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 
 @Component
 public class TestUtils {
@@ -51,6 +53,9 @@ public class TestUtils {
     private MovieRepository movieRepository;
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private UserService userService;
 
     private static final ObjectMapper MAPPER = new ObjectMapper()
             .findAndRegisterModules()
@@ -142,7 +147,7 @@ public class TestUtils {
     }
 
     public ResultActions perform(final MockHttpServletRequestBuilder request, User user) throws Exception {
-        final String token = jwtTokenUtils.generateAccessToken(user);
+        final String token = jwtTokenUtils.generateAccessToken(userService.loadUserByUsername(user.getUsername()));
         request.header(AUTHORIZATION, "Bearer " + token);
         return mockMvc.perform(request);
     }
@@ -165,7 +170,7 @@ public class TestUtils {
 
     public ResultActions regSampleMovie() throws Exception {
         User user = userRepository.findAll().get(0);
-        MockHttpServletRequestBuilder request = post(MOVIE_CONTROLLER_CREATE_PATH)
+        MockHttpServletRequestBuilder request = post(MOVIE_CONTROLLER_PATH)
                 .content(TestUtils.writeJson(SAMPLE_MOVIE))
                 .contentType(APPLICATION_JSON);
 
@@ -174,7 +179,7 @@ public class TestUtils {
 
     public ResultActions regAnotherMovie() throws Exception {
         User user = userRepository.findAll().get(1);
-        MockHttpServletRequestBuilder request = post(MOVIE_CONTROLLER_CREATE_PATH)
+        MockHttpServletRequestBuilder request = post(MOVIE_CONTROLLER_PATH)
                 .content(TestUtils.writeJson(ANOTHER_MOVIE))
                 .contentType(APPLICATION_JSON);
 

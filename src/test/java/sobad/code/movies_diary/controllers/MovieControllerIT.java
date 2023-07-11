@@ -26,9 +26,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_ALL_MOVIES_PATH;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_CREATE_PATH;
-import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_GENRES_PATH;
+
+import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.utils.TestUtils.ANOTHER_MOVIE;
 import static sobad.code.movies_diary.utils.TestUtils.SAMPLE_MOVIE;
 
@@ -61,7 +60,7 @@ public class MovieControllerIT {
     @Test
     public void createMovie() throws Exception {
         User user = userRepository.findAll().get(0);
-        MockHttpServletRequestBuilder request = post(MOVIE_CONTROLLER_CREATE_PATH)
+        MockHttpServletRequestBuilder request = post(MOVIE_CONTROLLER_PATH)
                 .content(TestUtils.writeJson(ANOTHER_MOVIE))
                 .contentType(APPLICATION_JSON);
 
@@ -102,7 +101,7 @@ public class MovieControllerIT {
                 movieRatingRepository.findByMovieIdAndUserId(anotherMovie.getId(), anotherUser.getId()).get();
 
         MockHttpServletRequestBuilder requestBuilder = get(
-                MOVIE_CONTROLLER_ALL_MOVIES_PATH
+                MOVIE_CONTROLLER_PATH
         );
 
         MockHttpServletResponse responseGet = testUtils.perform(requestBuilder).andReturn().getResponse();
@@ -140,7 +139,7 @@ public class MovieControllerIT {
         Movie anotherMovie = movieRepository.findAll().get(1);
 
         MockHttpServletRequestBuilder requestBuilder = get(
-                MOVIE_CONTROLLER_GENRES_PATH + "?genre=комедия"
+                MOVIE_CONTROLLER_PATH + "?genre=комедия"
         );
 
         MockHttpServletResponse genreResponse = testUtils.perform(requestBuilder).andReturn().getResponse();
@@ -151,7 +150,7 @@ public class MovieControllerIT {
         assertThat(genreResponseContent).doesNotContain(anotherMovie.getMovieName());
 
         MockHttpServletRequestBuilder anotherRequestBuilder = get(
-                MOVIE_CONTROLLER_GENRES_PATH + "?genre=боевик"
+                MOVIE_CONTROLLER_PATH + "?genre=боевик"
         );
 
         MockHttpServletResponse anotherGenreResponse = testUtils.perform(anotherRequestBuilder).andReturn()
