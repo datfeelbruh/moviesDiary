@@ -19,7 +19,7 @@ import sobad.code.movies_diary.entities.User;
 @AllArgsConstructor
 public class Token extends BaseModel {
     @Column(unique = true)
-    private String token;
+    private String accessToken;
     public boolean revoked;
     public boolean expired;
     @ManyToOne(fetch = FetchType.LAZY)

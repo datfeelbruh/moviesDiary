@@ -2,7 +2,7 @@ plugins {
 	id 'java'
 	id 'checkstyle'
 	id 'application'
-	id 'org.springframework.boot' version '3.0.6'
+	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
 	id 'com.github.ben-manes.versions' version '0.38.0'
 	id 'org.liquibase.gradle' version '2.2.0'
@@ -78,7 +78,11 @@ dependencies {
 	)
 	testImplementation (
 			'org.springframework.boot:spring-boot-starter-test',
-			'org.springframework.boot:spring-boot-starter-security'
+			'org.springframework.security:spring-security-test',
+			'org.springframework.boot:spring-boot-starter-security',
+			'org.testcontainers:testcontainers:1.18.3',
+			'org.testcontainers:postgresql:1.18.3',
+			'org.testcontainers:junit-jupiter:1.16.2'
 	)
 	liquibaseRuntime(
 			sourceSets.main.output,

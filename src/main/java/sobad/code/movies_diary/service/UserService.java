@@ -14,10 +14,12 @@ import sobad.code.movies_diary.dto.UserDto;
 import sobad.code.movies_diary.dto.UserDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.exceptions.UserPasswordMismatchException;
 import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,10 +68,13 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public UserDto createUser(AuthRegistrationRequest newUser) {
+    public UserDto createUser(AuthRegistrationRequest authRegistrationRequest) {
+        if (!Objects.equals(authRegistrationRequest.getPassword(), authRegistrationRequest.getConfirmPassword())) {
+            throw new UserPasswordMismatchException("Пароль и потверждающие пароль не совпадают");
+        }
         User user = User.builder()
-                .username(newUser.getUsername())
-                .password(passwordEncoder.encode(newUser.getPassword()))
+                .username(authRegistrationRequest.getUsername())
+                .password(passwordEncoder.encode(authRegistrationRequest.getPassword()))
                 .roles(List.of(roleService.getUserRole()))
                 .build();
         userRepository.save(user);

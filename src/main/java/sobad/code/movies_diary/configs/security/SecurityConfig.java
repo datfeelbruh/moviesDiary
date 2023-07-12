@@ -21,7 +21,7 @@ import sobad.code.movies_diary.jwts.JwtAuthenticationFilter;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
-import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REG_PATH;
+import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
 import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_PATH;
 
 @Configuration
@@ -41,9 +41,9 @@ public class SecurityConfig {
                 .cors().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        AUTH_CONTROLLER_REG_PATH, POST.name(),
                         AUTH_CONTROLLER_LOGIN_PATH, POST.name(),
-                        USER_CONTROLLER_PATH + "/**", GET.name()
+                        USER_CONTROLLER_PATH + "/**",
+                        AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.name()
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()

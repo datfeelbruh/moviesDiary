@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,9 +23,12 @@ import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
 
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
 import sobad.code.movies_diary.dto.UserDto;
+import sobad.code.movies_diary.exceptions.AppException;
+import sobad.code.movies_diary.exceptions.UserPasswordMismatchException;
 import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.service.AuthService;
 import java.io.IOException;
+import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -34,30 +38,9 @@ import static org.springframework.http.HttpStatus.OK;
 @Tag(name = "Аутентификация и авторизация")
 public class AuthController {
     private final AuthService authService;
-    public static final String AUTH_CONTROLLER_REG_PATH = "/api/auth/registration";
     public static final String AUTH_CONTROLLER_LOGIN_PATH = "/api/auth/login";
     public static final String AUTH_CONTROLLER_REFRESH_TOKEN_PATH = "/api/auth/refresh";
     public static final String AUTH_CONTROLLER_LOGOUT_PATH = "/api/auth/logout";
-
-    @Operation(summary = "Регистрация пользователя в приложении"
-    )
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Данные пользователя", content =
-            @Content(schema =
-            @Schema(implementation = UserDto.class))
-            )
-    })
-    @PostMapping(AUTH_CONTROLLER_REG_PATH)
-    public ResponseEntity<?> registry(@RequestBody AuthRegistrationRequest authRegistrationRequest) {
-        try {
-            return new ResponseEntity<>(authService.registry(authRegistrationRequest), CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                    String.format("Пользователь с таким именем '%s' уже существует!",
-                            authRegistrationRequest.getUsername())),
-                    HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-    }
 
     @Operation(summary = "Аутентификация пользователя в приложении"
     )
@@ -86,16 +69,16 @@ public class AuthController {
             @Schema(implementation = Token.class))
             )
     })
-    @PostMapping(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
+    @GetMapping(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
     public ResponseEntity<?> refreshToken(HttpServletRequest request) throws IOException {
-        try {
+//        try {
             AuthTokenResponse response = authService.refreshToken(request);
             return new ResponseEntity<>(response, OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
-                    "Рефреш токен невалиден"),
-                    HttpStatus.BAD_REQUEST);
-        }
+//        } catch (RuntimeException e) {
+//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
+//                    "Рефреш токен невалиден"),
+//                    HttpStatus.BAD_REQUEST);
+//        }
     }
 
     @Operation(summary = "Логаут он и в Африке логаут"

@@ -12,9 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
-import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
-import sobad.code.movies_diary.dto.UserDto;
 import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.exceptions.AppException;
 import sobad.code.movies_diary.jwts.JwtTokenUtils;
 import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.repositories.TokenRepository;
@@ -30,15 +29,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 @RequiredArgsConstructor
+@AppException
 public class AuthService {
     private final UserService userService;
     private final TokenRepository tokenRepository;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
-
-    public UserDto registry(AuthRegistrationRequest registrationUserDto) {
-        return userService.createUser(registrationUserDto);
-    }
 
     public AuthTokenResponse authenticate(AuthLoginRequest authLoginRequest) {
         authenticationManager.authenticate(
@@ -94,7 +90,7 @@ public class AuthService {
             return;
         }
         jwt = authHeader.substring(7);
-        var storedToken = tokenRepository.findByToken(jwt)
+        var storedToken = tokenRepository.findByAccessToken(jwt)
                 .orElse(null);
         if (storedToken != null) {
             storedToken.setExpired(true);
@@ -113,10 +109,10 @@ public class AuthService {
         }
     }
 
-    private void saveUserToken(UserDetails userDetails, String jwtToken) {
-        var token = Token.builder()
+    private void saveUserToken(UserDetails userDetails, String accessToken) {
+        Token token = Token.builder()
                 .user(userService.findByUsername(userDetails.getUsername()).get())
-                .token(jwtToken)
+                .accessToken(accessToken)
                 .expired(false)
                 .revoked(false)
                 .build();

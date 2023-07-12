@@ -1,17 +1,26 @@
-jwt:
-  secret: GDFGDFJGDLKVBMNSLKNSDKL
-  lifetime: 30m
-x-api-key: 1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z
+#jwt:
+#  secret: GDFGDFJGDLKVBMNSLKNSDKL
+#  lifetime: 30m
+#x-api-key: 1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z
 
-base-url: /api
+#base-url: /api
+#
+#server:
+#  port: 8080
 
 spring:
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:tc:postgresql:15
+
   jpa:
     show-sql: true
 
   liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/changelog-master.yaml
+    enabled: false
+#    change-log: classpath:db/changelog/changelog-master.yaml
 
   mvc:
     hiddenmethod:
