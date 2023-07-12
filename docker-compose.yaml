@@ -3,14 +3,18 @@ version: '3'
 services:
   postgres:
     image: 'postgres:15'
-    container_name: "movies_diary_db"
-    env_file:
-      - vars.env
+    container_name: "backend-db"
+    environment:
+      - "POSTGRES_USER=sobad"
+      - "POSTGRES_PASSWORD=asedur81"
+      - "POSTGRES_DB=backendDatabase"
+#    env_file:
+#      - vars.env
 
   backend:
-    image: 'moviesdiary-backend'
+    build: ./
     container_name: 'backend-app'
-    env_file:
-      - vars.env
+#    env_file:
+#      - vars.env
     ports:
-      - 8000:8000
+      - "8000:8000"

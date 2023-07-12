@@ -18,9 +18,12 @@ import sobad.code.movies_diary.exceptions.UserPasswordMismatchException;
 import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.repositories.UserRepository;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,11 +75,13 @@ public class UserService implements UserDetailsService {
         if (!Objects.equals(authRegistrationRequest.getPassword(), authRegistrationRequest.getConfirmPassword())) {
             throw new UserPasswordMismatchException("Пароль и потверждающие пароль не совпадают");
         }
-        User user = User.builder()
-                .username(authRegistrationRequest.getUsername())
-                .password(passwordEncoder.encode(authRegistrationRequest.getPassword()))
-                .roles(List.of(roleService.getUserRole()))
-                .build();
+        User user = new User();
+        user.setUsername(authRegistrationRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(authRegistrationRequest.getPassword()));
+        user.setRoles(List.of(roleService.getUserRole()));
+        user.setMovies(new HashSet<>());
+        user.setUserMovieRatings(new HashSet<>());
+
         userRepository.save(user);
         return new UserDto(user.getId(), user.getUsername());
     }
@@ -88,7 +93,9 @@ public class UserService implements UserDetailsService {
 
     public void addMovieToUser(Movie movie) {
         User user = getCurrentUser();
-        user.getMovies().add(movie);
+        Set<Movie> set = new HashSet<>(user.getMovies());
+        set.add(movie);
+        user.setMovies(set);
         userRepository.save(user);
     }
 }

@@ -15,15 +15,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import sobad.code.movies_diary.jwts.Token;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
-@Builder
 @Table(name = "users")
 @Entity
 @NoArgsConstructor
@@ -37,10 +40,9 @@ public class User extends BaseModel {
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
-        CascadeType.PERSIST,
-        CascadeType.MERGE
+        CascadeType.ALL
     })
-    private Set<Movie> movies;
+    private Set<Movie> movies = new HashSet<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private Set<MovieRating> userMovieRatings;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

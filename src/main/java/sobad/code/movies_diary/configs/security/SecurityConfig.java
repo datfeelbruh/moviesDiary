@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,24 +39,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .cors().disable()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        AUTH_CONTROLLER_LOGIN_PATH, POST.name(),
-                        USER_CONTROLLER_PATH + "/**",
-                        AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.name()
-                ).permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(requests -> {
+                    requests.requestMatchers(
+                            AUTH_CONTROLLER_LOGIN_PATH, POST.name(),
+                            USER_CONTROLLER_PATH + "/**",
+                            AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.name()
+                    ).permitAll();
+                    requests.anyRequest().authenticated();
+                })
                 .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 )
-                .headers().frameOptions().sameOrigin()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }

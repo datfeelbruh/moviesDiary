@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: user_movie_constraints
+      author: sobad
+      changes:
+        - createTable:
+            tableName: user_movies
+            columns:
+              - column:
+                  name: users_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_moviesPK
+              - column:
+                  name: movies_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_moviePK
+
+        - addForeignKeyConstraint:
+            baseColumnNames: users_id
+            baseTableName: user_movies
+            constraintName: FK_USER_MOVIES_MOVIES_ID_COL
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: movies
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseColumnNames: movies_id
+            baseTableName: user_movies
+            constraintName: FK_USER_MOVIES_USERS_ID_COL
+            deferrable: false
+            initiallyDeferred: false
+            referencedColumnNames: id
+            referencedTableName: users
+            validate: true

@@ -13,6 +13,7 @@ import sobad.code.movies_diary.repositories.dsl.filters.MovieNameFilter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service

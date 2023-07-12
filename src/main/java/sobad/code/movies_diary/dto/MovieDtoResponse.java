@@ -1,7 +1,9 @@
 package sobad.code.movies_diary.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sobad.code.movies_diary.entities.Genre;
 import java.util.Set;
@@ -9,6 +11,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MovieDtoResponse {
     private Long id;
     private Long kpId;

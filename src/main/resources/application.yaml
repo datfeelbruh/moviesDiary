@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8000
   http2:
     enabled: true
 
@@ -19,9 +19,9 @@ x-api-key: "1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z"
 
 spring:
   datasource:
-    username: "datfeelbruh"
+    username: "sobad"
     password: "asedur81"
-    url: "jdbc:postgresql://localhost:5432/movies_diary"
+    url: "jdbc:postgresql://postgres:5432/backendDatabase"
 
   jpa:
     hibernate:

@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop_column-rating
+      author: sobad
+      changes:
+        - dropColumn:
+            tableName: movies
+            columns:
+              - column:
+                  name: rating

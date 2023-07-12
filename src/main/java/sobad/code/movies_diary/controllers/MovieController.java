@@ -45,17 +45,17 @@ public class MovieController {
     })
     @RequestMapping(value = MOVIE_CONTROLLER_PATH, method = POST)
     public ResponseEntity<?> createMovie(@RequestBody MovieDtoRequest movieDtoRequest) {
-        try {
+//        try {
             MovieDtoResponse movie = movieService.createMovie(movieDtoRequest);
             return new ResponseEntity<>(movie, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(
-                    new AppError(HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                            String.format("Данный фильм '%s' уже добавлен в ваш профиль",
-                                    movieDtoRequest.getMovieName()
-                            )),
-                    HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(
+//                    new AppError(HttpStatus.UNPROCESSABLE_ENTITY.value(),
+//                            String.format("Данный фильм '%s' уже добавлен в ваш профиль",
+//                                    movieDtoRequest.getMovieName()
+//                            )),
+//                    HttpStatus.UNPROCESSABLE_ENTITY);
+//        }
     }
 
     @Operation(summary = "Получение всех фильмов в базе приложения"
