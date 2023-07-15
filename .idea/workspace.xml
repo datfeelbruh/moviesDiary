@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c6542980-d209-45b4-91a0-a06da898cd89" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/GenreDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/ReviewDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/UserMovieDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/ReviewRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/dsl/filters/MovieUserIdFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/ReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/moviesDiary.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/bootScripts/movies_diary" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/bootScripts/movies_diary.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/authentication/AuthRegistrationRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/authentication/AuthRegistrationRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/configs/security/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/configs/security/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/controllers/ExternalApiController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/controllers/ExternalApiController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/controllers/MovieController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/controllers/MovieController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/controllers/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoRequest$MovieDtoRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoRequest$MovieDtoRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoResponse$MovieDtoResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoResponse$MovieDtoResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/MovieDtoResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/UserDtoResponse$UserDtoResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/UserDtoResponse$UserDtoResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/UserDtoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/UserDtoResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieInfoDto$KinopoiskMovieInfoDtoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieInfoDto$KinopoiskMovieInfoDtoBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieInfoDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieInfoDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieShortInfoDto$KinopoiskMovieShortInfoDtoBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieShortInfoDto.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/Movie$MovieBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/Movie$MovieBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/Movie.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/Movie.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/MovieRating$MovieRatingBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/MovieRating.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/QMovie.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/QMovie.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/QMovieRating.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/QUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/QUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/entities/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/mappers/KinopoiskMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/mappers/MovieMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/mappers/MovieMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/DocsItemMovieInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/DocsItemMovieInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/Rating.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/Rating.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieList/DocsItemMoviesList.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieList/MovieList.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/MovieRatingRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/MovieRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/MovieRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/MovieCustomRepositoryImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/MovieCustomRepositoryImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/filters/MovieGenreFilter$MovieGenreFilterBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/filters/MovieGenreFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/filters/MovieGenreFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/filters/MovieNameFilter$MovieNameFilterBuilder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/filters/MovieNameFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/repositories/dsl/filters/MovieNameFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/ExternalApiService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/ExternalApiService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/GenreService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/GenreService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/MovieRatingService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/MovieService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/MovieService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/sobad/code/movies_diary/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/MoviesDiaryApplicationTests.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/TestConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/AuthControllerIT$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/AuthControllerIT$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/AuthControllerIT$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/AuthControllerIT$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/AuthControllerIT.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/ExternalApiControllerIT$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/ExternalApiControllerIT$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/ExternalApiControllerIT.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/MovieControllerIT$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/MovieControllerIT$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/MovieControllerIT.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/UserControllerIT$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/UserControllerIT$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/UserControllerIT$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/UserControllerIT$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/UserControllerIT$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/UserControllerIT$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/controllers/UserControllerIT.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/utils/TestUtilsIT$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/utils/TestUtilsIT$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/test/sobad/code/movies_diary/utils/TestUtilsIT.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/sobad/code/movies_diary/entities/QMovie.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/sobad/code/movies_diary/entities/QMovie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/sobad/code/movies_diary/entities/QMovieRating.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/sobad/code/movies_diary/entities/QUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/sobad/code/movies_diary/entities/QUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/install/movies_diary-boot/bin/movies_diary" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/install/movies_diary-boot/bin/movies_diary.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/install/movies_diary-boot/lib/movies_diary-1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/movies_diary-1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/sobad.code.movies_diary.controllers.MovieControllerIT.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/css/base-style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/js/report.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/sobad.code.movies_diary.controllers.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/test/config/application.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/test/fixtures/auth/anotherAuth.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/test/fixtures/auth/sampleAuth.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/test/fixtures/movies/anotherMovie.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/test/fixtures/movies/sampleMovie.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/test/fixtures/users/anotherUser.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/test/fixtures/users/sampleUser.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-sobad.code.movies_diary.controllers.MovieControllerIT.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/output.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/output.bin.idx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/AuthControllerIT$1.class.uniqueId9" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/AuthControllerIT$2.class.uniqueId10" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/AuthControllerIT$3.class.uniqueId15" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/AuthControllerIT$4.class.uniqueId2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/AuthControllerIT.class.uniqueId18" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/ExternalApiControllerIT$1.class.uniqueId17" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/ExternalApiControllerIT$2.class.uniqueId19" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/ExternalApiControllerIT.class.uniqueId20" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/MovieControllerIT$1.class.uniqueId3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/MovieControllerIT$2.class.uniqueId5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/MovieControllerIT.class.uniqueId14" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/TestUtilsIT$1.class.uniqueId12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/TestUtilsIT$2.class.uniqueId8" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/TestUtilsIT.class.uniqueId16" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/UserControllerIT$1.class.uniqueId6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/UserControllerIT$2.class.uniqueId11" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/UserControllerIT$3.class.uniqueId13" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/UserControllerIT$4.class.uniqueId4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/UserControllerIT$5.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/UserControllerIT$6.class.uniqueId1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/compileTransaction/stash-dir/UserControllerIT.class.uniqueId7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/previous-compilation-data.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/authentication/AuthRegistrationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/authentication/AuthRegistrationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/ExternalApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/ExternalApiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/MovieController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/MovieDtoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/MovieDtoRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/MovieDtoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/MovieDtoResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/UserDtoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/UserDtoResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieInfoDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieInfoDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/externalApiDtos/KinopoiskMovieShortInfoDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/MovieRating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/Review.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/mappers/KinopoiskMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/mappers/MovieMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/mappers/MovieMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/DocsItemMovieInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/DocsItemMovieInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieInfo/Rating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieList/DocsItemMoviesList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/pojo/kinopoiskApiResponse/pojosMovieList/MovieList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/MovieRatingRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/MovieRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/dsl/MovieCustomRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/dsl/MovieCustomRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/dsl/filters/MovieGenreFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/dsl/filters/MovieGenreFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/dsl/filters/MovieNameFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/dsl/filters/MovieNameFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/ExternalApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/ExternalApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/GenreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/GenreService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/MovieRatingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/ExternalApiControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/ExternalApiControllerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/MovieControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/MovieControllerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/utils/TestUtilsIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/utils/TestUtilsIT.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="movies_diary" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="movies_diary" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="movies_diary" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="application" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="movies_diary" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2SXU9tMbc19JzRSBO0S4GB1x2sP" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/datfe/moviesDiary&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Gradle.moviesDiary [bootRun]">
+    <configuration name="moviesDiary [bootRun]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootRun" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="moviesDiary [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="moviesDiary [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="run" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="moviesDiary" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="moviesDiary" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.moviesDiary [bootRun]" />
+        <item itemvalue="Gradle.moviesDiary [clean]" />
+        <item itemvalue="Gradle.moviesDiary [run]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c6542980-d209-45b4-91a0-a06da898cd89" name="Changes" comment="" />
+      <created>1689292272273</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1689292272273</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalArgumentException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/MovieController.java</url>
+          <line>48</line>
+          <properties class="sobad.code.movies_diary.controllers.MovieController" method="getMoviesByName">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="GradleRunConfiguration">
+        <watch expression="kpMovies" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
