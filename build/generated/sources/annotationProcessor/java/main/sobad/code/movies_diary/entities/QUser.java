@@ -22,18 +22,16 @@ public class QUser extends EntityPathBase<User> {
 
     public final QBaseModel _super = new QBaseModel(this);
 
+    public final StringPath email = createString("email");
+
     //inherited
     public final NumberPath<Long> id = _super.id;
-
-    public final SetPath<Movie, QMovie> movies = this.<Movie, QMovie>createSet("movies", Movie.class, QMovie.class, PathInits.DIRECT2);
 
     public final StringPath password = createString("password");
 
     public final CollectionPath<Role, QRole> roles = this.<Role, QRole>createCollection("roles", Role.class, QRole.class, PathInits.DIRECT2);
 
     public final ListPath<sobad.code.movies_diary.jwts.Token, sobad.code.movies_diary.jwts.QToken> tokens = this.<sobad.code.movies_diary.jwts.Token, sobad.code.movies_diary.jwts.QToken>createList("tokens", sobad.code.movies_diary.jwts.Token.class, sobad.code.movies_diary.jwts.QToken.class, PathInits.DIRECT2);
-
-    public final SetPath<MovieRating, QMovieRating> userMovieRatings = this.<MovieRating, QMovieRating>createSet("userMovieRatings", MovieRating.class, QMovieRating.class, PathInits.DIRECT2);
 
     public final StringPath username = createString("username");
 

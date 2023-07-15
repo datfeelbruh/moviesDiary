@@ -23,7 +23,9 @@ import sobad.code.movies_diary.jwts.JwtAuthenticationFilter;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
+import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGOUT_PATH;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
+import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_PATH;
 
 @Configuration
@@ -43,11 +45,10 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers(
-                            AUTH_CONTROLLER_LOGIN_PATH, POST.name(),
-                            USER_CONTROLLER_PATH + "/**",
-                            AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.name()
-                    ).permitAll();
-                    requests.anyRequest().authenticated();
+                            MOVIE_CONTROLLER_PATH, POST.name(),
+                            AUTH_CONTROLLER_LOGOUT_PATH, GET.name()
+                    ).authenticated();
+                    requests.anyRequest().permitAll();
                 })
                 .addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(

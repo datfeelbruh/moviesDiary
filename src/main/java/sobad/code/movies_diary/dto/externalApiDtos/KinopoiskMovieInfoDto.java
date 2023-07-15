@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.GenresItem;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -21,5 +22,6 @@ public class KinopoiskMovieInfoDto {
     private Double kpRating;
     private Double imdbRating;
     private String posterUrl;
-    private Set<GenresItem> genres;
+    private String description;
+    private List<GenresItem> genres;
 }

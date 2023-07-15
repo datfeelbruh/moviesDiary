@@ -9,5 +9,4 @@ import java.util.Set;
 @Builder
 public class UserDtoResponse {
     private String username;
-    private Set<MovieDtoResponse> movies;
 }

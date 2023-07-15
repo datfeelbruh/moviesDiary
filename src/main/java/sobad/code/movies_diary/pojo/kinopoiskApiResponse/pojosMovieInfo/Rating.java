@@ -1,14 +1,14 @@
 package sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo;
 
 public class Rating {
-    private Object imdb;
-    private Object kp;
+    private Double imdb;
+    private Double kp;
 
-    public Object getImdb() {
+    public Double getImdb() {
         return imdb;
     }
 
-    public Object getKp() {
+    public Double getKp() {
         return kp;
     }
 }

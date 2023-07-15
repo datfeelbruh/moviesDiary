@@ -15,13 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieDtoRequest implements Dto {
     private Long kpId;
-    private String movieName;
-    private Integer releaseYear;
     private String review;
-    private Double averageRating;
     private Double userRating;
-    private Double kpRating;
-    private Double imdbRating;
-    private String posterUrl;
-    private List<GenresItem> genres;
 }

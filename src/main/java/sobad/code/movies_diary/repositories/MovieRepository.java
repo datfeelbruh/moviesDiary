@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 public interface MovieRepository extends CrudRepository<Movie, Long>, QuerydslPredicateExecutor<Movie> {
     Optional<Movie> findByMovieName(String name);
-    List<Movie> findAllByKpId(Long id);
-    Optional<Movie> findByKpId(Long id);
+    Optional<Movie> findById(Long id);
     List<Movie> findAll();
 }

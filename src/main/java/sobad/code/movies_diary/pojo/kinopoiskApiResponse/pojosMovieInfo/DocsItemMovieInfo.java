@@ -9,6 +9,7 @@ public class DocsItemMovieInfo {
     private Rating rating;
     private String name;
     private Poster poster;
+    private String description;
     public long getId() {
         return id;
     }
@@ -26,6 +27,9 @@ public class DocsItemMovieInfo {
 
     public String getName() {
         return name;
+    }
+    public String getDescription() {
+        return description;
     }
 
     public Poster getPoster() {

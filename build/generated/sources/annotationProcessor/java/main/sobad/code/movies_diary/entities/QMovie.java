@@ -20,16 +20,13 @@ public class QMovie extends EntityPathBase<Movie> {
 
     public static final QMovie movie = new QMovie("movie");
 
-    public final QBaseModel _super = new QBaseModel(this);
+    public final StringPath description = createString("description");
 
     public final SetPath<Genre, QGenre> genres = this.<Genre, QGenre>createSet("genres", Genre.class, QGenre.class, PathInits.DIRECT2);
 
-    //inherited
-    public final NumberPath<Long> id = _super.id;
+    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final NumberPath<Double> imdbRating = createNumber("imdbRating", Double.class);
-
-    public final NumberPath<Long> kpId = createNumber("kpId", Long.class);
 
     public final NumberPath<Double> kpRating = createNumber("kpRating", Double.class);
 
@@ -38,8 +35,6 @@ public class QMovie extends EntityPathBase<Movie> {
     public final StringPath posterUrl = createString("posterUrl");
 
     public final NumberPath<Integer> releaseYear = createNumber("releaseYear", Integer.class);
-
-    public final StringPath review = createString("review");
 
     public QMovie(String variable) {
         super(Movie.class, forVariable(variable));

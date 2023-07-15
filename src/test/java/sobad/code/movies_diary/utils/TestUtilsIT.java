@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -13,9 +12,7 @@ import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.jwts.JwtTokenUtils;
-import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.repositories.GenreRepository;
-import sobad.code.movies_diary.repositories.MovieRatingRepository;
 import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.RoleRepository;
 import sobad.code.movies_diary.repositories.TokenRepository;
@@ -53,7 +50,7 @@ public class TestUtilsIT {
     private MovieRepository movieRepository;
 
     @Autowired
-    private MovieRatingRepository movieRatingRepository;
+    private RatingRepository movieRatingRepository;
 
     @Autowired
     private RoleRepository roleRepository;
