@@ -27,7 +27,6 @@ public class MovieService {
     private final ExternalApiService externalApiService;
     private final MovieMapper movieMapper;
 
-
     public MovieDtoResponse getMovieById(Long id) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
         if (movieInDb.isEmpty()) {
@@ -36,6 +35,12 @@ public class MovieService {
         Movie movie = movieInDb.get();
 
         return movieMapper.mapFromEntityToResponse(movie);
+    }
+
+    public List<MovieDtoResponse> getAllMovies() {
+        return movieRepository.findAll().stream()
+                .map(movieMapper::mapFromEntityToResponse)
+                .toList();
     }
 
     public List<MovieDtoResponse> getMoviesByName(String name, Boolean findOnKp) {
@@ -67,8 +72,14 @@ public class MovieService {
                     .toList();
 
             movieRepository.saveAll(movies);
-            return movies.stream()
-                    .map(movieMapper::mapToShortInfo)
+            return kpMovies.stream()
+                    .map(e -> MovieDtoShortInfo.builder()
+                            .id(e.getId())
+                            .title(e.getTitle())
+                            .posterUrl(e.getPosterUrl())
+                            .releaseYear(e.getReleaseYear())
+                            .build()
+                    )
                     .toList();
         }
 

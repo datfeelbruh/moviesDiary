@@ -33,6 +33,11 @@ public class MovieController {
         return new ResponseEntity<>(movie, OK);
     }
 
+    @GetMapping(value = MOVIE_CONTROLLER_PATH)
+    public ResponseEntity<?> getAllMovies() {
+        return new ResponseEntity<>(movieService.getAllMovies(), OK);
+    }
+
     @GetMapping(
             value = MOVIE_CONTROLLER_PATH,
             params = "username"
