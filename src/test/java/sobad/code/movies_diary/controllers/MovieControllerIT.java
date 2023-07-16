@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import sobad.code.movies_diary.dto.MovieDtoRequest;
+import sobad.code.movies_diary.dto.movie.MovieDtoRequest;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.repositories.GenreRepository;

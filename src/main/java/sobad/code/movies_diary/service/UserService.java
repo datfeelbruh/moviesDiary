@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
-import sobad.code.movies_diary.dto.UserDto;
+import sobad.code.movies_diary.dto.user.UserDtoResponse;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.UserPasswordMismatchException;
 import sobad.code.movies_diary.repositories.UserRepository;
@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public UserDto createUser(AuthRegistrationRequest authRegistrationRequest) {
+    public UserDtoResponse createUser(AuthRegistrationRequest authRegistrationRequest) {
         if (!Objects.equals(authRegistrationRequest.getPassword(), authRegistrationRequest.getConfirmPassword())) {
             throw new UserPasswordMismatchException("Пароль и потверждающие пароль не совпадают");
         }
@@ -60,7 +60,7 @@ public class UserService implements UserDetailsService {
         user.setRoles(List.of(roleService.getUserRole()));
 
         userRepository.save(user);
-        return new UserDto(user.getId(), user.getUsername());
+        return new UserDtoResponse(user.getId(), user.getUsername(), user.getEmail());
     }
 
     public User getCurrentUser() {

@@ -29,11 +29,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseModel {
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     @JsonIgnore
     @OneToMany(mappedBy = "user")

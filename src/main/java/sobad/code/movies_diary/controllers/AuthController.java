@@ -12,25 +12,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import sobad.code.movies_diary.AppError;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
-import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
 
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
-import sobad.code.movies_diary.dto.UserDto;
-import sobad.code.movies_diary.exceptions.AppException;
-import sobad.code.movies_diary.exceptions.UserPasswordMismatchException;
 import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.service.AuthService;
 import java.io.IOException;
-import java.util.Objects;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController

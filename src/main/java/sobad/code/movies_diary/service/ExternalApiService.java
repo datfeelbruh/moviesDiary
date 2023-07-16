@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import sobad.code.movies_diary.dto.MovieDtoResponse;
+import sobad.code.movies_diary.dto.movie.MovieDtoResponse;
 import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.DocsItemMovieInfo;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.MovieInfo;

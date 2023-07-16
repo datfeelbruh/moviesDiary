@@ -2,9 +2,9 @@ package sobad.code.movies_diary.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sobad.code.movies_diary.dto.MovieDtoRequest;
-import sobad.code.movies_diary.dto.MovieDtoResponse;
-import sobad.code.movies_diary.dto.UserMovieDto;
+import sobad.code.movies_diary.dto.movie.MovieDtoResponse;
+import sobad.code.movies_diary.dto.movie.MovieDtoShortInfo;
+import sobad.code.movies_diary.dto.movie.UserMoviesDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.mappers.MovieMapper;
@@ -24,17 +24,9 @@ public class MovieService {
     private final MovieCustomRepositoryImpl movieCustomRepository;
     private final MovieRepository movieRepository;
     private final UserService userService;
-    private final ReviewService reviewService;
     private final ExternalApiService externalApiService;
     private final MovieMapper movieMapper;
 
-    public UserMovieDto createMovie(MovieDtoRequest movieDtoRequest) {
-        Movie movie = movieRepository.findById(movieDtoRequest.getKpId()).get();
-        User user = userService.getCurrentUser();
-        reviewService.create(movieDtoRequest.getReview(), movieDtoRequest.getUserRating(), movie, user);
-
-        return movieMapper.mapFromEntityToUserMovieResponse(movie, user);
-    }
 
     public MovieDtoResponse getMovieById(Long id) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
@@ -65,6 +57,27 @@ public class MovieService {
                 .toList();
     }
 
+    public List<MovieDtoShortInfo> getMoviesByNameShortInfo(String name, Boolean findOnKp) {
+        if (findOnKp) {
+            List<MovieDtoResponse> kpMovies = externalApiService.findMovieByName(name);
+
+            List<Movie> movies = kpMovies.stream()
+                    .filter(e -> movieRepository.findById(e.getId()).isEmpty())
+                    .map(movieMapper::mapFromMovieInfoToEntity)
+                    .toList();
+
+            movieRepository.saveAll(movies);
+            return movies.stream()
+                    .map(movieMapper::mapToShortInfo)
+                    .toList();
+        }
+
+        return movieCustomRepository.findByMovieNameFilter(new MovieNameFilter(name))
+                .stream()
+                .map(movieMapper::mapToShortInfo)
+                .toList();
+    }
+
     public List<MovieDtoResponse> getMoviesByGenre(String genreName) {
         return movieCustomRepository.findByFilter(new MovieGenreFilter(genreName))
                 .stream()
@@ -72,12 +85,18 @@ public class MovieService {
                 .toList();
     }
 
-    public List<UserMovieDto> getMoviesByUser(String username) {
-        User user = userService.findByUsername(username).orElseThrow();
-        return movieCustomRepository.findByMovieUserIdFilter(new MovieUserIdFilter(user.getId()))
+    public List<MovieDtoShortInfo> getMoviesByGenreShortInfo(String genreName) {
+        return movieCustomRepository.findByFilter(new MovieGenreFilter(genreName))
                 .stream()
-                .map(e -> movieMapper.mapFromEntityToUserMovieResponse(e, user))
+                .map(movieMapper::mapToShortInfo)
                 .toList();
+    }
+
+    public UserMoviesDtoResponse getMoviesByUser(String username) {
+        User user = userService.findByUsername(username).orElseThrow();
+        List<Movie> movies = movieCustomRepository.findByMovieUserIdFilter(new MovieUserIdFilter(user.getId()));
+
+        return movieMapper.mapFromEntityToUserMovieResponse(movies, user);
     }
 
 }

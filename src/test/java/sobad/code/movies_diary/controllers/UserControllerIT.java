@@ -1,18 +1,12 @@
 package sobad.code.movies_diary.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -21,13 +15,10 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import sobad.code.movies_diary.AppError;
-import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
-import sobad.code.movies_diary.dto.UserDto;
+import sobad.code.movies_diary.dto.user.UserDtoResponse;
 import sobad.code.movies_diary.repositories.UserRepository;
 import sobad.code.movies_diary.utils.TestUtilsIT;
-
-import java.nio.charset.StandardCharsets;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +60,7 @@ public class UserControllerIT {
         ResultActions resultActions = mockMvc.perform(request);
         resultActions.andExpect(status().isCreated());
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        UserDto response = TestUtilsIT.readJson(content, new TypeReference<>(){});
+        UserDtoResponse response = TestUtilsIT.readJson(content, new TypeReference<>(){});
 
         assertThat(userRepository.findAll().size()).isGreaterThan(0);
         assertThat(userRepository.findByUsername(user.getUsername())).isNotNull();
