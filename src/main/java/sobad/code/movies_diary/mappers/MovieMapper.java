@@ -68,7 +68,7 @@ public class MovieMapper {
     }
 
     public UserMovieDto toUserMovieDto(Movie movie, Long userId) {
-        ReviewDtoResponse reviewByUser = reviewService.getReviewByUserIdAndMovieID(userId, movie.getId());
+        ReviewDtoResponse reviewByUser = reviewService.getReviewByUserIdAndMovieId(userId, movie.getId());
         return UserMovieDto.builder()
                 .id(movie.getId())
                 .description(movie.getDescription())

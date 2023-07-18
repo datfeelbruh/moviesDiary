@@ -1,8 +1,15 @@
 package sobad.code.movies_diary.dto.review;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class ReviewDtoRequest {
     private Long movieId;
     private String review;

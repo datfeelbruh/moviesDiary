@@ -7,6 +7,7 @@ import sobad.code.movies_diary.dto.movie.MovieDtoShortInfo;
 import sobad.code.movies_diary.dto.movie.UserMoviesDtoResponse;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.exceptions.MovieNotFoundException;
 import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.dsl.MovieCustomRepositoryImpl;
@@ -30,7 +31,7 @@ public class MovieService {
     public MovieDtoResponse getMovieById(Long id) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
         if (movieInDb.isEmpty()) {
-            throw new RuntimeException("нет фильма соси");
+            throw new MovieNotFoundException(String.format("Фильм с данным id '%s' не найден", id));
         }
         Movie movie = movieInDb.get();
 
@@ -72,6 +73,7 @@ public class MovieService {
                     .toList();
 
             movieRepository.saveAll(movies);
+
             return kpMovies.stream()
                     .map(e -> MovieDtoShortInfo.builder()
                             .id(e.getId())
@@ -104,7 +106,7 @@ public class MovieService {
     }
 
     public UserMoviesDtoResponse getMoviesByUser(String username) {
-        User user = userService.findByUsername(username).orElseThrow();
+        User user = userService.findByUsername(username);
         List<Movie> movies = movieCustomRepository.findByMovieUserIdFilter(new MovieUserIdFilter(user.getId()));
 
         return movieMapper.mapFromEntityToUserMovieResponse(movies, user);

@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6542980-d209-45b4-91a0-a06da898cd89" name="Changes" comment="">
+    <list default="true" id="c6542980-d209-45b4-91a0-a06da898cd89" name="Changes" comment="v 0.6.1">
+      <change afterPath="$PROJECT_DIR$/infrastructure/create_db.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/exceptions/MovieNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/exceptions/ReviewNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/ReviewControllerIT.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/utils/MovieTestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/fixtures/movies/movie1.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -12,11 +18,61 @@
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/AppError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/exceptions/AppError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/ExceptionHandlerFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/exceptions/ExceptionHandlerFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/SwaggerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/MovieController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/ReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/GenreDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/GenreDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/movie/MovieDtoShortInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/movie/MovieDtoShortInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/movie/MovieReview.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/movie/MovieReview.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/movie/UserMoviesDtoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/movie/UserMoviesDtoResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/review/ReviewDtoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/review/ReviewDtoRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/review/ReviewDtoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/review/ReviewDtoResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/review/UserReview.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/dto/review/UserReview.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/Genre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/entities/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/exceptions/AppException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/exceptions/AuthControllerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/exceptions/CustomAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/mappers/MovieMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/mappers/MovieMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/ReviewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/repositories/ReviewRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/GenreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/GenreService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/ReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changelog-master.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/changelog/changelog-master.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/drop-column-movie-table.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/genres-table.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/insert-roles-in-roles-table.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/movie-genres-constraints.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/movies-table.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/roles-table.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/user-movie-constraints.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/user-roles-constraints.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/changeset/users-table.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/TestConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/AuthControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/AuthControllerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/MovieControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/MovieControllerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/UserControllerIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/controllers/UserControllerIT.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/utils/TestUtilsIT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sobad/code/movies_diary/utils/TestUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/fixtures/movies/anotherMovie.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/fixtures/movies/movie3.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/fixtures/movies/sampleMovie.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/fixtures/movies/movie2.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/fixtures/users/anotherUser.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/fixtures/users/anotherUser.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/fixtures/users/sampleUser.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/resources/fixtures/users/sampleUser.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/test.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/test.trace.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testdb.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/testdb.mv.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/testdb.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/testdb.trace.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vars.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +114,24 @@
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="build" type="c8890929:TasksNode$1" />
               </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="movies_diary" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="distribution" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="movies_diary" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="liquibase" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="movies_diary" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
             </expand>
             <select />
           </tree_state>
@@ -92,27 +166,6 @@
   }
 }</component>
   <component name="RunManager" selected="Gradle.moviesDiary [clean]">
-    <configuration name="moviesDiary [bootRun]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="bootRun" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="moviesDiary [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -134,7 +187,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="moviesDiary [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="moviesDiary [diffChangelog]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -145,7 +198,70 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="run" />
+            <option value="diffChangelog" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="moviesDiary [dropAll]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dropAll" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="moviesDiary [installBootDist]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="installBootDist" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="moviesDiary [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -171,8 +287,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.moviesDiary [clean]" />
-        <item itemvalue="Gradle.moviesDiary [run]" />
-        <item itemvalue="Gradle.moviesDiary [bootRun]" />
+        <item itemvalue="Gradle.moviesDiary [installBootDist]" />
+        <item itemvalue="Gradle.moviesDiary [diffChangelog]" />
+        <item itemvalue="Gradle.moviesDiary [dropAll]" />
+        <item itemvalue="Gradle.moviesDiary [test]" />
       </list>
     </recent_temporary>
   </component>
@@ -185,6 +303,14 @@
       <option name="presentableId" value="Default" />
       <updated>1689292272273</updated>
     </task>
+    <task id="LOCAL-00001" summary="v 0.6.1">
+      <created>1689500032286</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1689500032286</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -197,6 +323,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="v 0.6.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="v 0.6.1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -221,12 +351,30 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/controllers/MovieController.java</url>
-          <line>53</line>
-          <properties class="sobad.code.movies_diary.controllers.MovieController" method="getMoviesByName">
+          <line>99</line>
+          <properties class="sobad.code.movies_diary.controllers.MovieController" method="getMoviesByUser">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
           </properties>
-          <option name="timeStamp" value="25" />
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/ReviewService.java</url>
+          <line>116</line>
+          <properties class="sobad.code.movies_diary.service.ReviewService" method="updateReview">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/service/ReviewService.java</url>
+          <line>27</line>
+          <properties class="sobad.code.movies_diary.service.ReviewService" method="createReview">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -16,68 +16,89 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import sobad.code.movies_diary.AppError;
+import sobad.code.movies_diary.dto.user.UserDtoResponse;
+import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
 
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
 import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.service.AuthService;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Аутентификация и авторизация")
+@Tag(name = "Аутентификация и авторизация", description = "API Аутентификации пользователей")
 public class AuthController {
     private final AuthService authService;
     public static final String AUTH_CONTROLLER_LOGIN_PATH = "/api/auth/login";
     public static final String AUTH_CONTROLLER_REFRESH_TOKEN_PATH = "/api/auth/refresh";
     public static final String AUTH_CONTROLLER_LOGOUT_PATH = "/api/auth/logout";
 
-    @Operation(summary = "Аутентификация пользователя в приложении"
-    )
+    @Operation(summary = "Аутентификация пользователя")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Токены аутентификации", content =
-            @Content(schema =
-            @Schema(implementation = Token.class))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Аутентификация успешна",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AuthTokenResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Не удалось авторизироваться с такими данными",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AppError.class)
+                            )
+                    }
             )
     })
     @PostMapping(AUTH_CONTROLLER_LOGIN_PATH)
     public ResponseEntity<?> login(@RequestBody AuthLoginRequest authLoginRequest) {
-        try {
-            return ResponseEntity.ok(authService.authenticate(authLoginRequest));
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(),
-                    "Не удалось авторизироваться с такими данными"),
-                    HttpStatus.UNAUTHORIZED);
-        }
+        return ResponseEntity.ok(authService.authenticate(authLoginRequest));
     }
 
-    @Operation(summary = "Получение нового токена доступа"
-    )
+    @Operation(summary = "Получение нового токена доступа")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Токены аутентификации", content =
-            @Content(schema =
-            @Schema(implementation = Token.class))
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Токены для этого пользователя успешно обновлненны",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AuthTokenResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Рефреш токен истек, нужно залогиниться заново",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AppError.class)
+                            )
+                    }
             )
     })
     @GetMapping(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
     public ResponseEntity<?> refreshToken(HttpServletRequest request) throws IOException {
-//        try {
-            AuthTokenResponse response = authService.refreshToken(request);
-            return new ResponseEntity<>(response, OK);
-//        } catch (RuntimeException e) {
-//            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(),
-//                    "Рефреш токен невалиден"),
-//                    HttpStatus.BAD_REQUEST);
-//        }
+        AuthTokenResponse response = authService.refreshToken(request);
+        return new ResponseEntity<>(response, OK);
     }
 
-    @Operation(summary = "Логаут он и в Африке логаут"
+    @Operation(summary = "Логаут пользователя"
     )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Веселое сообщение :)")
+        @ApiResponse(responseCode = "200", description = "Пользователь успешно вышел")
     })
     @GetMapping(AUTH_CONTROLLER_LOGOUT_PATH)
     public void logout(

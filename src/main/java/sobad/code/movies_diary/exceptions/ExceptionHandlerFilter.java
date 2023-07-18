@@ -1,4 +1,4 @@
-package sobad.code.movies_diary;
+package sobad.code.movies_diary.exceptions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +29,15 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
-            Map<String, Object> errorDetails = new HashMap<>();
-            errorDetails.put("message", "Token expired, go to '/api/auth/refresh' for get new access token");
+            AppError appError = new AppError(
+                    FORBIDDEN.value(),
+                    "Токен доступа истек, обновите токен доступа",
+                    LocalDateTime.now().toString());
+
             response.setStatus(FORBIDDEN.value());
             response.setContentType(APPLICATION_JSON_VALUE);
 
-            objectMapper.writeValue(response.getWriter(), errorDetails);
+            objectMapper.writeValue(response.getWriter(), appError);
         }
     }
 }

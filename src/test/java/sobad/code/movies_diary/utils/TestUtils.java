@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
+import sobad.code.movies_diary.entities.Genre;
+import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.jwts.JwtTokenUtils;
 import sobad.code.movies_diary.repositories.GenreRepository;
@@ -22,15 +24,20 @@ import sobad.code.movies_diary.service.UserService;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
+import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_PATH;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @Component
-public class TestUtilsIT {
+public class TestUtils {
 
     public static final String FIXTURES_PATH = "src/test/resources/fixtures/";
 
@@ -49,8 +56,6 @@ public class TestUtilsIT {
     @Autowired
     private MovieRepository movieRepository;
 
-    @Autowired
-    private RatingRepository movieRatingRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -65,7 +70,6 @@ public class TestUtilsIT {
 
     public void clear() {
         movieRepository.deleteAll();
-        movieRatingRepository.deleteAll();
         genreRepository.deleteAll();
         tokenRepository.deleteAll();
         userRepository.deleteAll();
@@ -108,30 +112,42 @@ public class TestUtilsIT {
     }
 
     public void createSampleUser() throws Exception {
-        AuthRegistrationRequest user = TestUtilsIT.readJson(
-                TestUtilsIT.readFixture("users/sampleUser.json"),
+        AuthRegistrationRequest user = TestUtils.readJson(
+                TestUtils.readFixture("users/sampleUser.json"),
                 new TypeReference<>() {
                 }
         );
 
         MockHttpServletRequestBuilder request = post(USER_CONTROLLER_PATH)
-                .content(TestUtilsIT.writeJson(user))
+                .content(TestUtils.writeJson(user))
                 .contentType(APPLICATION_JSON);
 
         performUnsecuredRequest(request);
     }
 
-    public void authSampleUser() throws Exception {
-        AuthLoginRequest userAuth = TestUtilsIT.readJson(
-                TestUtilsIT.readFixture("auth/sampleAuth.json"),
+    public void createAnotherUser() throws Exception {
+        AuthRegistrationRequest user = TestUtils.readJson(
+                TestUtils.readFixture("users/anotherUser.json"),
                 new TypeReference<>() {
                 }
         );
 
-        MockHttpServletRequestBuilder request = post(AUTH_CONTROLLER_LOGIN_PATH)
-                .content(TestUtilsIT.writeJson(userAuth))
+        MockHttpServletRequestBuilder request = post(USER_CONTROLLER_PATH)
+                .content(TestUtils.writeJson(user))
                 .contentType(APPLICATION_JSON);
 
         performUnsecuredRequest(request);
+    }
+
+    public void createMovies() throws Exception {
+        createSampleUser();
+        User user = userRepository.findAll().get(0);
+
+        MockHttpServletRequestBuilder request = get(MOVIE_CONTROLLER_PATH)
+                .param("movieName", "Человек-паук")
+                .param("findKp", "true")
+                .param("expanded", "true");
+
+        performSecuredRequest(request, user);
     }
 }

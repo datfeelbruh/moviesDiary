@@ -10,18 +10,18 @@ springdoc:
     path: /api-docs.html
 
 jwt:
-  secret-key: 'fdsflksdncvkjlsnadklvBJKASBVKJLBASDL'
+  secret-key: ${JWT-SECRET-KEY}
   expiration: 1200
   refresh-token:
     expiration: 8400
 
-x-api-key: "1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z"
+x-api-key: ${X-API-KEY}
 
 spring:
   datasource:
-    username: " "
-    password: " "
-    url: "jdbc:h2:./testdb"
+    username: ${PG_USER}
+    password: ${PG_PASSWORD}
+    url: ${PG_DB}
 
   jpa:
     hibernate:

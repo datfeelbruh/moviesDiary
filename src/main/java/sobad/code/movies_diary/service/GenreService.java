@@ -12,13 +12,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GenreService {
     private final GenreRepository genreRepository;
-//    public Genre createGenre(GenreDto genreDto) {
-//        Genre genre = Genre.builder()
-//                .name(genreDto.getName())
-//                .build();
-//
-//        return genreRepository.save(genre);
-//    }
 
     public Genre findGenre(String genreName) {
         Optional<Genre> genreInDB = genreRepository.findByName(genreName);

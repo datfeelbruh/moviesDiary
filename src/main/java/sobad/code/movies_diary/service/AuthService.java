@@ -13,23 +13,25 @@ import org.springframework.stereotype.Service;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
 import sobad.code.movies_diary.entities.User;
-import sobad.code.movies_diary.exceptions.AppException;
+import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.jwts.JwtTokenUtils;
 import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.repositories.TokenRepository;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 @RequiredArgsConstructor
-@AppException
 public class AuthService {
     private final UserService userService;
     private final TokenRepository tokenRepository;
@@ -99,19 +101,23 @@ public class AuthService {
             authentication.setAuthenticated(false);
             SecurityContextHolder.clearContext();
 
-            Map<String, Object> errorDetails = new HashMap<>();
-            errorDetails.put("message", "You have successfully logged out");
+            AppError appError = new AppError(
+                    FORBIDDEN.value(),
+                    "Вы успешно вышли из профиля",
+                    LocalDateTime.now().toString());
+
             response.setStatus(FORBIDDEN.value());
             response.setContentType(APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding(UTF_8.toString());
             ObjectMapper objectMapper = new ObjectMapper();
 
-            objectMapper.writeValue(response.getWriter(), errorDetails);
+            objectMapper.writeValue(response.getWriter(), appError);
         }
     }
 
     private void saveUserToken(UserDetails userDetails, String accessToken) {
         Token token = Token.builder()
-                .user(userService.findByUsername(userDetails.getUsername()).get())
+                .user(userService.findByUsername(userDetails.getUsername()))
                 .accessToken(accessToken)
                 .expired(false)
                 .revoked(false)
@@ -120,7 +126,7 @@ public class AuthService {
     }
 
     private void revokeAllUserTokens(UserDetails userDetails) {
-        User user = userService.findByUsername(userDetails.getUsername()).get();
+        User user = userService.findByUsername(userDetails.getUsername());
         List<Token> validUserTokens = tokenRepository.findAllValidTokenByUserId(user.getId());
         if (validUserTokens.isEmpty()) {
             return;
