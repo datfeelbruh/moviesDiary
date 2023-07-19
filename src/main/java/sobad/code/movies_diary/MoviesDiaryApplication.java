@@ -16,16 +16,4 @@ public class MoviesDiaryApplication {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry
-                        .addMapping("/api/**")
-                        .allowedMethods("*")
-                        .allowedOrigins("http://localhost:8000");
-            }
-        };
-    }
 }

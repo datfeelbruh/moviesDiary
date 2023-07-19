@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6542980-d209-45b4-91a0-a06da898cd89" name="Changes" comment="fix swagger doc response code user controller">
+    <list default="true" id="c6542980-d209-45b4-91a0-a06da898cd89" name="Changes" comment="add corsConfigurer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sobad/code/movies_diary/configs/security/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -277,7 +278,14 @@
       <option name="project" value="LOCAL" />
       <updated>1689758510662</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add corsConfigurer">
+      <created>1689772070958</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1689772070958</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -294,7 +302,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="v 0.6.1" />
     <MESSAGE value="fix swagger doc response code user controller" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix swagger doc response code user controller" />
+    <MESSAGE value="add corsConfigurer" />
+    <option name="LAST_COMMIT_MESSAGE" value="add corsConfigurer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

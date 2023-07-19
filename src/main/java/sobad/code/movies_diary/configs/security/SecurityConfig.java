@@ -1,6 +1,7 @@
 package sobad.code.movies_diary.configs.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.exceptions.ExceptionHandlerFilter;
 import sobad.code.movies_diary.jwts.JwtAuthenticationFilter;
@@ -119,5 +124,18 @@ public class SecurityConfig {
                 .requestMatchers("/h2/**")
                 .requestMatchers("/v3/api-docs/**")
                 .requestMatchers("/swagger-ui/**");
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry
+                        .addMapping("/api/**")
+                        .allowedMethods("*")
+                        .allowedOrigins("http://localhost:8000");
+            }
+        };
     }
 }
