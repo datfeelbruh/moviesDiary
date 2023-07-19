@@ -30,7 +30,7 @@ public class UserController {
     @Operation(summary = "Зарегистрировать нового пользователя")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "Новый пользователь зарегистрирован",
                     content = {
                             @Content(
