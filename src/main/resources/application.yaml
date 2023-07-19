@@ -10,12 +10,12 @@ springdoc:
     path: /api-docs.html
 
 jwt:
-  secret-key: ${JWT-SECRET-KEY}
+  secret-key: ${JWT_SECRET_KEY}
   expiration: 1200
   refresh-token:
     expiration: 8400
 
-x-api-key: ${X-API-KEY}
+x_api_key: ${X_API_KEY}
 
 spring:
   datasource:

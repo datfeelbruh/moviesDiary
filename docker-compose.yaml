@@ -6,7 +6,7 @@ services:
     restart: always
     ports:
       - "5432:5432"
-    container_name: "database"
+    container_name: "service-db"
     environment:
       - "POSTGRES_USER=${PG_USER}"
       - "POSTGRES_PASSWORD=${PG_PASSWORD}"
@@ -38,7 +38,7 @@ services:
       context: .
       dockerfile: Dockerfile
 
-    container_name: 'backend-app'
+    container_name: 'service-app'
     env_file:
       - .env
     ports:

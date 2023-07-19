@@ -1,3 +1,11 @@
 FROM gradle:7.4.0-jdk17
-ADD /build/libs/movies_diary-1.0.jar backend.jar
-ENTRYPOINT ["java", "-jar", "backend.jar"]
+
+WORKDIR /app
+
+COPY ./ .
+
+RUN gradle clean installDist
+
+CMD ./build/install/movies_diary/bin/movies_diary
+
+EXPOSE 8000

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ExternalApiService {
-    @Value("${x-api-key}")
+    @Value("${x_api_key}")
     private String apiKey;
     private final MovieMapper movieMapper;
 
