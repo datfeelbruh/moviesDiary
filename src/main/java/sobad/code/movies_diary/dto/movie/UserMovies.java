@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserMoviesDtoResponse {
+public class UserMovies {
     private String username;
-    private List<UserMovieDto> movies;
+    private List<UserMovie> movies;
 }

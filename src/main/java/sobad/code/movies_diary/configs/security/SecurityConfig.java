@@ -65,7 +65,7 @@ public class SecurityConfig {
     private static final RequestMatcher publicUrls = new OrRequestMatcher(
             new AntPathRequestMatcher(AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.toString()),
             new AntPathRequestMatcher(AUTH_CONTROLLER_LOGIN_PATH, POST.toString()),
-            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS + "/{username}", GET.toString()),
+            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS, GET.toString()),
             new AntPathRequestMatcher(USER_CONTROLLER_PATH, POST.toString()),
             new AntPathRequestMatcher("/h2/**"),
             new AntPathRequestMatcher("/swagger-ui/**"),

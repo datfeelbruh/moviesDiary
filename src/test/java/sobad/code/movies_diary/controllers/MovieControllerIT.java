@@ -1,41 +1,24 @@
 package sobad.code.movies_diary.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import sobad.code.movies_diary.dto.GenreDto;
-import sobad.code.movies_diary.dto.movie.MovieDtoResponse;
-import sobad.code.movies_diary.dto.movie.MovieDtoShortInfo;
-import sobad.code.movies_diary.dto.movie.UserMoviesDtoResponse;
+import sobad.code.movies_diary.dto.movie.MovieCard;
+import sobad.code.movies_diary.dto.movie.MovieShortInfo;
+import sobad.code.movies_diary.dto.movie.UserMovies;
 import sobad.code.movies_diary.dto.review.ReviewDtoRequest;
-import sobad.code.movies_diary.dto.review.ReviewDtoResponse;
-import sobad.code.movies_diary.entities.Genre;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.AppError;
@@ -44,14 +27,9 @@ import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.ReviewRepository;
 import sobad.code.movies_diary.repositories.TokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
-import sobad.code.movies_diary.service.UserService;
-import sobad.code.movies_diary.utils.MovieTestDto;
 import sobad.code.movies_diary.utils.TestUtils;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,6 +42,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
+import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH_GENRE;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH_USERS;
 import static sobad.code.movies_diary.controllers.ReviewController.REVIEW_CONTROLLER_PATH;
 
@@ -106,7 +85,7 @@ public class MovieControllerIT {
 
         ResultActions result = mockMvc.perform(getMovieByIdRequest);
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MovieDtoResponse response = TestUtils.readJson(content, new TypeReference<>() {});
+        MovieCard response = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(response.getId()).isEqualTo(movie.getId());
     }
@@ -141,14 +120,14 @@ public class MovieControllerIT {
         Movie movie = movieRepository.findAll().get(0);
         User user = userRepository.findAll().get(0);
 
-        MockHttpServletRequestBuilder requestMoviesByUsername = get(
-                MOVIE_CONTROLLER_PATH_USERS + "/" + user.getUsername());
+        MockHttpServletRequestBuilder requestMoviesByUsername = get(MOVIE_CONTROLLER_PATH_USERS)
+                .param("username", user.getUsername());
 
         ResultActions result = mockMvc.perform(requestMoviesByUsername).andExpect(status().isOk());
 
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
 
-        UserMoviesDtoResponse response = TestUtils.readJson(content, new TypeReference<>() {});
+        UserMovies response = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(response.getUsername()).isEqualTo(user.getUsername());
         assertThat(response.getMovies().size()).isEqualTo(0);
@@ -220,26 +199,24 @@ public class MovieControllerIT {
 
         mockMvc.perform(createReviewRequest2);
 
-        MockHttpServletRequestBuilder getMovieByUsername = get(
-                MOVIE_CONTROLLER_PATH_USERS + "/" + user.getUsername()
-        );
+        MockHttpServletRequestBuilder getMovieByUsername = get(MOVIE_CONTROLLER_PATH_USERS)
+                .param("username", user.getUsername());
 
 
         ResultActions resultActions = mockMvc.perform(getMovieByUsername);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        UserMoviesDtoResponse response = TestUtils.readJson(content, new TypeReference<>() {});
+        UserMovies response = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(response.getUsername()).isEqualTo(user.getUsername());
         assertThat(response.getMovies().size()).isEqualTo(1);
         assertThat(response.getMovies().get(0).getId()).isEqualTo(movie.getId());
 
-        MockHttpServletRequestBuilder getMovieByUsername2 = get(
-                MOVIE_CONTROLLER_PATH_USERS + "/" + user2.getUsername()
-        );
+        MockHttpServletRequestBuilder getMovieByUsername2 = get(MOVIE_CONTROLLER_PATH_USERS)
+                .param("username", user2.getUsername());
 
         ResultActions resultActions2 = mockMvc.perform(getMovieByUsername2);
         String content2 = resultActions2.andReturn().getResponse().getContentAsString(UTF_8);
-        UserMoviesDtoResponse response2 = TestUtils.readJson(content2, new TypeReference<>() {});
+        UserMovies response2 = TestUtils.readJson(content2, new TypeReference<>() {});
 
         assertThat(response2.getUsername()).isEqualTo(user2.getUsername());
         assertThat(response2.getMovies().size()).isEqualTo(1);
@@ -250,8 +227,8 @@ public class MovieControllerIT {
     @Transactional
     @WithMockUser("sobad")
     void getMoviesByNonExistedUsername() throws Exception {
-        MockHttpServletRequestBuilder requestMoviesByUsername = get(
-                MOVIE_CONTROLLER_PATH_USERS + "/qwer");
+        MockHttpServletRequestBuilder requestMoviesByUsername = get(MOVIE_CONTROLLER_PATH_USERS)
+                .param("username", "qwer");
 
         ResultActions resultActions = mockMvc.perform(requestMoviesByUsername);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
@@ -272,7 +249,7 @@ public class MovieControllerIT {
 
         ResultActions resultActions = mockMvc.perform(requestMoviesByName);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        List<MovieDtoResponse> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
+        List<MovieCard> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(movieDtoResponse.size()).isGreaterThan(0);
         assertThat(movieDtoResponse.get(0).getTitle()).contains("Человек-паук");
@@ -289,7 +266,7 @@ public class MovieControllerIT {
 
         ResultActions resultActions = mockMvc.perform(requestMoviesByName);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        List<MovieDtoShortInfo> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
+        List<MovieShortInfo> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(movieDtoResponse.size()).isGreaterThan(0);
         assertThat(movieDtoResponse.get(0).getTitle()).contains("Человек-паук");
@@ -312,7 +289,7 @@ public class MovieControllerIT {
 
         ResultActions resultActions = mockMvc.perform(requestMoviesByNameFromDb);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        List<MovieDtoResponse> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
+        List<MovieCard> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(movieDtoResponse.size()).isGreaterThan(0);
         assertThat(movieDtoResponse.get(0).getTitle()).contains("Человек-паук");
@@ -335,7 +312,7 @@ public class MovieControllerIT {
 
         ResultActions resultActions = mockMvc.perform(requestMoviesByNameFromDb);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        List<MovieDtoShortInfo> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
+        List<MovieShortInfo> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(movieDtoResponse.size()).isGreaterThan(0);
         assertThat(movieDtoResponse.get(0).getTitle()).contains("Человек-паук");
@@ -352,13 +329,13 @@ public class MovieControllerIT {
 
         mockMvc.perform(requestMoviesByName);
 
-        MockHttpServletRequestBuilder requestMoviesByGenreFromDb = get(MOVIE_CONTROLLER_PATH)
+        MockHttpServletRequestBuilder requestMoviesByGenreFromDb = get(MOVIE_CONTROLLER_PATH_GENRE)
                 .param("genreName", "боевик")
                 .param("expanded", "true");
 
         ResultActions resultActions = mockMvc.perform(requestMoviesByGenreFromDb);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        List<MovieDtoResponse> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
+        List<MovieCard> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(movieDtoResponse.size()).isGreaterThan(0);
         assertThat(movieDtoResponse.get(0).getGenres()).contains(new GenreDto("боевик"));
@@ -375,12 +352,12 @@ public class MovieControllerIT {
 
         mockMvc.perform(requestMoviesByName);
 
-        MockHttpServletRequestBuilder requestMoviesByGenreFromDb = get(MOVIE_CONTROLLER_PATH)
+        MockHttpServletRequestBuilder requestMoviesByGenreFromDb = get(MOVIE_CONTROLLER_PATH_GENRE)
                 .param("genreName", "боевик");
 
         ResultActions resultActions = mockMvc.perform(requestMoviesByGenreFromDb);
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        List<MovieDtoShortInfo> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
+        List<MovieShortInfo> movieDtoResponse = TestUtils.readJson(content, new TypeReference<>() {});
 
         assertThat(movieDtoResponse.size()).isGreaterThan(0);
     }

@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import sobad.code.movies_diary.dto.movie.MovieDtoResponse;
-import sobad.code.movies_diary.mappers.MovieMapper;
+import sobad.code.movies_diary.dto.movie.MovieCard;
+import sobad.code.movies_diary.mappers.ExternalAPISerializer;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.DocsItemMovieInfo;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.MovieInfo;
 
@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 public class ExternalApiService {
     @Value("${x_api_key}")
     private String apiKey;
-    private final MovieMapper movieMapper;
+    private final ExternalAPISerializer externalAPISerializer;
 
-    public List<MovieDtoResponse> findMovieByName(String name) {
+    public List<MovieCard> findMovieByName(String name) {
         String url = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("api.kinopoisk.dev")
@@ -48,7 +48,7 @@ public class ExternalApiService {
         }
 
         return foundMovie.stream()
-                .map(movieMapper::mapFromKinopoiskToMovieInfo)
+                .map(externalAPISerializer)
                 .collect(Collectors.toList());
     }
 }

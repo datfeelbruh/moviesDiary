@@ -38,43 +38,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @Component
 public class TestUtils {
-
     public static final String FIXTURES_PATH = "src/test/resources/fixtures/";
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private JwtTokenUtils jwtTokenUtils;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MovieRepository movieRepository;
-
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private GenreRepository genreRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    public void clear() {
-        movieRepository.deleteAll();
-        genreRepository.deleteAll();
-        tokenRepository.deleteAll();
-        userRepository.deleteAll();
-        roleRepository.deleteAll();
-    }
 
     public static String readFixture(String path) {
         try {
@@ -98,13 +68,6 @@ public class TestUtils {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public ResultActions performSecuredRequest(final MockHttpServletRequestBuilder request, User user)
-            throws Exception {
-        final String token = jwtTokenUtils.generateAccessToken(userService.loadUserByUsername(user.getUsername()));
-        request.header(AUTHORIZATION, "Bearer " + token);
-        return mockMvc.perform(request);
     }
 
     public ResultActions performUnsecuredRequest(final MockHttpServletRequestBuilder request) throws Exception {
@@ -137,17 +100,5 @@ public class TestUtils {
                 .contentType(APPLICATION_JSON);
 
         performUnsecuredRequest(request);
-    }
-
-    public void createMovies() throws Exception {
-        createSampleUser();
-        User user = userRepository.findAll().get(0);
-
-        MockHttpServletRequestBuilder request = get(MOVIE_CONTROLLER_PATH)
-                .param("movieName", "Человек-паук")
-                .param("findKp", "true")
-                .param("expanded", "true");
-
-        performSecuredRequest(request, user);
     }
 }
