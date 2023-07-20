@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class MovieUserIdFilter {
-    private Long id;
+    private Long userId;
 }

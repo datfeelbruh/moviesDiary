@@ -43,7 +43,7 @@ public class MovieCustomRepositoryImpl implements MovieCustomRepository {
                 .from(movie)
                 .join(review).on(movie.id.eq(review.movie.id))
                 .join(user).on(user.id.eq(review.user.id))
-                .where(review.user.id.eq(filter.getId()))
+                .where(review.user.id.eq(filter.getUserId()))
                 .fetch();
     }
 }

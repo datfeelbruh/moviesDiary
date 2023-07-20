@@ -20,7 +20,7 @@ spring:
 #
 #  liquibase:
 #    enabled: false
-##    change-log: classpath:db/changelog/changelog-master.yaml
+##    change-log: classpath:db/changelog/db.changelog-master.yaml
 #
 #  mvc:
 #    hiddenmethod:

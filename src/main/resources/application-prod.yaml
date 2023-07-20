@@ -1,0 +1,22 @@
+server:
+  error:
+    include-stacktrace: never
+
+spring:
+  datasource:
+    username: ${PG_USER}
+    password: ${PG_PASSWORD}
+    url: ${PG_DB}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+      show-sql: false
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  expiration: 1200
+  refresh-token:
+    expiration: 8400
+
+x_api_key: ${X_API_KEY}

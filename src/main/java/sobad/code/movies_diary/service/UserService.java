@@ -18,7 +18,6 @@ import sobad.code.movies_diary.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +26,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
