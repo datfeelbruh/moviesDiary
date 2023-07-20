@@ -35,6 +35,7 @@ import sobad.code.movies_diary.jwts.JwtAuthenticationFilter;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +79,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(corsConfig -> corsConfig.configurationSource(
+                        request -> {
+                            CorsConfiguration configuration = new CorsConfiguration();
+                            configuration.setAllowedOrigins(Arrays.asList("*"));
+                            configuration.setAllowedHeaders(Arrays.asList("*"));
+                            configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                            return configuration;
+                        }
+                ))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests.requestMatchers(publicUrls).permitAll())
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated())
