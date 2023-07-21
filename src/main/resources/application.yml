@@ -8,7 +8,7 @@ spring:
   application:
     name: movies_diary
   profiles:
-    active: dev
+    active: prod
 
 springdoc:
   swagger-ui:

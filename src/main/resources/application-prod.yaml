@@ -12,6 +12,8 @@ spring:
     hibernate:
       ddl-auto: none
       show-sql: false
+      connection:
+        auto-commit: false
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}

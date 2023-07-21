@@ -2,6 +2,7 @@ package sobad.code.movies_diary.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sobad.code.movies_diary.dto.movie.MovieCard;
 import sobad.code.movies_diary.dto.movie.MovieShortInfo;
 import sobad.code.movies_diary.dto.movie.UserMovies;
@@ -52,6 +53,7 @@ public class MovieService {
                 .toList();
     }
 
+    @Transactional
     public List<MovieCard> getMoviesByName(String name, Boolean findOnKp) {
         if (findOnKp) {
             List<MovieCard> kpMovies = externalApiService.findMovieByName(name);
@@ -71,6 +73,7 @@ public class MovieService {
                 .toList();
     }
 
+    @Transactional
     public List<MovieShortInfo> getMoviesByNameShortInfo(String name, Boolean findOnKp) {
         if (findOnKp) {
             List<MovieCard> kpMovies = externalApiService.findMovieByName(name);
