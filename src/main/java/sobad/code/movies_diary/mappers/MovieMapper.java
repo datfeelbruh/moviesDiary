@@ -25,6 +25,7 @@ public class MovieMapper {
 
     public UserMovies mapFromEntityToUserMovieResponse(List<Movie> movies, User user) {
         return UserMovies.builder()
+                .userId(user.getId())
                 .username(user.getUsername())
                 .movies(
                         movies.stream()

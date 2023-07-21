@@ -37,6 +37,8 @@ public class ExternalAPISerializer implements Function<DocsItemMovieInfo, MovieC
                 .posterUrl(movieInfo.getPoster().getUrl())
                 .reviews(reviewService.getReviewByMovieId(movieInfo.getId()).stream()
                         .map(e -> new MovieReview(
+                                e.getId(),
+                                e.getUserId(),
                                 e.getUsername(),
                                 e.getUserReview().getRating(),
                                 e.getUserReview().getReview())

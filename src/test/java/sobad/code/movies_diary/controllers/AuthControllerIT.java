@@ -2,16 +2,13 @@ package sobad.code.movies_diary.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +18,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
-import sobad.code.movies_diary.jwts.Token;
-import sobad.code.movies_diary.repositories.TokenRepository;
+import sobad.code.movies_diary.jwts.JwtToken;
 import sobad.code.movies_diary.repositories.UserRepository;
 import sobad.code.movies_diary.utils.TestUtils;
 
@@ -45,6 +41,7 @@ import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers
+@Slf4j
 public class AuthControllerIT {
     @Container
     @ServiceConnection
@@ -52,16 +49,16 @@ public class AuthControllerIT {
 
     @Autowired
     private TestUtils testUtils;
-
     @Autowired
-    private TokenRepository tokenRepository;
+    private MockMvc mockMvc;
+
 
     @Autowired
     private UserRepository userRepository;
 
     @BeforeEach
     void beforeEach() {
-        tokenRepository.deleteAll();
+
         userRepository.deleteAll();
     }
 
@@ -87,12 +84,6 @@ public class AuthControllerIT {
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
         AuthTokenResponse tokenResponse = TestUtils.readJson(content, new TypeReference<>(){});
 
-        Optional<Token> tokenFromDb = tokenRepository.findByAccessToken(tokenResponse.getAccessToken());
-
-        assertThat(tokenFromDb).isPresent();
-        assertThat(tokenFromDb.get().getAccessToken()).isEqualTo(tokenResponse.getAccessToken());
-        assertThat(tokenFromDb.get().expired).isFalse();
-        assertThat(tokenFromDb.get().revoked).isFalse();
     }
 
     @Test
@@ -114,9 +105,38 @@ public class AuthControllerIT {
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
         AppError appError = TestUtils.readJson(content, new TypeReference<>(){});
 
-        List<Token> tokens = tokenRepository.findAll();
 
-        assertThat(tokens).isEmpty();
         assertThat(appError.getStatusCode()).isEqualTo(UNAUTHORIZED.value());
+    }
+
+    @Test
+    @Transactional
+    void refreshToken() throws Exception {
+        testUtils.createSampleUser();
+
+        AuthLoginRequest userAuth = TestUtils.readJson(
+                TestUtils.readFixture("auth/sampleAuth.json"),
+                new TypeReference<>() {
+                }
+        );
+
+        MockHttpServletRequestBuilder request = post(AUTH_CONTROLLER_LOGIN_PATH)
+                .content(TestUtils.writeJson(userAuth))
+                .contentType(APPLICATION_JSON);
+
+        ResultActions resultActions = testUtils.performUnsecuredRequest(request);
+
+        resultActions.andExpect(status().isOk());
+
+        String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
+        AuthTokenResponse tokenResponse = TestUtils.readJson(content, new TypeReference<>(){});
+
+        String refreshToken = tokenResponse.getRefreshToken();
+
+        MockHttpServletRequestBuilder refresh = get(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
+                .header(AUTHORIZATION, "Bearer " + refreshToken);
+
+        ResultActions resultActions1 = mockMvc.perform(refresh).andExpect(status().isOk());
+
     }
 }

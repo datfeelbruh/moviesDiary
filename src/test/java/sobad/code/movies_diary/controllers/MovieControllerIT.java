@@ -25,7 +25,6 @@ import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.repositories.GenreRepository;
 import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.ReviewRepository;
-import sobad.code.movies_diary.repositories.TokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
 import sobad.code.movies_diary.utils.TestUtils;
 
@@ -61,8 +60,6 @@ public class MovieControllerIT {
     private MovieRepository movieRepository;
     @Autowired
     private GenreRepository genreRepository;
-    @Autowired
-    private TokenRepository tokenRepository;
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired

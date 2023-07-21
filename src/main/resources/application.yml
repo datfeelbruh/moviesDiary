@@ -10,6 +10,11 @@ spring:
   profiles:
     active: dev
 
+jwt:
+  expiration: 1000
+  refresh-token:
+    expiration: 2000
+
 springdoc:
   swagger-ui:
     path: /api-docs.html

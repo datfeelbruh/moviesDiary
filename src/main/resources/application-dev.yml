@@ -12,15 +12,12 @@ spring:
   h2:
     console:
       enabled: true
-      path: /h2-console
+      path: /h2
       settings:
         web-allow-others: true
 
 jwt:
-  secret-key: fdsflksdncvkjlsnadklvBJKASBVKJLBASDL
-  expiration: 1200
-  refresh-token:
-    expiration: 8400
+  secret-key: fdsflksdncvkjlsnadklvBJKASBVKJLBASDLJFNSDVBAJKhjfvsdhjfvashjbvjhcavsfdvds
 
 x_api_key: 1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z
 

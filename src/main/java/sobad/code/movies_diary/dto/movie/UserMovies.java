@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserMovies {
+    private Long userId;
     private String username;
     private List<UserMovie> movies;
 }

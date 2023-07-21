@@ -1,6 +1,7 @@
 package sobad.code.movies_diary.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import sobad.code.movies_diary.dto.review.UserReview;
 import sobad.code.movies_diary.dto.review.ReviewDtoRequest;
@@ -10,6 +11,7 @@ import sobad.code.movies_diary.entities.Review;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.MovieNotFoundException;
 import sobad.code.movies_diary.exceptions.ReviewNotFoundException;
+import sobad.code.movies_diary.mappers.ReviewSerializer;
 import sobad.code.movies_diary.repositories.MovieRepository;
 import sobad.code.movies_diary.repositories.ReviewRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
@@ -21,9 +23,8 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserService userService;
-    private final UserRepository userRepository;
     private final MovieRepository movieRepository;
-    private final Integer countReviewToCalcAverage = 5;
+    private final ReviewSerializer reviewSerializer;
 
     public ReviewDtoResponse createReview(ReviewDtoRequest reviewDtoRequest) {
         User user = userService.getCurrentUser();
@@ -44,70 +45,44 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        return ReviewDtoResponse.builder()
-                .id(review.getId())
-                .username(user.getUsername())
-                .movieId(movie.getId())
-                .userReview(new UserReview(review.getReview(), review.getRating()))
-                .build();
+
+        return reviewSerializer.apply(review);
     }
 
     public List<ReviewDtoResponse> getAllReviews() {
         return reviewRepository.findAll().stream()
-                .map(e -> ReviewDtoResponse.builder()
-                        .id(e.getId())
-                        .username(e.getUser().getUsername())
-                        .movieId(e.getMovie().getId())
-                        .userReview(new UserReview(e.getReview(), e.getRating()))
-                        .build()
-                )
+                .map(reviewSerializer)
                 .toList();
     }
 
 
     public ReviewDtoResponse getReviewByUserIdAndMovieId(Long userId, Long movieId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        Movie movie = movieRepository.findById(movieId).orElseThrow();
-
         Review review = reviewRepository.findAllByUserIdAndMovieId(userId, movieId)
                 .orElseThrow(() -> new ReviewNotFoundException(
                         String.format(
                                 "Ревью на фильм с id '%s' от пользователя с айди '%s' не найдено", userId, movieId)
                 ));
 
-        return ReviewDtoResponse.builder()
-                .username(user.getUsername())
-                .movieId(movie.getId())
-                .userReview(new UserReview(review.getReview(), review.getRating()))
-                .build();
+        return reviewSerializer.apply(review);
     }
 
     public List<ReviewDtoResponse> getReviewByMovieId(Long movieId) {
         return reviewRepository.findAllByMovieId(movieId)
                 .stream()
-                .map(e -> ReviewDtoResponse.builder()
-                        .id(e.getId())
-                        .username(e.getUser().getUsername())
-                        .movieId(e.getMovie().getId())
-                        .userReview(new UserReview(e.getReview(), e.getRating()))
-                        .build())
+                .map(reviewSerializer)
                 .toList();
     }
 
     public List<ReviewDtoResponse> getReviewByUserId(Long userId) {
         return reviewRepository.findAllByUserId(userId)
                 .stream()
-                .map(e -> ReviewDtoResponse.builder()
-                        .id(e.getId())
-                        .username(e.getUser().getUsername())
-                        .movieId(e.getMovie().getId())
-                        .userReview(new UserReview(e.getReview(), e.getRating()))
-                        .build())
+                .map(reviewSerializer)
                 .toList();
     }
 
     public Double getAverageReviewRatingById(Long id) {
         Integer count = reviewRepository.countByMovieId(id);
+        Integer countReviewToCalcAverage = 5;
         if (count > 0 && count % countReviewToCalcAverage == 0) {
             return getAverage(id);
         }
@@ -115,8 +90,7 @@ public class ReviewService {
     }
 
     public ReviewDtoResponse updateReview(Long reviewId, ReviewDtoRequest reviewDtoRequest) {
-        User user = userService.getCurrentUser();
-        Movie movie = movieRepository.findById(reviewDtoRequest.getMovieId())
+        movieRepository.findById(reviewDtoRequest.getMovieId())
                 .orElseThrow(() -> new MovieNotFoundException(
                         String.format("Фильм с данным id '%s' не найден",  reviewDtoRequest.getMovieId()))
                 );
@@ -131,12 +105,7 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        return ReviewDtoResponse.builder()
-                .id(reviewId)
-                .username(user.getUsername())
-                .movieId(movie.getId())
-                .userReview(new UserReview(review.getReview(), review.getRating()))
-                .build();
+        return reviewSerializer.apply(review);
     }
 
     public void deleteReview(Long reviewId) {

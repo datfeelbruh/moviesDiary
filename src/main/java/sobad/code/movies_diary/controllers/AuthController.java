@@ -9,23 +9,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import sobad.code.movies_diary.dto.user.UserDtoResponse;
+import sobad.code.movies_diary.dto.RefreshTokenDto;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.authentication.AuthLoginRequest;
 
 import sobad.code.movies_diary.authentication.AuthTokenResponse;
-import sobad.code.movies_diary.jwts.Token;
 import sobad.code.movies_diary.service.AuthService;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -89,9 +85,9 @@ public class AuthController {
                     }
             )
     })
-    @GetMapping(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
-    public ResponseEntity<?> refreshToken(HttpServletRequest request) throws IOException {
-        AuthTokenResponse response = authService.refreshToken(request);
+    @PostMapping(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
+        AuthTokenResponse response = authService.refreshToken(refreshTokenDto);
         return new ResponseEntity<>(response, OK);
     }
 

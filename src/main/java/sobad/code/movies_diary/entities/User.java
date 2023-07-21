@@ -14,13 +14,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import sobad.code.movies_diary.jwts.Token;
+import sobad.code.movies_diary.jwts.JwtToken;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -33,11 +30,10 @@ public class User extends BaseModel {
     private String email;
     @Column(name = "username", unique = true, nullable = false)
     private String username;
+//    @Column(name = "about")
+//    private String about;
     @Column(name = "password", nullable = false)
     private String password;
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

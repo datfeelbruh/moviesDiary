@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
 import sobad.code.movies_diary.dto.user.UserDtoResponse;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.service.UserService;
+
+import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -67,6 +71,11 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody AuthRegistrationRequest authRegistrationRequest) {
         UserDtoResponse userDto = userService.createUser(authRegistrationRequest);
         return new ResponseEntity<>(userDto, CREATED);
+    }
+
+    @GetMapping(value = "api/test")
+    public String test(@RequestParam("image") MultipartFile file) throws IOException {
+        return userService.uploadImage(file);
     }
 
 }

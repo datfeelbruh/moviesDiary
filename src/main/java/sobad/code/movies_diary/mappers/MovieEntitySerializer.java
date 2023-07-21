@@ -33,6 +33,8 @@ public class MovieEntitySerializer implements Function<Movie, MovieCard> {
                 .reviews(
                         reviewService.getReviewByMovieId(movie.getId()).stream()
                                 .map(e -> new MovieReview(
+                                        e.getId(),
+                                        e.getUserId(),
                                         e.getUsername(),
                                         e.getUserReview().getRating(),
                                         e.getUserReview().getReview())

@@ -1,5 +1,6 @@
 package sobad.code.movies_diary.exceptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +18,25 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RestControllerAdvice
 @Slf4j
 public class CustomAdvice {
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<AppError> sameUsernameOrEmail(DataIntegrityViolationException e) {
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    public ResponseEntity<AppError> sameUsernameOrEmail(DataIntegrityViolationException e) {
+//        log.error(e.getMessage(), e);
+//        return ResponseEntity
+//                .status(422)
+//                .body(new AppError(UNPROCESSABLE_ENTITY.value(), "Пользователь с таким именем"
+//                        + " или email уже существует", LocalDateTime.now().toString()));
+//    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<AppError> jwtExpired(ExpiredJwtException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity
-                .status(422)
-                .body(new AppError(UNPROCESSABLE_ENTITY.value(), "Пользователь с таким именем"
-                        + " или email уже существует", LocalDateTime.now().toString()));
+                .status(401)
+                .body(new AppError(
+                        UNAUTHORIZED.value(),
+                        "Необходимо повторно авторизироваться",
+                        LocalDateTime.now().toString())
+                );
     }
-
     @ExceptionHandler(UserPasswordMismatchException.class)
     public ResponseEntity<AppError> passwordMismatch(UserPasswordMismatchException e) {
         log.error(e.getMessage(), e);

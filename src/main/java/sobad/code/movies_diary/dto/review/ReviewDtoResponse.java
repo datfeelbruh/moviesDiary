@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class ReviewDtoResponse {
     private Long id;
     private String username;
+    private Long userId;
     private Long movieId;
     private UserReview userReview;
 }
