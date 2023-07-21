@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
     private final UserService userService;
     private final TokenRepository tokenRepository;
@@ -45,11 +47,11 @@ public class AuthService {
                         authLoginRequest.getPassword()
                 )
         );
-        UserDetails userDetails = userService.loadUserByUsername(authLoginRequest.getUsername());
+        User user = userService.findByUsername(authLoginRequest.getUsername());
 
-        String accessToken = jwtTokenUtils.generateAccessToken(userDetails);
-        String refreshToken = jwtTokenUtils.generateRefreshToken(userDetails);
-        saveUserToken(userDetails, accessToken);
+        String accessToken = jwtTokenUtils.generateAccessToken(user);
+        String refreshToken = jwtTokenUtils.generateRefreshToken(user);
+        saveUserToken(user, accessToken);
 
         return AuthTokenResponse.builder()
                 .accessToken(accessToken)
@@ -69,10 +71,11 @@ public class AuthService {
         username = jwtTokenUtils.extractUsername(refreshToken);
         if (username != null) {
             UserDetails userDetails = userService.loadUserByUsername(username);
+            User user = userService.findByUsername(username);
             if (jwtTokenUtils.isTokenValid(refreshToken, userDetails)) {
-                accessToken = jwtTokenUtils.generateAccessToken(userDetails);
-                revokeAllUserTokens(userDetails);
-                saveUserToken(userDetails, accessToken);
+                accessToken = jwtTokenUtils.generateAccessToken(user);
+                revokeAllUserTokens(user);
+                saveUserToken(user, accessToken);
                 return AuthTokenResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
@@ -115,9 +118,10 @@ public class AuthService {
         }
     }
 
-    private void saveUserToken(UserDetails userDetails, String accessToken) {
+    private void saveUserToken(User user, String accessToken) {
+        log.info(accessToken);
         Token token = Token.builder()
-                .user(userService.findByUsername(userDetails.getUsername()))
+                .user(userService.findByUsername(user.getUsername()))
                 .accessToken(accessToken)
                 .expired(false)
                 .revoked(false)
@@ -125,8 +129,7 @@ public class AuthService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(UserDetails userDetails) {
-        User user = userService.findByUsername(userDetails.getUsername());
+    private void revokeAllUserTokens(User user) {
         List<Token> validUserTokens = tokenRepository.findAllValidTokenByUserId(user.getId());
         if (validUserTokens.isEmpty()) {
             return;

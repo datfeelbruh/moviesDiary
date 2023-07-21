@@ -8,17 +8,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.stereotype.Service;
+import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.service.UserService;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JwtTokenUtils {
+    private final UserService userService;
     @Value("${jwt.secret-key}")
     private String secretKey;
     @Value("${jwt.expiration}")
@@ -26,8 +33,8 @@ public class JwtTokenUtils {
     @Value(("${jwt.refresh-token.expiration}"))
     private long jwtRefreshTokenExpiration;
 
-    public String generateAccessToken(UserDetails userDetails) {
-        return buildToken(new HashMap<>(), userDetails, jwtAccessTokenExpiration);
+    public String generateAccessToken(User user) {
+        return buildToken(new HashMap<>(), user, jwtAccessTokenExpiration);
     }
 
     public String extractUsername(String token) {
@@ -44,12 +51,15 @@ public class JwtTokenUtils {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
-        return buildToken(new HashMap<>(), userDetails, jwtRefreshTokenExpiration);
+    public String generateRefreshToken(User user) {
+        return buildToken(new HashMap<>(), user, jwtRefreshTokenExpiration);
     }
 
-    public String buildToken(Map<String, Object> claims, UserDetails userDetails, Long jwtAccessTokenExpiration) {
+    public String buildToken(Map<String, Object> claims, User user, Long jwtAccessTokenExpiration) {
         Instant now = Instant.now();
+        UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+        claims.put("role", userDetails.getAuthorities().toString());
+        claims.put("id", user.getId());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
