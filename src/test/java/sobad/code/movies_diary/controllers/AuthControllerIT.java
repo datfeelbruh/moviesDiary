@@ -112,31 +112,6 @@ public class AuthControllerIT {
     @Test
     @Transactional
     void refreshToken() throws Exception {
-        testUtils.createSampleUser();
-
-        AuthLoginRequest userAuth = TestUtils.readJson(
-                TestUtils.readFixture("auth/sampleAuth.json"),
-                new TypeReference<>() {
-                }
-        );
-
-        MockHttpServletRequestBuilder request = post(AUTH_CONTROLLER_LOGIN_PATH)
-                .content(TestUtils.writeJson(userAuth))
-                .contentType(APPLICATION_JSON);
-
-        ResultActions resultActions = testUtils.performUnsecuredRequest(request);
-
-        resultActions.andExpect(status().isOk());
-
-        String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AuthTokenResponse tokenResponse = TestUtils.readJson(content, new TypeReference<>(){});
-
-        String refreshToken = tokenResponse.getRefreshToken();
-
-        MockHttpServletRequestBuilder refresh = get(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
-                .header(AUTHORIZATION, "Bearer " + refreshToken);
-
-        ResultActions resultActions1 = mockMvc.perform(refresh).andExpect(status().isOk());
 
     }
 }

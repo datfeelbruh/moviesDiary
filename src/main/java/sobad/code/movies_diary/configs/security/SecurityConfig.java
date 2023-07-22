@@ -23,18 +23,13 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.jwts.JwtAuthenticationFilter;
 
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH_USERS;
@@ -49,8 +44,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final RequestMatcher publicUrls = new OrRequestMatcher(
-            new AntPathRequestMatcher(AUTH_CONTROLLER_REFRESH_TOKEN_PATH, POST.toString()),
+    public static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
+            new AntPathRequestMatcher(AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.toString()),
             new AntPathRequestMatcher(AUTH_CONTROLLER_LOGIN_PATH, POST.toString()),
             new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS, GET.toString()),
             new AntPathRequestMatcher(USER_CONTROLLER_PATH, POST.toString()),
@@ -76,7 +71,7 @@ public class SecurityConfig {
                         }
                 ))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(requests -> requests.requestMatchers(publicUrls).permitAll())
+                .authorizeHttpRequests(requests -> requests.requestMatchers(PUBLIC_URLS).permitAll())
                 .authorizeHttpRequests(request -> request.anyRequest().authenticated())
                 .addFilterBefore(
                         jwtAuthenticationFilter,

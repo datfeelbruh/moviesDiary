@@ -28,6 +28,7 @@ public class AccessTokenSerializer implements Function<JwtToken, String> {
 
         claims.put("role", token.getAuthorities());
         claims.put("userId", token.getUserId());
+        claims.put("tokenId", token.getId());
 
 
         return Jwts.builder()

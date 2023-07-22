@@ -85,9 +85,9 @@ public class AuthController {
                     }
             )
     })
-    @PostMapping(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
-        AuthTokenResponse response = authService.refreshToken(refreshTokenDto);
+    @GetMapping(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) throws IOException {
+        AuthTokenResponse response = authService.refreshToken(request);
         return new ResponseEntity<>(response, OK);
     }
 

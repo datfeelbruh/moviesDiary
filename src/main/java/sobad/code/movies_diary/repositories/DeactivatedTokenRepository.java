@@ -6,5 +6,6 @@ import sobad.code.movies_diary.entities.DeactivatedToken;
 import java.util.Optional;
 
 public interface DeactivatedTokenRepository extends JpaRepository<DeactivatedToken, Long> {
-    Optional<DeactivatedToken> findByToken(String token);
+    Boolean existsByToken(String token);
 }
+
