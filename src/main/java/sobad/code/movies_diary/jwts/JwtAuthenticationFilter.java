@@ -36,7 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenUtils jwtTokenUtils;
     private final UserService userService;
     private final DeactivatedTokenRepository deactivatedTokenRepository;
-    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
