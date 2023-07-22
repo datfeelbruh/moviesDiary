@@ -8,10 +8,10 @@ spring:
   application:
     name: movies_diary
   profiles:
-    active: dev
+    active: prod
 
 jwt:
-  expiration: 1000
+  expiration: 24
 
 springdoc:
   swagger-ui:

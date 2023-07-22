@@ -39,6 +39,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -76,7 +77,7 @@ public class AuthService {
                         .map(GrantedAuthority::getAuthority)
                         .toList())
                 .createdAt(Instant.now())
-                .expiredAt(Instant.now().plus(jwtAccessTokenExpiration, SECONDS))
+                .expiredAt(Instant.now().plus(jwtAccessTokenExpiration, DAYS))
                 .build();
 
 
@@ -120,7 +121,7 @@ public class AuthService {
                         .userId(userId)
                         .authorities(roles)
                         .createdAt(Instant.now())
-                        .expiredAt(Instant.now().plus(jwtAccessTokenExpiration, SECONDS))
+                        .expiredAt(Instant.now().plus(jwtAccessTokenExpiration, DAYS))
                         .build();
 
 
