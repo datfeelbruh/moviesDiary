@@ -32,8 +32,7 @@ public class Movie {
     private Long id;
     @Column(name = "title")
     private String title;
-    @Column(name = "description")
-    @Lob
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
     @Column(name = "release_year")
     private Integer releaseYear;

@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class User extends BaseModel {
     @Column(name = "email", unique = true, nullable = false)
+    @Email(message = "Email должен соотвестновать паттерну *@*.*")
     private String email;
     @Column(name = "username", unique = true, nullable = false)
     private String username;

@@ -1,6 +1,8 @@
 package sobad.code.movies_diary.exceptions;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -15,6 +17,10 @@ import sobad.code.movies_diary.exceptions.entiryExceptions.UserAlreadyExistExcep
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserPasswordMismatchException;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -23,6 +29,17 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RestControllerAdvice
 @Slf4j
 public class CustomAdvice {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<AppError> validationException(ConstraintViolationException e) {
+        List<String> errorMessages = e.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage).toList();
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(UNPROCESSABLE_ENTITY.value(), errorMessages.get(0), Instant.now().toString()));
+    }
+
     @ExceptionHandler(DeactivatedTokenException.class)
     public ResponseEntity<AppError> deactivatedTokenException(DeactivatedTokenException e) {
         log.error(e.getMessage(), e);
