@@ -58,6 +58,7 @@ public class ReviewService {
         return reviewSerializer.apply(review);
     }
 
+    @Transactional
     public ReviewDtoResponse getAllReviews(Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Review> reviewPage = reviewRepository.findAll(pageRequest);
@@ -75,6 +76,7 @@ public class ReviewService {
                 .build();
     }
 
+    @Transactional
     public ReviewDto getReviewByUserIdAndMovieId(Long userId, Long movieId) {
         Review review = reviewRepository.findAllByUserIdAndMovieId(userId, movieId)
                 .orElseThrow(() -> new ReviewNotFoundException(
@@ -85,6 +87,7 @@ public class ReviewService {
         return reviewSerializer.apply(review);
     }
 
+    @Transactional
     public ReviewDtoResponse getReviewByMovieId(Long movieId, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Review> reviewPage = reviewRepository.findAllByMovieId(movieId, pageRequest);
@@ -102,6 +105,7 @@ public class ReviewService {
                 .build();
     }
 
+    @Transactional
     public ReviewDtoResponse getReviewByUserId(Long userId, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Review> reviewPage = reviewRepository.findAllByUserId(userId, pageRequest);
