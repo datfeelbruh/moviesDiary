@@ -178,4 +178,9 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMoviesByGenre(genreName, page, limit), OK);
     }
 
+    @Operation(summary = "Получить названия фильмов для фичи в поисковой строке.")
+    @GetMapping(value = MOVIE_CONTROLLER_PATH + "/moviesTitles")
+    public ResponseEntity<?> findMoviesTitles() {
+        return new ResponseEntity<>(movieService.getMoviesName(), OK);
+    }
 }

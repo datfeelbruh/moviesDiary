@@ -23,7 +23,9 @@ import sobad.code.movies_diary.repositories.dsl.filters.GenreFilter;
 import sobad.code.movies_diary.repositories.dsl.filters.TitleFilter;
 import sobad.code.movies_diary.repositories.dsl.filters.UserIdFilter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -90,6 +92,7 @@ public class MovieService {
         return pageMapper.buildMoviePageShort(limit, page, moviePage);
     }
 
+    @Transactional
     public MoviePage getMoviesByGenre(String genreName, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByGenreNameFilter(new GenreFilter(genreName), pageRequest);
@@ -97,6 +100,7 @@ public class MovieService {
         return pageMapper.buildMoviePage(limit, page, moviePage);
     }
 
+    @Transactional
     public UserMoviesPage getMoviesByUser(Long userId, Integer page, Integer limit) {
         User user = userService.findById(userId);
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
@@ -115,6 +119,14 @@ public class MovieService {
                 .limit(limit)
                 .pages(movies.getTotalPages())
                 .build();
+    }
+
+    public Map<String, List<String>> getMoviesName() {
+        List<String> movies = movieRepository.findMoviesName();
+        Map<String, List<String>> response = new HashMap<>();
+        response.put("moviesTitles", movies);
+
+        return response;
     }
 
 }

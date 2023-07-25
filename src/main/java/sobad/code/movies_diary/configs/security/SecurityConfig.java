@@ -23,14 +23,20 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.jwt.JwtAuthenticationFilter;
 
+import java.time.Instant;
 import java.util.Arrays;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
+import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH_USERS;
 import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_PATH;
 
@@ -45,6 +51,7 @@ public class SecurityConfig {
 
     public static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
             new AntPathRequestMatcher(AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.toString()),
+            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH + "/moviesTitles", GET.toString()),
             new AntPathRequestMatcher(AUTH_CONTROLLER_LOGIN_PATH, POST.toString()),
             new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS + "/{userId}", GET.toString()),
             new AntPathRequestMatcher(USER_CONTROLLER_PATH, POST.toString()),
@@ -77,9 +84,22 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> {
+                    ex.authenticationEntryPoint(((request, response, authException) -> {
+                        response.setContentType(APPLICATION_JSON_VALUE);
+                        response.setCharacterEncoding(String.valueOf(UTF_8));
+                        response.setStatus(SC_FORBIDDEN);
+                        AppError appError = new AppError(
+                                SC_FORBIDDEN,
+                                "Авторизируйтесь для выполнения этого действия",
+                                Instant.now().toString());
+                        objectMapper.writeValue(response.getWriter(), appError);
+                    }));
+                });
 
-        return http.build();
+
+                    return http.build();
     }
 
     @Bean
