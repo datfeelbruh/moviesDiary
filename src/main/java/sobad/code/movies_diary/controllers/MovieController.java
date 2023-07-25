@@ -1,6 +1,7 @@
 package sobad.code.movies_diary.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sobad.code.movies_diary.dto.movie.MovieCard;
-import sobad.code.movies_diary.dto.movie.UserMovies;
+import sobad.code.movies_diary.dtos.movie.MovieDto;
+import sobad.code.movies_diary.dtos.movie.MoviePage;
+import sobad.code.movies_diary.dtos.movie.UserMoviesPage;
 import sobad.code.movies_diary.exceptions.AppError;
-import sobad.code.movies_diary.service.MovieService;
+import sobad.code.movies_diary.services.MovieService;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -36,139 +38,144 @@ public class MovieController {
 
     @Operation(summary = "Получить фильм по ID из базы данных приложения")
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Фильм с данным ID",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = MovieCard.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Фильм с данным ID",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = MovieDto.class)
+                        )
+                }
             ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Фильм с таким ID не найден",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "422",
+            description = "Фильм с таким ID не найден",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
-    @GetMapping(value = MOVIE_CONTROLLER_PATH + "/{id}")
-    public ResponseEntity<?> getMovieById(@PathVariable("id") Long id) {
-        MovieCard movie = movieService.getMovieById(id);
+    @GetMapping(value = MOVIE_CONTROLLER_PATH + "/{movieId}")
+    public ResponseEntity<?> getMovieById(@PathVariable("movieId")
+                                          @Parameter(description = "ID фильма", example = "1") Long movieId) {
+        MovieDto movie = movieService.getMovieById(movieId);
         return new ResponseEntity<>(movie, OK);
-    }
-
-    @Operation(summary = "Получить все фильмы из базы данных приложения")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Все фильмы из базы данных",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = MovieCard.class))
-                            )
-                    }
-            )
-    })
-    @GetMapping(value = MOVIE_CONTROLLER_PATH)
-    public ResponseEntity<?> getAllMovies() {
-        return new ResponseEntity<>(movieService.getAllMovies(), OK);
     }
 
     @Operation(summary = "Получить все фильмы пользователя", description =
             """
             Возвращается все фильмы пользователя которые он добавил себе в коллекцию вместе его с ревью и оценкой.
+            \s
+            Метод возвращает определенное количество результатов сформированных в страницы на основе параметров.
             """)
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Все фильмы из базы данных которые закреплены за пользователем",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = UserMovies.class))
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Все фильмы из базы данных которые закреплены за пользователем",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = UserMoviesPage.class))
+                        )
+                }
+            ),
+        @ApiResponse(
+            responseCode = "422",
+            description = "Пользователь не найден",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
-    @GetMapping(value = MOVIE_CONTROLLER_PATH_USERS)
-    public ResponseEntity<?> getMoviesByUser(@RequestParam(value = "username") String username) {
-        UserMovies movies = movieService.getMoviesByUser(username);
+    @GetMapping(value = MOVIE_CONTROLLER_PATH_USERS + "/{userId}")
+    public ResponseEntity<?> getMoviesByUser(
+            @PathVariable(value = "userId") @Parameter(description = "ID пользователя",
+                    example = "1") Long userId,
+            @RequestParam(required = false, value = "page", defaultValue = "1")
+            @Parameter(description = "Страница выборки.") Integer page,
+            @RequestParam(required = false, value = "limit", defaultValue = "10")
+            @Parameter(description = "Количество элементов на странице.") Integer limit) {
+
+        UserMoviesPage movies = movieService.getMoviesByUser(userId, page, limit);
         return new ResponseEntity<>(movies, OK);
     }
 
 
     @Operation(summary = "Универсальный поиск фильмов", description =
             """
-            Комбинации запросов данного эндпоинта:
-            \s
-            1) movieName(findKp = false) - все фильмы из базы данных приложения которые содержат
-            переданную подстроку.
-            \s
-            2) movieName(findKp = true) - все фильмы которые содержат данную подстроку, поиск будет произведен через
-            внешнее API Кинопоиска.
-            \s
-            3) genreName - все фильмы из базы данных приложения жанр которых соответствует переданному названию
-            жанра.
-            \s
-            Параметр expanded = true - возвращает больше информации о найденных фильмах(оценки, ревью, etc).
-            \s
-            Допускаются комбинации - genreName&expanded и movieName + expanded&findKp.
+           В этом методе можно составить запрос на получение фильма из базы приложения или через Кинопоиск API.
+           \s
+           Метод возвращает определенное количество результатов сформированных в страницы на основе параметров.
             """)
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Фильмы соответствующие переданным параметрам",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = MovieCard.class))
-                            )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Некорректная комбинация параметров",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Фильмы соответствующие переданным параметрам",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = MoviePage.class))
+                        )
+                }
             )
     })
-    @GetMapping(
-            value = MOVIE_CONTROLLER_PATH,
-            params = "movieName"
-    )
+    @GetMapping(value = MOVIE_CONTROLLER_PATH)
     public ResponseEntity<?> getMoviesByName(
-            @RequestParam(required = false, value = "movieName") String movieName,
-            @RequestParam(required = false, value = "findKp", defaultValue = "false") Boolean findKp,
-            @RequestParam(required = false, value = "expanded",defaultValue = "false") Boolean expanded) {
+            @RequestParam(value = "title") @Parameter(description = "Название фильма.",
+                    example = "Разрушение") String title,
+            @RequestParam(required = false, value = "page", defaultValue = "1")
+            @Parameter(description = "Страница выборки.") Integer page,
+            @RequestParam(required = false, value = "limit", defaultValue = "10")
+            @Parameter(description = "Количество элементов на странице.") Integer limit,
+            @RequestParam(required = false, value = "expanded", defaultValue = "false")
+            @Parameter(description = "Предоставить полную информацию о фильмах."
+                    + "true - вернуть полную информацию о фильмах, "
+                    + "false - только то что нужно для выпадающего поиска.") Boolean expanded,
+            @RequestParam(required = false, value = "findKp", defaultValue = "false")
+            @Parameter(description = "Поиск по кинопоиску. true - искать на кинопоиске, "
+                    + "false - в базе приложения.") Boolean findKp) {
 
         if (expanded) {
-            return new ResponseEntity<>(movieService.getMoviesByName(movieName, findKp), OK);
+            return new ResponseEntity<>(movieService.getMoviesByName(title, findKp, page, limit), OK);
         }
-        return new ResponseEntity<>(movieService.getMoviesByNameShortInfo(movieName, findKp), OK);
+        return new ResponseEntity<>(movieService.getMoviesByNameShortInfo(title, findKp, page, limit), OK);
     }
 
-    @GetMapping(
-            value = MOVIE_CONTROLLER_PATH_GENRE,
-            params = "genreName"
-    )
+    @Operation(summary = "Получить фильмы по жанру.", description =
+            """
+            Возвращается все фильмы представители переданного жанра.
+            \s
+            Метод возвращает определенное количество результатов сформированных в страницы на основе параметров.
+            """)
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Все фильмы из базы данных которые являются представителями переданного жанра.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = MoviePage.class))
+                        )
+                }
+            )
+    })
+    @GetMapping(value = MOVIE_CONTROLLER_PATH_GENRE)
     public ResponseEntity<?> findMoviesByGenre(
-            @RequestParam(value = "genreName") String genreName,
-            @RequestParam(required = false, value = "expanded", defaultValue = "false") Boolean expanded) {
-        if (expanded) {
-            return new ResponseEntity<>(movieService.getMoviesByGenre(genreName), OK);
-        }
-        return new ResponseEntity<>(movieService.getMoviesByGenreShortInfo(genreName), OK);
+            @RequestParam(value = "genreName") @Parameter(description = "Жанр фильма.",
+                    example = "Боевик.") String genreName,
+            @RequestParam(required = false, value = "page", defaultValue = "1")
+            @Parameter(description = "Страница выборки.") Integer page,
+            @RequestParam(required = false, value = "limit", defaultValue = "10")
+            @Parameter(description = "Количество элементов на странице.") Integer limit) {
+
+        return new ResponseEntity<>(movieService.getMoviesByGenre(genreName, page, limit), OK);
     }
 
 }

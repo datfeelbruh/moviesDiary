@@ -2,7 +2,6 @@ package sobad.code.movies_diary.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,14 +15,12 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import sobad.code.movies_diary.exceptions.AppError;
-import sobad.code.movies_diary.authentication.AuthLoginRequest;
-import sobad.code.movies_diary.authentication.AuthTokenResponse;
-import sobad.code.movies_diary.jwts.JwtToken;
+import sobad.code.movies_diary.dtos.user.UserLoginRequest;
+import sobad.code.movies_diary.dtos.authentication.AuthTokenDtoResponse;
+import sobad.code.movies_diary.repositories.DeactivatedTokenRepository;
+import sobad.code.movies_diary.repositories.TokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
 import sobad.code.movies_diary.utils.TestUtils;
-
-import java.util.List;
-import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,23 +48,19 @@ public class AuthControllerIT {
     private TestUtils testUtils;
     @Autowired
     private MockMvc mockMvc;
-
-
     @Autowired
     private UserRepository userRepository;
-
-    @BeforeEach
-    void beforeEach() {
-
-        userRepository.deleteAll();
-    }
+    @Autowired
+    private TokenRepository tokenRepository;
+    @Autowired
+    private DeactivatedTokenRepository deactivatedTokenRepository;
 
     @Test
     @Transactional
     void authCorrectUser() throws Exception {
         testUtils.createSampleUser();
 
-        AuthLoginRequest userAuth = TestUtils.readJson(
+        UserLoginRequest userAuth = TestUtils.readJson(
                 TestUtils.readFixture("auth/sampleAuth.json"),
                 new TypeReference<>() {
                 }
@@ -77,33 +70,34 @@ public class AuthControllerIT {
                 .content(TestUtils.writeJson(userAuth))
                 .contentType(APPLICATION_JSON);
 
-        ResultActions resultActions = testUtils.performUnsecuredRequest(request);
+        ResultActions resultActions = mockMvc.perform(request);
 
         resultActions.andExpect(status().isOk());
 
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AuthTokenResponse tokenResponse = TestUtils.readJson(content, new TypeReference<>(){});
-
+        AuthTokenDtoResponse tokenResponse = TestUtils.readJson(content, new TypeReference<>() { });
+        assertThat(tokenResponse.getAccessToken())
+                .isEqualTo(tokenRepository.findByAccessToken(tokenResponse.getAccessToken()).get().getAccessToken());
     }
 
     @Test
     @Transactional
     void authUserWhichDoesNotRegistered() throws Exception {
-        AuthLoginRequest userAuth = TestUtils.readJson(
+        UserLoginRequest userAuth = TestUtils.readJson(
                 TestUtils.readFixture("auth/anotherAuth.json"),
-                new TypeReference<>() {}
+                new TypeReference<>() { }
         );
 
         MockHttpServletRequestBuilder request = post(AUTH_CONTROLLER_LOGIN_PATH)
                 .content(TestUtils.writeJson(userAuth))
                 .contentType(APPLICATION_JSON);
 
-        ResultActions resultActions = testUtils.performUnsecuredRequest(request);
+        ResultActions resultActions = mockMvc.perform(request);
 
         resultActions.andExpect(status().isUnauthorized());
 
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError appError = TestUtils.readJson(content, new TypeReference<>(){});
+        AppError appError = TestUtils.readJson(content, new TypeReference<>() { });
 
 
         assertThat(appError.getStatusCode()).isEqualTo(UNAUTHORIZED.value());
@@ -112,6 +106,33 @@ public class AuthControllerIT {
     @Test
     @Transactional
     void refreshToken() throws Exception {
+        testUtils.createSampleUser();
 
+        UserLoginRequest userAuth = TestUtils.readJson(
+                TestUtils.readFixture("auth/sampleAuth.json"),
+                new TypeReference<>() {
+                }
+        );
+
+        MockHttpServletRequestBuilder authRequest = post(AUTH_CONTROLLER_LOGIN_PATH)
+                .content(TestUtils.writeJson(userAuth))
+                .contentType(APPLICATION_JSON);
+
+        ResultActions authResult = mockMvc.perform(authRequest).andExpect(status().isOk());
+
+        String authContent = authResult.andReturn().getResponse().getContentAsString(UTF_8);
+        AuthTokenDtoResponse authTokenResponse = TestUtils.readJson(authContent, new TypeReference<>() { });
+
+        MockHttpServletRequestBuilder refreshRequest = get(AUTH_CONTROLLER_REFRESH_TOKEN_PATH)
+                .header(AUTHORIZATION, "Bearer " + authTokenResponse.getAccessToken());
+
+        ResultActions refreshResult = mockMvc.perform(refreshRequest).andExpect(status().isOk());
+        String refreshContent = refreshResult.andReturn().getResponse().getContentAsString(UTF_8);
+
+        AuthTokenDtoResponse refreshToken = TestUtils.readJson(refreshContent, new TypeReference<>() { });
+
+        assertThat(refreshToken.getAccessToken()).isNotEqualTo(tokenRepository.findAll().get(0).getAccessToken());
+        assertThat(authTokenResponse.getAccessToken())
+                .isEqualTo(deactivatedTokenRepository.findAll().get(0).getToken());
     }
 }

@@ -6,9 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
+import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,15 +16,12 @@ import java.nio.file.Path;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_PATH;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @Component
 public class TestUtils {
-    public static final String FIXTURES_PATH = "src/test/resources/fixtures/";
-
     @Autowired
     private MockMvc mockMvc;
-
+    public static final String FIXTURES_PATH = "src/test/resources/fixtures/";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -53,12 +49,8 @@ public class TestUtils {
         }
     }
 
-    public ResultActions performUnsecuredRequest(final MockHttpServletRequestBuilder request) throws Exception {
-        return mockMvc.perform(request);
-    }
-
     public void createSampleUser() throws Exception {
-        AuthRegistrationRequest user = TestUtils.readJson(
+        UserRegistrationDtoRequest user = TestUtils.readJson(
                 TestUtils.readFixture("users/sampleUser.json"),
                 new TypeReference<>() {
                 }
@@ -68,11 +60,11 @@ public class TestUtils {
                 .content(TestUtils.writeJson(user))
                 .contentType(APPLICATION_JSON);
 
-        performUnsecuredRequest(request);
+        mockMvc.perform(request);
     }
 
     public void createAnotherUser() throws Exception {
-        AuthRegistrationRequest user = TestUtils.readJson(
+        UserRegistrationDtoRequest user = TestUtils.readJson(
                 TestUtils.readFixture("users/anotherUser.json"),
                 new TypeReference<>() {
                 }
@@ -82,6 +74,14 @@ public class TestUtils {
                 .content(TestUtils.writeJson(user))
                 .contentType(APPLICATION_JSON);
 
-        performUnsecuredRequest(request);
+        mockMvc.perform(request);
+    }
+
+    public void createUser(UserRegistrationDtoRequest authRequest) throws Exception {
+        MockHttpServletRequestBuilder request = post(USER_CONTROLLER_PATH)
+                .content(TestUtils.writeJson(authRequest))
+                .contentType(APPLICATION_JSON);
+
+        mockMvc.perform(request);
     }
 }

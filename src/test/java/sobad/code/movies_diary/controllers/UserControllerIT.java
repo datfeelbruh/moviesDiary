@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -14,16 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import sobad.code.movies_diary.authentication.AuthLoginRequest;
 import sobad.code.movies_diary.exceptions.AppError;
-import sobad.code.movies_diary.authentication.AuthRegistrationRequest;
-import sobad.code.movies_diary.dto.user.UserDtoResponse;
+import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
+import sobad.code.movies_diary.dtos.user.UserDtoResponse;
 import sobad.code.movies_diary.repositories.UserRepository;
 import sobad.code.movies_diary.utils.TestUtils;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -46,9 +43,9 @@ public class UserControllerIT {
     private TestUtils testUtilsIT;
 
     @Test
-    @Rollback
+    @Transactional
     void registrationUserWithCorrectData() throws Exception {
-        AuthRegistrationRequest user = TestUtils.readJson(
+        UserRegistrationDtoRequest user = TestUtils.readJson(
                 TestUtils.readFixture("users/sampleUser.json"),
                 new TypeReference<>() {
                 }
@@ -61,7 +58,7 @@ public class UserControllerIT {
         ResultActions resultActions = mockMvc.perform(request);
         resultActions.andExpect(status().isCreated());
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        UserDtoResponse response = TestUtils.readJson(content, new TypeReference<>(){});
+        UserDtoResponse response = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(userRepository.findAll().size()).isGreaterThan(0);
         assertThat(userRepository.findByUsername(user.getUsername())).isNotNull();
@@ -71,9 +68,10 @@ public class UserControllerIT {
     }
 
     @Test
-    @Rollback
+    @Transactional
     void registrationUserWithExistedUsername() throws Exception {
-        AuthRegistrationRequest user = TestUtils.readJson(
+        testUtilsIT.createSampleUser();
+        UserRegistrationDtoRequest user = TestUtils.readJson(
                 TestUtils.readFixture("users/sampleUser.json"),
                 new TypeReference<>() {
                 }
@@ -84,12 +82,11 @@ public class UserControllerIT {
                 .content(TestUtils.writeJson(user))
                 .contentType(APPLICATION_JSON);
 
-        testUtilsIT.performUnsecuredRequest(request);
-        ResultActions resultActions = testUtilsIT.performUnsecuredRequest(request);
+        ResultActions resultActions = mockMvc.perform(request);
 
         resultActions.andExpect(status().isUnprocessableEntity());
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError response = TestUtils.readJson(content, new TypeReference<>() {});
+        AppError response = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(userRepository.findAll().size()).isEqualTo(1);
         assertThat(response.getMessage()).contains("Пользователь с таким именем или email уже существует");
@@ -97,9 +94,9 @@ public class UserControllerIT {
     }
 
     @Test
-    @Rollback
+    @Transactional
     void registrationUserWithIncorrectData() throws Exception {
-        AuthRegistrationRequest user = TestUtils.readJson(
+        UserRegistrationDtoRequest user = TestUtils.readJson(
                 TestUtils.readFixture("users/sampleUser.json"),
                 new TypeReference<>() {
                 }
@@ -111,14 +108,14 @@ public class UserControllerIT {
                 .content(TestUtils.writeJson(user))
                 .contentType(APPLICATION_JSON);
 
-        ResultActions resultActions = testUtilsIT.performUnsecuredRequest(request);
+        ResultActions resultActions = mockMvc.perform(request);
 
         resultActions.andExpect(status().isUnprocessableEntity());
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError response = TestUtils.readJson(content, new TypeReference<>() {});
+        AppError response = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(userRepository.findAll().size()).isEqualTo(0);
-        assertThat(userRepository.findByUsername(user.getUsername())).isEmpty();;
+        assertThat(userRepository.findByUsername(user.getUsername())).isEmpty();
         assertThat(response.getMessage()).contains("Пароль и потверждающие пароль не совпадают");
         assertThat(response.getStatusCode()).isEqualTo(UNPROCESSABLE_ENTITY.value());
     }

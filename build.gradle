@@ -62,7 +62,11 @@ dependencies {
 			'com.querydsl:querydsl-jpa:5.0.0:jakarta',
 			'io.jsonwebtoken:jjwt-api:0.11.5',
 			'io.jsonwebtoken:jjwt-jackson:0.11.5',
-			'io.jsonwebtoken:jjwt-impl:0.11.5'
+			'io.jsonwebtoken:jjwt-impl:0.11.5',
+			'com.blazebit:blaze-persistence-integration-querydsl-expressions-jakarta:1.6.9',
+			'com.blazebit:blaze-persistence-core-api-jakarta:1.6.9',
+			'com.blazebit:blaze-persistence-core-impl-jakarta:1.6.9',
+			'com.blazebit:blaze-persistence-integration-hibernate-6.2:1.6.9'
 	)
 	compileOnly (
 			'org.projectlombok:lombok'

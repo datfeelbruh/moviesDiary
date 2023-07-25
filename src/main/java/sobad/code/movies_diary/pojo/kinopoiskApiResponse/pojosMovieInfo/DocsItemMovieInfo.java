@@ -1,15 +1,16 @@
 package sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 public class DocsItemMovieInfo {
     private long id;
     private int year;
     private List<GenresItem> genres;
-    private Rating rating;
+    private Optional<Rating> rating;
     private String name;
     private Poster poster;
-    private String description;
+    private Optional<String> description;
     public long getId() {
         return id;
     }
@@ -21,14 +22,14 @@ public class DocsItemMovieInfo {
         return genres;
     }
 
-    public Rating getRating() {
+    public Optional<Rating> getRating() {
         return rating;
     }
 
     public String getName() {
         return name;
     }
-    public String getDescription() {
+    public Optional<String> getDescription() {
         return description;
     }
 

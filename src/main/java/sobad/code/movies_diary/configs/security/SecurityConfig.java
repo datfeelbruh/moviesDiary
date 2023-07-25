@@ -23,8 +23,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import sobad.code.movies_diary.jwts.JwtAuthenticationFilter;
-
+import sobad.code.movies_diary.jwt.JwtAuthenticationFilter;
 
 import java.util.Arrays;
 
@@ -47,7 +46,7 @@ public class SecurityConfig {
     public static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
             new AntPathRequestMatcher(AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.toString()),
             new AntPathRequestMatcher(AUTH_CONTROLLER_LOGIN_PATH, POST.toString()),
-            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS, GET.toString()),
+            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS + "/{userId}", GET.toString()),
             new AntPathRequestMatcher(USER_CONTROLLER_PATH, POST.toString()),
             new AntPathRequestMatcher("/h2/**"),
             new AntPathRequestMatcher("/swagger-ui/**"),
@@ -79,18 +78,6 @@ public class SecurityConfig {
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//                .exceptionHandling(ex -> {
-//                    ex.authenticationEntryPoint(((request, response, authException) -> {
-//                        response.setContentType(APPLICATION_JSON_VALUE);
-//                        response.setCharacterEncoding(String.valueOf(UTF_8));
-//                        response.setStatus(SC_FORBIDDEN);
-//                        AppError appError = new AppError(
-//                                SC_FORBIDDEN,
-//                                "Авторизируйтесь для выполнения этого действия",
-//                                LocalDateTime.now().toString());
-//                        objectMapper.writeValue(response.getWriter(), appError);
-//                    }));
-//                });
 
         return http.build();
     }
