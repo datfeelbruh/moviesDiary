@@ -5,9 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sobad.code.movies_diary.dtos.movie.MovieDto;
-import sobad.code.movies_diary.dtos.movie.MoviePage;
-import sobad.code.movies_diary.dtos.movie.MoviePageShort;
+import sobad.code.movies_diary.dtos.movie.MovieCard;
+import sobad.code.movies_diary.dtos.movie.MoviePages;
+import sobad.code.movies_diary.dtos.movie.MoviePagesShort;
 import sobad.code.movies_diary.dtos.movie.UserMovie;
 import sobad.code.movies_diary.dtos.movie.UserMoviesPage;
 import sobad.code.movies_diary.entities.Movie;
@@ -41,20 +41,20 @@ public class MovieService {
     private final PageMapper pageMapper;
     private final UserService userService;
 
-    public MovieDto getMovieById(Long id) {
+    public MovieCard getMovieById(Long id) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
         if (movieInDb.isEmpty()) {
             throw new MovieNotFoundException(String.format("Фильм с данным id '%s' не найден", id));
         }
         Movie movie = movieInDb.get();
 
-        return movieDtoSerializer.apply(movie);
+        return movieMapper.toMovieCard(movie);
     }
 
     @Transactional
-    public MoviePage getMoviesByName(String name, Boolean findOnKp, Integer page, Integer limit) {
+    public MoviePages getMoviesByName(String name, Boolean findOnKp, Integer page, Integer limit) {
         if (findOnKp) {
-            MoviePage kpMovies = externalApiService.findMovieByName(name, page, limit);
+            MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
 
             List<Movie> movies = kpMovies.getMovies().stream()
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
@@ -73,9 +73,9 @@ public class MovieService {
     }
 
     @Transactional
-    public MoviePageShort getMoviesByNameShortInfo(String name, Boolean findOnKp, Integer page, Integer limit) {
+    public MoviePagesShort getMoviesByNameShortInfo(String name, Boolean findOnKp, Integer page, Integer limit) {
         if (findOnKp) {
-            MoviePage kpMovies = externalApiService.findMovieByName(name, page, limit);
+            MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
 
             List<Movie> movies = kpMovies.getMovies().stream()
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
@@ -93,7 +93,7 @@ public class MovieService {
     }
 
     @Transactional
-    public MoviePage getMoviesByGenre(String genreName, Integer page, Integer limit) {
+    public MoviePages getMoviesByGenre(String genreName, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByGenreNameFilter(new GenreFilter(genreName), pageRequest);
 

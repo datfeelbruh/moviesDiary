@@ -20,8 +20,8 @@ import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.movies_diary.dtos.GenreDto;
 import sobad.code.movies_diary.dtos.movie.MovieDto;
 import sobad.code.movies_diary.dtos.movie.MovieDtoShort;
-import sobad.code.movies_diary.dtos.movie.MoviePage;
-import sobad.code.movies_diary.dtos.movie.MoviePageShort;
+import sobad.code.movies_diary.dtos.movie.MoviePages;
+import sobad.code.movies_diary.dtos.movie.MoviePagesShort;
 import sobad.code.movies_diary.dtos.movie.UserMoviesPage;
 import sobad.code.movies_diary.dtos.review.ReviewDtoRequest;
 import sobad.code.movies_diary.entities.Genre;
@@ -165,7 +165,7 @@ public class MovieControllerIT {
         ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
 
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePageShort moviePageShort = TestUtils.readJson(content, new TypeReference<>() { });
+        MoviePagesShort moviePageShort = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(moviePageShort.getLimit()).isEqualTo(10);
         assertThat(moviePageShort.getPage()).isEqualTo(1);
@@ -192,7 +192,7 @@ public class MovieControllerIT {
         ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
 
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePage moviePage = TestUtils.readJson(content, new TypeReference<>() { });
+        MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(moviePage.getLimit()).isEqualTo(10);
         assertThat(moviePage.getPage()).isEqualTo(1);
@@ -222,7 +222,7 @@ public class MovieControllerIT {
         ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
 
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePage moviePage = TestUtils.readJson(content, new TypeReference<>() { });
+        MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(moviePage.getLimit()).isEqualTo(1);
         assertThat(moviePage.getPage()).isEqualTo(2);
@@ -247,7 +247,7 @@ public class MovieControllerIT {
         ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
 
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePage moviePage = TestUtils.readJson(content, new TypeReference<>() { });
+        MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(moviePage.getLimit()).isEqualTo(10);
         assertThat(moviePage.getPage()).isEqualTo(1);
@@ -268,7 +268,7 @@ public class MovieControllerIT {
 
         ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePage moviePage = TestUtils.readJson(content, new TypeReference<>() { });
+        MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
         GenreDto existedGenre = new GenreDto(genreName);
         GenreDto nonExistedGenre = new GenreDto("123");
 
@@ -388,19 +388,19 @@ public class MovieControllerIT {
 
         UserRegistrationDtoRequest user3 = UserRegistrationDtoRequest.builder()
                 .username("user3")
-                .email("user3")
+                .email("user3@mail.com")
                 .password("s")
                 .confirmPassword("s")
                 .build();
         UserRegistrationDtoRequest user4 = UserRegistrationDtoRequest.builder()
                 .username("user4")
-                .email("user4")
+                .email("user4@mail.com")
                 .password("s")
                 .confirmPassword("s")
                 .build();
         UserRegistrationDtoRequest user5 = UserRegistrationDtoRequest.builder()
                 .username("user5")
-                .email("user5")
+                .email("user5@mail.com")
                 .password("s")
                 .confirmPassword("s")
                 .build();
@@ -485,7 +485,7 @@ public class MovieControllerIT {
 
         ResultActions findResult = mockMvc.perform(requestFindMovieInApp).andExpect(status().isOk());
         String appResultContent = findResult.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePage moviePage = TestUtils.readJson(appResultContent, new TypeReference<>() { });
+        MoviePages moviePage = TestUtils.readJson(appResultContent, new TypeReference<>() { });
         assertThat(moviePage.getMovies().get(0).getAverageRating()).isNotNull();
     }
 }

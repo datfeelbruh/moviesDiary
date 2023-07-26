@@ -13,8 +13,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MoviePageShort {
-    private List<MovieDtoShort> movies;
+public class MoviePages {
+    private List<MovieDto> movies;
     private Integer page;
     private Integer pages;
     private Long total;

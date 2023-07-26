@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import sobad.code.movies_diary.dtos.movie.MovieDto;
-import sobad.code.movies_diary.dtos.movie.MoviePage;
+import sobad.code.movies_diary.dtos.movie.MoviePages;
 import sobad.code.movies_diary.mappers.externalApiSerializer.ExternalAPISerializer;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.DocsItemMovieInfo;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.MovieInfo;
@@ -25,7 +25,7 @@ public class ExternalApiService {
     private String apiKey;
     private final ExternalAPISerializer externalAPISerializer;
 
-    public MoviePage findMovieByName(String name, Integer page, Integer limit) {
+    public MoviePages findMovieByName(String name, Integer page, Integer limit) {
         String url = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("api.kinopoisk.dev")
@@ -47,7 +47,7 @@ public class ExternalApiService {
         List<DocsItemMovieInfo> foundMovie = responseEntity.getBody().getDocs();
 
         if (responseEntity.getBody().getDocs().isEmpty()) {
-            return MoviePage.builder()
+            return MoviePages.builder()
                     .movies(new ArrayList<>())
                     .page(responseEntity.getBody().getPage())
                     .pages(responseEntity.getBody().getPages())
@@ -59,7 +59,7 @@ public class ExternalApiService {
         List<MovieDto> movies = foundMovie.stream()
                 .map(externalAPISerializer).toList();
 
-        return MoviePage.builder()
+        return MoviePages.builder()
                 .movies(movies)
                 .page(responseEntity.getBody().getPage())
                 .pages(responseEntity.getBody().getPages())

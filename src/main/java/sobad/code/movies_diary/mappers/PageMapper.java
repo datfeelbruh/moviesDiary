@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import sobad.code.movies_diary.dtos.movie.MovieDto;
 import sobad.code.movies_diary.dtos.movie.MovieDtoShort;
-import sobad.code.movies_diary.dtos.movie.MoviePage;
-import sobad.code.movies_diary.dtos.movie.MoviePageShort;
+import sobad.code.movies_diary.dtos.movie.MoviePages;
+import sobad.code.movies_diary.dtos.movie.MoviePagesShort;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.mappers.entitySerializers.MovieDtoSerializer;
 import sobad.code.movies_diary.mappers.entitySerializers.MovieDtoShortSerializer;
@@ -19,12 +19,12 @@ public class PageMapper {
     private final MovieDtoSerializer movieDtoSerializer;
     private final MovieDtoShortSerializer movieDtoShortSerializer;
 
-    public MoviePage buildMoviePage(Integer limit, Integer page, Page<Movie> moviePage) {
+    public MoviePages buildMoviePage(Integer limit, Integer page, Page<Movie> moviePage) {
         List<MovieDto> movies = moviePage.getContent().stream()
                 .map(movieDtoSerializer)
                 .toList();
 
-        return MoviePage.builder()
+        return MoviePages.builder()
                 .movies(movies)
                 .page(page)
                 .pages(moviePage.getTotalPages())
@@ -33,13 +33,13 @@ public class PageMapper {
                 .build();
     }
 
-    public MoviePageShort buildMoviePageShortFromKp(Integer limit, Integer page,
-                                                    MoviePage moviePage, List<Movie> movies) {
+    public MoviePagesShort buildMoviePageShortFromKp(Integer limit, Integer page,
+                                                     MoviePages moviePage, List<Movie> movies) {
         List<MovieDtoShort> movieDtoShorts = movies.stream()
                 .map(movieDtoShortSerializer)
                 .toList();
 
-        return MoviePageShort.builder()
+        return MoviePagesShort.builder()
                 .movies(movieDtoShorts)
                 .page(page)
                 .pages(moviePage.getPages())
@@ -48,12 +48,12 @@ public class PageMapper {
                 .build();
     }
 
-    public MoviePageShort buildMoviePageShort(Integer limit, Integer page, Page<Movie> moviePage) {
+    public MoviePagesShort buildMoviePageShort(Integer limit, Integer page, Page<Movie> moviePage) {
         List<MovieDtoShort> movies = moviePage.getContent().stream()
                 .map(movieDtoShortSerializer)
                 .toList();
 
-        return MoviePageShort.builder()
+        return MoviePagesShort.builder()
                 .movies(movies)
                 .page(page)
                 .pages(moviePage.getTotalPages())

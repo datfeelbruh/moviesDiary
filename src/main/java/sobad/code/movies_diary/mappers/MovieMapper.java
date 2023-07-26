@@ -3,6 +3,7 @@ package sobad.code.movies_diary.mappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import sobad.code.movies_diary.dtos.GenreDto;
+import sobad.code.movies_diary.dtos.movie.MovieCard;
 import sobad.code.movies_diary.dtos.movie.UserMovie;
 import sobad.code.movies_diary.dtos.review.ReviewDto;
 import sobad.code.movies_diary.entities.Movie;
@@ -31,6 +32,22 @@ public class MovieMapper {
                 .kpRating(movie.getKpRating())
                 .review(reviewByUser.getUserReview().getReview())
                 .rating(reviewByUser.getUserReview().getRating())
+                .build();
+    }
+
+    public MovieCard toMovieCard(Movie movie) {
+        return MovieCard.builder()
+                .id(movie.getId())
+                .description(movie.getDescription())
+                .posterUrl(movie.getPosterUrl())
+                .title(movie.getTitle())
+                .averageRating(reviewService.getAverageReviewRatingById(movie.getId()))
+                .releaseYear(movie.getReleaseYear())
+                .genres(movie.getGenres().stream()
+                        .map(e -> new GenreDto(e.getName()))
+                        .collect(Collectors.toSet()))
+                .imdbRating(movie.getImdbRating())
+                .kpRating(movie.getKpRating())
                 .build();
     }
 }

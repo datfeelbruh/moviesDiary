@@ -17,10 +17,7 @@ import sobad.code.movies_diary.exceptions.entiryExceptions.UserAlreadyExistExcep
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserPasswordMismatchException;
 
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;

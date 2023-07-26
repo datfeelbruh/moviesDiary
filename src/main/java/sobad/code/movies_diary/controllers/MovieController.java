@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sobad.code.movies_diary.dtos.movie.MovieDto;
-import sobad.code.movies_diary.dtos.movie.MoviePage;
+import sobad.code.movies_diary.dtos.movie.MovieCard;
+import sobad.code.movies_diary.dtos.movie.MoviePages;
 import sobad.code.movies_diary.dtos.movie.UserMoviesPage;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.services.MovieService;
@@ -44,7 +44,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = MovieDto.class)
+                        schema = @Schema(implementation = MovieCard.class)
                         )
                 }
             ),
@@ -62,7 +62,7 @@ public class MovieController {
     @GetMapping(value = MOVIE_CONTROLLER_PATH + "/{movieId}")
     public ResponseEntity<?> getMovieById(@PathVariable("movieId")
                                           @Parameter(description = "ID фильма", example = "1") Long movieId) {
-        MovieDto movie = movieService.getMovieById(movieId);
+        MovieCard movie = movieService.getMovieById(movieId);
         return new ResponseEntity<>(movie, OK);
     }
 
@@ -121,7 +121,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = MoviePage.class))
+                        array = @ArraySchema(schema = @Schema(implementation = MoviePages.class))
                         )
                 }
             )
@@ -161,7 +161,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = MoviePage.class))
+                        array = @ArraySchema(schema = @Schema(implementation = MoviePages.class))
                         )
                 }
             )
