@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sobad.code.movies_diary.dtos.review.ReviewDto;
 import sobad.code.movies_diary.dtos.review.ReviewDtoRequest;
 import sobad.code.movies_diary.dtos.review.ReviewDtoResponse;
+import sobad.code.movies_diary.dtos.review.ReviewDtoUpdateRequest;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.Review;
 import sobad.code.movies_diary.entities.User;
@@ -123,20 +124,8 @@ public class ReviewService {
                 .build();
     }
 
-    public Double getAverageReviewRatingById(Long id) {
-        Integer count = reviewRepository.countByMovieId(id);
-        Integer countReviewToCalcAverage = 5;
-        if (count > 0 && count % countReviewToCalcAverage == 0) {
-            return getAverage(id);
-        }
-        return null;
-    }
-
     @Transactional
-    public ReviewDto updateReview(Long reviewId, ReviewDtoRequest reviewDtoRequest) {
-        movieRepository.findById(reviewDtoRequest.getMovieId())
-                .orElseThrow(() -> new MovieNotFoundException(
-                    String.format("Фильм с данным id '%s' не найден",  reviewDtoRequest.getMovieId())));
+    public ReviewDto updateReview(Long reviewId, ReviewDtoUpdateRequest reviewDtoRequest) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException(
                     String.format("Ревью с данным id '%s' не найдено", reviewId)));
@@ -164,6 +153,16 @@ public class ReviewService {
         }
         reviewRepository.deleteById(reviewId);
     }
+
+    public Double getAverageReviewRatingById(Long id) {
+        Integer count = reviewRepository.countByMovieId(id);
+        Integer countReviewToCalcAverage = 5;
+        if (count > 0 && count % countReviewToCalcAverage == 0) {
+            return getAverage(id);
+        }
+        return null;
+    }
+
 
     public Double getAverage(Long id) {
         Double avg = reviewRepository.getAvgRatingByMovieId(id);

@@ -79,7 +79,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = UserMoviesPage.class))
+                        schema = @Schema(implementation = UserMoviesPage.class)
                         )
                 }
             ),
@@ -121,7 +121,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = MoviePages.class))
+                        schema = @Schema(implementation = MoviePages.class)
                         )
                 }
             )
@@ -161,7 +161,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = MoviePages.class))
+                        schema = @Schema(implementation = MoviePages.class)
                         )
                 }
             )

@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sobad.code.movies_diary.dtos.review.ReviewDto;
 import sobad.code.movies_diary.dtos.review.ReviewDtoRequest;
 import sobad.code.movies_diary.dtos.review.ReviewDtoResponse;
+import sobad.code.movies_diary.dtos.review.ReviewDtoUpdateRequest;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.services.ReviewService;
 
@@ -81,11 +83,9 @@ public class ReviewController {
         @ApiResponse(
             responseCode = "200",
             description = "Ревью пользователей на фильмы",
-            content = {
-                @Content(
+            content = @Content(
                         mediaType = "application/json",
-                        array = @ArraySchema(schema = @Schema(implementation = ReviewDtoResponse.class)))
-            }
+                        schema = @Schema(implementation = ReviewDtoResponse.class))
             ),
         @ApiResponse(
             responseCode = "422",
@@ -119,6 +119,7 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.getAllReviews(page, limit), OK);
     }
 
+
     @Operation(summary = "Обновить ревью для фильма", description =
             """
             Данный метод обновляет ревью на фильм у пользователя.
@@ -146,7 +147,7 @@ public class ReviewController {
     @PutMapping(value = REVIEW_CONTROLLER_PATH + "/{reviewId}")
     public ResponseEntity<?> updateReview(
             @PathVariable @Parameter(description = "ID ревью", example = "1") Long reviewId,
-            @RequestBody ReviewDtoRequest reviewDtoRequest) {
+            @RequestBody ReviewDtoUpdateRequest reviewDtoRequest) {
         return new ResponseEntity<>(reviewService.updateReview(reviewId, reviewDtoRequest), OK);
     }
     @Operation(summary = "Удалить ревью для фильма")
