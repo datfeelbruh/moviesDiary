@@ -48,6 +48,20 @@ services:
 #    volumes:
 #      - C:/Users/datfe/Pictures/service-images:/image-data/service-images
 
+  frontend:
+    build:
+      context: ./MD-frontend
+      dockerfile: Dockerfile
+
+    restart: always
+    container_name: 'service-frontend'
+
+    ports:
+      - 80:80
+
+    depends_on:
+      - backend
+
 volumes:
 #  image-data:
   db-data:
