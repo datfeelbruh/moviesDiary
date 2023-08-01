@@ -9,12 +9,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sobad.code.movies_diary.dtos.user.UserDtoAboutRequest;
 import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.movies_diary.dtos.user.UserDtoResponse;
 import sobad.code.movies_diary.exceptions.AppError;
@@ -67,5 +70,11 @@ public class UserController {
     @PostMapping(value = USER_CONTROLLER_PATH + "/avatar")
     public ResponseEntity<?> uploadAvatar(@RequestParam("image") MultipartFile multipartFile) throws IOException {
         return new ResponseEntity<>(userService.uploadImage(multipartFile), OK);
+    }
+
+    @PutMapping(value = USER_CONTROLLER_PATH + "/{userId}")
+    public ResponseEntity<?> updateAbout(@PathVariable(value = "userId") Long userId,
+                                         @RequestBody UserDtoAboutRequest aboutRequest) {
+        return new ResponseEntity<>(userService.updateAbout(userId, aboutRequest), OK);
     }
 }

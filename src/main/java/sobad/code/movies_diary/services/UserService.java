@@ -13,12 +13,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import sobad.code.movies_diary.ImageUtils;
+import sobad.code.movies_diary.dtos.user.UserDtoAboutRequest;
 import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.movies_diary.dtos.user.UserDtoResponse;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.UploadAvatarException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.UpdateAnotherUserDataException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserAlreadyExistException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.UserNotFoundException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserPasswordMismatchException;
+import sobad.code.movies_diary.mappers.entitySerializers.UserSerializer;
 import sobad.code.movies_diary.repositories.UserRepository;
 
 import java.io.File;
@@ -39,6 +43,7 @@ public class UserService implements UserDetailsService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final ImageUtils imageUtils;
+    private final UserSerializer userSerializer;
 
 
     public User findByUsername(String username) {
@@ -83,9 +88,25 @@ public class UserService implements UserDetailsService {
         user.setUsername(authRegistrationRequest.getUsername());
         user.setPassword(passwordEncoder.encode(authRegistrationRequest.getPassword()));
         user.setRoles(List.of(roleService.getUserRole()));
-
         userRepository.save(user);
-        return new UserDtoResponse(user.getId(), user.getUsername(), user.getEmail());
+
+        return userSerializer.apply(user);
+    }
+
+    @Transactional
+    public UserDtoResponse updateAbout(Long userId, UserDtoAboutRequest aboutRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь с данным ID не найден."));
+        User currentUser = getCurrentUser();
+        if (!user.getId().equals(currentUser.getId())) {
+            throw new UpdateAnotherUserDataException("Нельзя обновить данные другого пользователя!");
+        }
+
+        user.setId(userId);
+        user.setAbout(aboutRequest.getAbout());
+        userRepository.save(user);
+
+        return userSerializer.apply(user);
     }
 
     public User getCurrentUser() {
@@ -93,7 +114,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).get();
     }
 
-    public String uploadImage(MultipartFile multipartFile) throws IOException {
+    public UserDtoResponse uploadImage(MultipartFile multipartFile) throws IOException {
         if (!multipartFile.isEmpty() && multipartFile != null) {
             if (isSupportedContentType(multipartFile.getContentType())) {
                 User user = getCurrentUser();
@@ -104,7 +125,8 @@ public class UserService implements UserDetailsService {
                 link = IMAGE_CONTROLLER_PATH + link;
                 user.setAvatar(link);
                 userRepository.save(user);
-                return "Файл успешно загружен.";
+
+                return userSerializer.apply(user);
             }
             throw new UploadAvatarException("Неподдерживаемый тип файла.");
         }

@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +15,9 @@ import sobad.code.movies_diary.exceptions.authenticationExceptions.DeactivatedTo
 import sobad.code.movies_diary.exceptions.entiryExceptions.CustomAccessDeniedException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.MovieNotFoundException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.ReviewNotFoundException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.UpdateAnotherUserDataException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserAlreadyExistException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.UserNotFoundException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserPasswordMismatchException;
 
 import java.time.Instant;
@@ -28,6 +31,26 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RestControllerAdvice
 @Slf4j
 public class CustomAdvice {
+    @ExceptionHandler(UpdateAnotherUserDataException.class)
+    public ResponseEntity<AppError> updateAnotherUser(UpdateAnotherUserDataException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(
+                        UNPROCESSABLE_ENTITY.value(),
+                        e.getMessage(),
+                        Instant.now().toString()));
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<AppError> userNotFound(UserNotFoundException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(
+                        UNPROCESSABLE_ENTITY.value(),
+                        e.getMessage(),
+                        Instant.now().toString()));
+    }
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<AppError> avatarUploadSizeException(MaxUploadSizeExceededException e) {
         log.error(e.getMessage(), e);
