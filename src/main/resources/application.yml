@@ -8,7 +8,12 @@ spring:
   application:
     name: movies_diary
   profiles:
-    active: prod
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 8MB
+      max-request-size: 8MB
+      enabled: true
 
 jwt:
   expiration: 24

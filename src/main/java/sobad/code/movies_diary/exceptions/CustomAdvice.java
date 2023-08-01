@@ -9,6 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import sobad.code.movies_diary.exceptions.authenticationExceptions.DeactivatedTokenException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.CustomAccessDeniedException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.MovieNotFoundException;
@@ -20,12 +21,45 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @RestControllerAdvice
 @Slf4j
 public class CustomAdvice {
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<AppError> avatarUploadSizeException(MaxUploadSizeExceededException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(
+                        UNPROCESSABLE_ENTITY.value(),
+                        "Размер файла слишком большой! Максимальный размер для загружаемого файла 8 МБ.",
+                        Instant.now().toString()));
+    }
+
+    @ExceptionHandler(UploadAvatarException.class)
+    public ResponseEntity<AppError> avatarUploadException(UploadAvatarException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(
+                        UNPROCESSABLE_ENTITY.value(),
+                        e.getMessage(),
+                        Instant.now().toString()));
+    }
+
+    @ExceptionHandler(AvatarNotFoundException.class)
+    public ResponseEntity<AppError> avatarNotFoundException(AvatarNotFoundException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(
+                        NOT_FOUND.value(),
+                        e.getMessage(),
+                        Instant.now().toString()));
+    }
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<AppError> validationException(ConstraintViolationException e) {
         List<String> errorMessages = e.getConstraintViolations()

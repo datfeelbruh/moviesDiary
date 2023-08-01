@@ -12,19 +12,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sobad.code.movies_diary.ImageUtils;
 import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.movies_diary.dtos.user.UserDtoResponse;
 import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.exceptions.UploadAvatarException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserAlreadyExistException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserPasswordMismatchException;
 import sobad.code.movies_diary.repositories.UserRepository;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static sobad.code.movies_diary.controllers.ImageController.IMAGE_CONTROLLER_PATH;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final ImageUtils imageUtils;
 
 
     public User findByUsername(String username) {
@@ -87,17 +93,28 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).get();
     }
 
-    public String uploadImage(MultipartFile file) throws IOException {
-        log.info(file.getContentType());
-        log.info(file.getName());
-        log.info(file.getOriginalFilename());
-        log.info("bytes = ", file.getBytes());
-        FileOutputStream stream = new FileOutputStream("C:/Users/datfe/Pictures/service-images/test.txt");
-        try {
-            stream.write(file.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+    public String uploadImage(MultipartFile multipartFile) throws IOException {
+        if (!multipartFile.isEmpty() && multipartFile != null) {
+            if (isSupportedContentType(multipartFile.getContentType())) {
+                User user = getCurrentUser();
+                imageUtils.deletePreviousUserImage(user.getUsername());
+                String filepath = imageUtils.buildFile(multipartFile.getContentType(), user.getUsername());
+                multipartFile.transferTo(new File(filepath));
+                String link = filepath.substring(filepath.lastIndexOf("/"));
+                link = IMAGE_CONTROLLER_PATH + link;
+                user.setAvatar(link);
+                userRepository.save(user);
+                return "Файл успешно загружен.";
+            }
+            throw new UploadAvatarException("Неподдерживаемый тип файла.");
         }
-        return "pizdec";
+        throw new UploadAvatarException("Файл пустой!");
+    }
+
+    private boolean isSupportedContentType(String contentType) {
+        return contentType.equals("image/png")
+                || contentType.equals("image/jpg")
+                || contentType.equals("image/gif")
+                || contentType.equals("image/jpeg");
     }
 }

@@ -36,6 +36,7 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
+import static sobad.code.movies_diary.controllers.ImageController.IMAGE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH_USERS;
 import static sobad.code.movies_diary.controllers.UserController.USER_CONTROLLER_PATH;
@@ -53,8 +54,9 @@ public class SecurityConfig {
             new AntPathRequestMatcher(AUTH_CONTROLLER_REFRESH_TOKEN_PATH, GET.toString()),
             new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH + "/moviesTitles", GET.toString()),
             new AntPathRequestMatcher(AUTH_CONTROLLER_LOGIN_PATH, POST.toString()),
-            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS + "/{userId}", GET.toString()),
+            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS + "/**", GET.toString()),
             new AntPathRequestMatcher(USER_CONTROLLER_PATH, POST.toString()),
+            new AntPathRequestMatcher(IMAGE_CONTROLLER_PATH + "/**", GET.toString()),
             new AntPathRequestMatcher("/h2/**"),
             new AntPathRequestMatcher("/swagger-ui/**"),
             new AntPathRequestMatcher("/swagger-ui.html"),
@@ -112,27 +114,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
-    }
-
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .requestMatchers("/h2/**")
-                .requestMatchers("/v3/api-docs/**")
-                .requestMatchers("/swagger-ui/**");
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry
-                        .addMapping("/api/**")
-                        .allowedMethods("*")
-                        .allowedOrigins("http://localhost:8000");
-            }
-        };
     }
 }

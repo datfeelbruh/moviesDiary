@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import sobad.code.movies_diary.services.UserService;
 import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
@@ -62,9 +64,8 @@ public class UserController {
         return new ResponseEntity<>(userDto, CREATED);
     }
 
-    @GetMapping(value = "api/test")
-    public String test(@RequestParam("image") MultipartFile file) throws IOException {
-        return userService.uploadImage(file);
+    @PostMapping(value = USER_CONTROLLER_PATH + "/avatar")
+    public ResponseEntity<?> uploadAvatar(@RequestParam("image") MultipartFile multipartFile) throws IOException {
+        return new ResponseEntity<>(userService.uploadImage(multipartFile), OK);
     }
-
 }

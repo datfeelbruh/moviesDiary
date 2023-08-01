@@ -28,8 +28,10 @@ public class User extends BaseModel {
     private String email;
     @Column(name = "username", unique = true, nullable = false)
     private String username;
-//    @Column(name = "about")
-//    private String about;
+    @Column(name = "avatar")
+    private String avatar;
+    @Column(name = "about")
+    private String about;
     @Column(name = "password", nullable = false)
     private String password;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

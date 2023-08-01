@@ -18,4 +18,6 @@ spring:
 jwt:
   secret-key: ${JWT_SECRET_KEY}
 
+image-directory: "/var/lib/image-data"
+
 x_api_key: ${X_API_KEY}

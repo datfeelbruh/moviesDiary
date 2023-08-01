@@ -45,8 +45,8 @@ services:
       - "8000:8000"
     depends_on:
       - backend-db
-#    volumes:
-#      - C:/Users/datfe/Pictures/service-images:/image-data/service-images
+    volumes:
+      - /c/Users/datfe/Pictures/service-images:/var/lib/image-data
 
   frontend:
     build:
@@ -63,6 +63,6 @@ services:
       - backend
 
 volumes:
-#  image-data:
+  image-data:
   db-data:
   pgadmin-data:
