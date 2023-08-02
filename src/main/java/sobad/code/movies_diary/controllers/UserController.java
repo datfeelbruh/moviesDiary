@@ -35,7 +35,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class UserController {
     private final UserService userService;
     public static final String USER_CONTROLLER_PATH = "/api/users";
-    public static final String USER_CONTROLLER_PATH_RESET_PASSWORD = "/api/users/reset";
 
     @Operation(summary = "Зарегистрировать нового пользователя", description = """
             С помощью этого метода можно зарегистрировать нового пользователя.
@@ -77,10 +76,5 @@ public class UserController {
     public ResponseEntity<?> updateAbout(@PathVariable(value = "userId") Long userId,
                                          @RequestBody UserDtoAboutRequest aboutRequest) {
         return new ResponseEntity<>(userService.updateAbout(userId, aboutRequest), OK);
-    }
-
-    @PostMapping(value = USER_CONTROLLER_PATH_RESET_PASSWORD)
-    public ResponseEntity<?> updateAbout(@RequestParam(value = "email") String email) {
-        return ResponseEntity.ok(email);
     }
 }

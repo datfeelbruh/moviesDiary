@@ -46,7 +46,7 @@ public class ResetPasswordService {
                 .build();
 
         resetPasswordTokenRepository.save(resetPasswordToken);
-        sendResetPasswordEmail("http://localhost:8000/api/resetPassword?token=" + resetPasswordToken.getToken(),
+        sendResetPasswordEmail("???resetPassword?token=" + resetPasswordToken.getToken(),
                 user.getEmail());
         return Map.of("resetToken", resetPasswordToken.getToken());
     }
