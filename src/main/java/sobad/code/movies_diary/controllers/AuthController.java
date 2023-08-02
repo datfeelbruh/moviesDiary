@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import sobad.code.movies_diary.exceptions.AppError;
-import sobad.code.movies_diary.dtos.user.UserLoginRequest;
+import sobad.code.movies_diary.dtos.user.UserDtoLoginRequest;
 
 import sobad.code.movies_diary.dtos.authentication.AuthTokenDtoResponse;
 import sobad.code.movies_diary.services.AuthService;
@@ -59,7 +59,7 @@ public class AuthController {
             )
     })
     @PostMapping(AUTH_CONTROLLER_LOGIN_PATH)
-    public ResponseEntity<?> login(@RequestBody UserLoginRequest authLoginRequest) {
+    public ResponseEntity<?> login(@RequestBody UserDtoLoginRequest authLoginRequest) {
         return ResponseEntity.ok(authService.authenticate(authLoginRequest));
     }
 

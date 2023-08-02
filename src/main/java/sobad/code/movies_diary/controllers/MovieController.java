@@ -2,7 +2,6 @@ package sobad.code.movies_diary.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sobad.code.movies_diary.dtos.movie.MovieCard;
-import sobad.code.movies_diary.dtos.movie.MoviePages;
-import sobad.code.movies_diary.dtos.movie.UserMoviesPage;
+import sobad.code.movies_diary.dtos.pages.MoviePages;
+import sobad.code.movies_diary.dtos.pages.UserMoviesPage;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.services.MovieService;
 

@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sobad.code.movies_diary.dtos.user.UserLoginRequest;
+import sobad.code.movies_diary.dtos.user.UserDtoLoginRequest;
 import sobad.code.movies_diary.dtos.authentication.AuthTokenDtoResponse;
 import sobad.code.movies_diary.entities.DeactivatedToken;
 import sobad.code.movies_diary.entities.User;
@@ -58,7 +58,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthTokenDtoResponse authenticate(UserLoginRequest authLoginRequest) {
+    public AuthTokenDtoResponse authenticate(UserDtoLoginRequest authLoginRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authLoginRequest.getUsername(),

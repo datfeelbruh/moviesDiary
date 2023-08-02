@@ -36,6 +36,7 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
 import static sobad.code.movies_diary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
+import static sobad.code.movies_diary.controllers.ForgotPasswordController.FORGOT_PASSWORD_CONTROLLER_PATH_RESET_PASSWORD;
 import static sobad.code.movies_diary.controllers.ImageController.IMAGE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 import static sobad.code.movies_diary.controllers.MovieController.MOVIE_CONTROLLER_PATH_USERS;
@@ -57,6 +58,8 @@ public class SecurityConfig {
             new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH_USERS + "/**", GET.toString()),
             new AntPathRequestMatcher(USER_CONTROLLER_PATH, POST.toString()),
             new AntPathRequestMatcher(IMAGE_CONTROLLER_PATH + "/**", GET.toString()),
+            new AntPathRequestMatcher(FORGOT_PASSWORD_CONTROLLER_PATH_RESET_PASSWORD + "**", POST.toString()),
+            new AntPathRequestMatcher(FORGOT_PASSWORD_CONTROLLER_PATH_RESET_PASSWORD + "/**", GET.toString()),
             new AntPathRequestMatcher("/h2/**"),
             new AntPathRequestMatcher("/swagger-ui/**"),
             new AntPathRequestMatcher("/swagger-ui.html"),

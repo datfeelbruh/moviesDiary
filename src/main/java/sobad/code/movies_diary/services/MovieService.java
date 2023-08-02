@@ -6,10 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sobad.code.movies_diary.dtos.movie.MovieCard;
-import sobad.code.movies_diary.dtos.movie.MoviePages;
-import sobad.code.movies_diary.dtos.movie.MoviePagesShort;
+import sobad.code.movies_diary.dtos.pages.MoviePages;
+import sobad.code.movies_diary.dtos.pages.MoviePagesShort;
 import sobad.code.movies_diary.dtos.movie.UserMovie;
-import sobad.code.movies_diary.dtos.movie.UserMoviesPage;
+import sobad.code.movies_diary.dtos.pages.UserMoviesPage;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.entiryExceptions.MovieNotFoundException;
@@ -111,8 +111,7 @@ public class MovieService {
                 .toList();
 
         return UserMoviesPage.builder()
-                .userId(userId)
-                .username(user.getUsername())
+                .user(userService.getUserById(userId))
                 .movies(userMovies)
                 .total(movies.getTotalElements())
                 .page(page)

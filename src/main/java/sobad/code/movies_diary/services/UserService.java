@@ -16,6 +16,7 @@ import sobad.code.movies_diary.ImageUtils;
 import sobad.code.movies_diary.dtos.user.UserDtoAboutRequest;
 import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.movies_diary.dtos.user.UserDtoResponse;
+import sobad.code.movies_diary.entities.ResetPasswordToken;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.UploadAvatarException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UpdateAnotherUserDataException;
@@ -23,14 +24,19 @@ import sobad.code.movies_diary.exceptions.entiryExceptions.UserAlreadyExistExcep
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserNotFoundException;
 import sobad.code.movies_diary.exceptions.entiryExceptions.UserPasswordMismatchException;
 import sobad.code.movies_diary.mappers.entitySerializers.UserSerializer;
+import sobad.code.movies_diary.repositories.ResetPasswordTokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static sobad.code.movies_diary.controllers.ImageController.IMAGE_CONTROLLER_PATH;
@@ -40,6 +46,7 @@ import static sobad.code.movies_diary.controllers.ImageController.IMAGE_CONTROLL
 @Slf4j
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final ResetPasswordTokenRepository resetPasswordTokenRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final ImageUtils imageUtils;
@@ -56,6 +63,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("Пользователь с таким ID '%s' не найден", id)
         ));
+    }
+
+    public UserDtoResponse getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь с данным ID не найден."));
+
+        return userSerializer.apply(user);
     }
 
 

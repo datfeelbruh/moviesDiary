@@ -1,20 +1,21 @@
-package sobad.code.movies_diary.dtos.movie;
+package sobad.code.movies_diary.dtos.pages;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import sobad.code.movies_diary.dtos.movie.MovieDto;
 
 import java.util.List;
 
-@Builder
 @Getter
-@NoArgsConstructor
+@Setter
+@Builder
 @AllArgsConstructor
-public class UserMoviesPage {
-    private Long userId;
-    private String username;
-    private List<UserMovie> movies;
+@NoArgsConstructor
+public class MoviePages {
+    private List<MovieDto> movies;
     private Integer page;
     private Integer pages;
     private Long total;

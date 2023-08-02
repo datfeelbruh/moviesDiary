@@ -1,18 +1,21 @@
-package sobad.code.movies_diary.dtos.review;
+package sobad.code.movies_diary.dtos.pages;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import sobad.code.movies_diary.dtos.movie.MovieDtoShort;
 
 import java.util.List;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
-public class ReviewDtoResponse {
-    private List<ReviewDto> reviews;
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MoviePagesShort {
+    private List<MovieDtoShort> movies;
     private Integer page;
     private Integer pages;
     private Long total;

@@ -56,6 +56,7 @@ dependencies {
 			'org.springframework.boot:spring-boot-starter-web',
 			'org.springframework.boot:spring-boot-starter-actuator',
 			'org.springframework.boot:spring-boot-starter-validation',
+			'org.springframework.boot:spring-boot-starter-mail',
 			'org.springframework.boot:spring-boot-starter-security',
 			'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0',
 			'org.liquibase:liquibase-core',

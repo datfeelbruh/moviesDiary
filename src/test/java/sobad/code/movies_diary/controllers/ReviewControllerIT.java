@@ -18,7 +18,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import sobad.code.movies_diary.dtos.review.ReviewDto;
 import sobad.code.movies_diary.dtos.review.ReviewDtoRequest;
-import sobad.code.movies_diary.dtos.review.ReviewDtoResponse;
+import sobad.code.movies_diary.dtos.pages.ReviewPages;
 import sobad.code.movies_diary.entities.Genre;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.Review;
@@ -227,13 +227,13 @@ public class ReviewControllerIT {
         ResultActions datfeelResult = mockMvc.perform(getReviewByDatfeel).andExpect(status().isOk());
 
         String datfeelContent = datfeelResult.andReturn().getResponse().getContentAsString(UTF_8);
-        ReviewDtoResponse sobadResponse = TestUtils.readJson(sobadContent, new TypeReference<>() { });
-        ReviewDtoResponse datfeelResponse = TestUtils.readJson(datfeelContent, new TypeReference<>() { });
+        ReviewPages sobadResponse = TestUtils.readJson(sobadContent, new TypeReference<>() { });
+        ReviewPages datfeelResponse = TestUtils.readJson(datfeelContent, new TypeReference<>() { });
 
-        assertThat(sobadResponse.getReviews().get(0).getUserId()).isEqualTo(sobad.getId());
+        assertThat(sobadResponse.getReviews().get(0).getUser().getId()).isEqualTo(sobad.getId());
         assertThat(sobadResponse.getReviews().get(0).getMovieId()).isEqualTo(sobadMovie.getId());
         assertThat(sobadResponse.getReviews().size()).isEqualTo(1);
-        assertThat(datfeelResponse.getReviews().get(0).getUserId()).isEqualTo(datfeel.getId());
+        assertThat(datfeelResponse.getReviews().get(0).getUser().getId()).isEqualTo(datfeel.getId());
         assertThat(datfeelResponse.getReviews().get(0).getMovieId()).isEqualTo(datfeelMovie.getId());
         assertThat(datfeelResponse.getReviews().size()).isEqualTo(1);
     }
@@ -280,10 +280,10 @@ public class ReviewControllerIT {
 
         ResultActions getResult = mockMvc.perform(getReviewByMovie).andExpect(status().isOk());
         String content = getResult.andReturn().getResponse().getContentAsString(UTF_8);
-        ReviewDtoResponse response = TestUtils.readJson(content, new TypeReference<>() { });
+        ReviewPages response = TestUtils.readJson(content, new TypeReference<>() { });
 
-        assertThat(response.getReviews().get(0).getUsername()).isEqualTo("sobad");
-        assertThat(response.getReviews().get(1).getUsername()).isEqualTo("datfeel");
+        assertThat(response.getReviews().get(0).getUser().getUsername()).isEqualTo("sobad");
+        assertThat(response.getReviews().get(1).getUser().getUsername()).isEqualTo("datfeel");
         assertThat(response.getReviews().get(0).getMovieId()).isEqualTo(movie.getId());
         assertThat(response.getReviews().get(1).getMovieId()).isEqualTo(movie.getId());
     }
@@ -344,11 +344,11 @@ public class ReviewControllerIT {
         ReviewDto sobadResponse = TestUtils.readJson(sobadContent, new TypeReference<>() { });
         ReviewDto datfeelResponse = TestUtils.readJson(datfeelContent, new TypeReference<>() { });
 
-        assertThat(sobadResponse.getUserId()).isEqualTo(sobad.getId());
+        assertThat(sobadResponse.getUser().getId()).isEqualTo(sobad.getId());
         assertThat(sobadResponse.getMovieId()).isEqualTo(sobadMovie.getId());
         assertThat(sobadResponse.getUserReview().getRating()).isEqualTo(10.0);
         assertThat(sobadResponse.getUserReview().getReview()).isEqualTo("good");
-        assertThat(datfeelResponse.getUserId()).isEqualTo(datfeel.getId());
+        assertThat(datfeelResponse.getUser().getId()).isEqualTo(datfeel.getId());
         assertThat(datfeelResponse.getMovieId()).isEqualTo(datfeelMovie.getId());
         assertThat(datfeelResponse.getUserReview().getRating()).isEqualTo(0.0);
         assertThat(datfeelResponse.getUserReview().getReview()).isEqualTo("bad");
@@ -400,11 +400,11 @@ public class ReviewControllerIT {
 
         String content = getAllResult.andReturn().getResponse().getContentAsString(UTF_8);
 
-        ReviewDtoResponse allReviews = TestUtils.readJson(content, new TypeReference<>() { });
+        ReviewPages allReviews = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(allReviews.getReviews().size()).isEqualTo(2);
-        assertThat(allReviews.getReviews().get(0).getUserId()).isEqualTo(sobad.getId());
-        assertThat(allReviews.getReviews().get(1).getUserId()).isEqualTo(datfeel.getId());
+        assertThat(allReviews.getReviews().get(0).getUser().getId()).isEqualTo(sobad.getId());
+        assertThat(allReviews.getReviews().get(1).getUser().getId()).isEqualTo(datfeel.getId());
     }
 
     @Test
@@ -483,7 +483,7 @@ public class ReviewControllerIT {
 
         ResultActions getResultAfterDelete = mockMvc.perform(getReviewByMovieAfterDelete).andExpect(status().isOk());
         String contentAfterDelete = getResultAfterDelete.andReturn().getResponse().getContentAsString(UTF_8);
-        ReviewDtoResponse responseAfterDelete = TestUtils.readJson(contentAfterDelete, new TypeReference<>() { });
+        ReviewPages responseAfterDelete = TestUtils.readJson(contentAfterDelete, new TypeReference<>() { });
 
         assertThat(responseAfterDelete.getReviews().size()).isEqualTo(0);
     }

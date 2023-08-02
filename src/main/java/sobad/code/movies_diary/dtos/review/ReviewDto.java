@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import sobad.code.movies_diary.dtos.user.UserDtoResponse;
 
 @Builder
 @NoArgsConstructor
@@ -11,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ReviewDto {
     private Long id;
-    private String username;
-    private Long userId;
+    private UserDtoResponse user;
     private Long movieId;
     private UserReview userReview;
 }

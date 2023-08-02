@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sobad.code.movies_diary.dtos.review.ReviewDto;
 import sobad.code.movies_diary.dtos.review.ReviewDtoRequest;
-import sobad.code.movies_diary.dtos.review.ReviewDtoResponse;
+import sobad.code.movies_diary.dtos.pages.ReviewPages;
 import sobad.code.movies_diary.dtos.review.ReviewDtoUpdateRequest;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.Review;
@@ -60,7 +60,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewDtoResponse getAllReviews(Integer page, Integer limit) {
+    public ReviewPages getAllReviews(Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Review> reviewPage = reviewRepository.findAll(pageRequest);
 
@@ -68,7 +68,7 @@ public class ReviewService {
                 .map(reviewSerializer)
                 .toList();
 
-        return ReviewDtoResponse.builder()
+        return ReviewPages.builder()
                 .reviews(reviews)
                 .total(reviewPage.getTotalElements())
                 .limit(limit)
@@ -89,7 +89,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewDtoResponse getReviewByMovieId(Long movieId, Integer page, Integer limit) {
+    public ReviewPages getReviewByMovieId(Long movieId, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Review> reviewPage = reviewRepository.findAllByMovieId(movieId, pageRequest);
 
@@ -97,7 +97,7 @@ public class ReviewService {
                 .map(reviewSerializer)
                 .toList();
 
-        return ReviewDtoResponse.builder()
+        return ReviewPages.builder()
                 .reviews(reviews)
                 .total(reviewPage.getTotalElements())
                 .limit(limit)
@@ -107,7 +107,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewDtoResponse getReviewByUserId(Long userId, Integer page, Integer limit) {
+    public ReviewPages getReviewByUserId(Long userId, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Review> reviewPage = reviewRepository.findAllByUserId(userId, pageRequest);
 
@@ -115,7 +115,7 @@ public class ReviewService {
                 .map(reviewSerializer)
                 .toList();
 
-        return ReviewDtoResponse.builder()
+        return ReviewPages.builder()
                 .reviews(reviews)
                 .total(reviewPage.getTotalElements())
                 .limit(limit)

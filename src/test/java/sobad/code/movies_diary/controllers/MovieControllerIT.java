@@ -20,9 +20,9 @@ import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.movies_diary.dtos.GenreDto;
 import sobad.code.movies_diary.dtos.movie.MovieDto;
 import sobad.code.movies_diary.dtos.movie.MovieDtoShort;
-import sobad.code.movies_diary.dtos.movie.MoviePages;
-import sobad.code.movies_diary.dtos.movie.MoviePagesShort;
-import sobad.code.movies_diary.dtos.movie.UserMoviesPage;
+import sobad.code.movies_diary.dtos.pages.MoviePages;
+import sobad.code.movies_diary.dtos.pages.MoviePagesShort;
+import sobad.code.movies_diary.dtos.pages.UserMoviesPage;
 import sobad.code.movies_diary.dtos.review.ReviewDtoRequest;
 import sobad.code.movies_diary.entities.Genre;
 import sobad.code.movies_diary.entities.Movie;
@@ -303,7 +303,7 @@ public class MovieControllerIT {
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
         UserMoviesPage response = TestUtils.readJson(content, new TypeReference<>() { });
 
-        assertThat(response.getUsername()).isEqualTo(user.getUsername());
+        assertThat(response.getUser().getUsername()).isEqualTo(user.getUsername());
         assertThat(response.getMovies().size()).isEqualTo(0);
 
         ReviewDtoRequest reviewDtoRequest = new ReviewDtoRequest(movie.getId(), "good", 10.0);
@@ -320,7 +320,7 @@ public class MovieControllerIT {
 
         response = TestUtils.readJson(content, new TypeReference<>() { });
 
-        assertThat(response.getUsername()).isEqualTo(user.getUsername());
+        assertThat(response.getUser().getUsername()).isEqualTo(user.getUsername());
         assertThat(response.getMovies().size()).isEqualTo(1);
         assertThat(response.getMovies().get(0).getId()).isEqualTo(movie.getId());
         assertThat(response.getMovies().get(0).getReview()).isEqualTo(reviewRepository.findAll().get(0).getReview());

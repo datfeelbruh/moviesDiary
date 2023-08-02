@@ -9,6 +9,7 @@ import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.DocsItem
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.Rating;
 import sobad.code.movies_diary.services.GenreService;
 import sobad.code.movies_diary.services.ReviewService;
+import sobad.code.movies_diary.services.UserService;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class ExternalAPISerializer implements Function<DocsItemMovieInfo, MovieDto> {
     private final ReviewService reviewService;
     private final GenreService genreService;
+    private final UserService userService;
 
     @Override
     public MovieDto apply(DocsItemMovieInfo movieInfo) {
@@ -39,8 +41,7 @@ public class ExternalAPISerializer implements Function<DocsItemMovieInfo, MovieD
                 .reviews(reviewService.getRandomReviewsByMovieId(movieInfo.getId()).stream()
                         .map(e -> new MovieReview(
                                 e.getId(),
-                                e.getUserId(),
-                                e.getUsername(),
+                                e.getUser(),
                                 e.getUserReview().getRating(),
                                 e.getUserReview().getReview())
                         ).toList()

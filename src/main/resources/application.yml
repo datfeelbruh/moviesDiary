@@ -14,6 +14,18 @@ spring:
       max-file-size: 8MB
       max-request-size: 8MB
       enabled: true
+  mail:
+    host: smtp.gmail.com
+    username: movies.diary.team@gmail.com
+    password: expvgpcaboyzgimj
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
 jwt:
   expiration: 24

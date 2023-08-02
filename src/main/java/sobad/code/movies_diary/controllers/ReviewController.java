@@ -2,7 +2,6 @@ package sobad.code.movies_diary.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,9 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import sobad.code.movies_diary.dtos.review.ReviewDto;
 import sobad.code.movies_diary.dtos.review.ReviewDtoRequest;
-import sobad.code.movies_diary.dtos.review.ReviewDtoResponse;
+import sobad.code.movies_diary.dtos.pages.ReviewPages;
 import sobad.code.movies_diary.dtos.review.ReviewDtoUpdateRequest;
 import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.services.ReviewService;
@@ -50,7 +48,7 @@ public class ReviewController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = ReviewDtoResponse.class))
+                        schema = @Schema(implementation = ReviewPages.class))
                 }
             ),
         @ApiResponse(
@@ -85,7 +83,7 @@ public class ReviewController {
             description = "Ревью пользователей на фильмы",
             content = @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = ReviewDtoResponse.class))
+                        schema = @Schema(implementation = ReviewPages.class))
             ),
         @ApiResponse(
             responseCode = "422",
@@ -131,7 +129,7 @@ public class ReviewController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = ReviewDtoResponse.class))
+                        schema = @Schema(implementation = ReviewPages.class))
             }
             ),
         @ApiResponse(

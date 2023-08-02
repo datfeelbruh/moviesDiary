@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import sobad.code.movies_diary.dtos.movie.MovieDto;
-import sobad.code.movies_diary.dtos.movie.MoviePages;
+import sobad.code.movies_diary.dtos.pages.MoviePages;
 import sobad.code.movies_diary.mappers.externalApiSerializer.ExternalAPISerializer;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.DocsItemMovieInfo;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.MovieInfo;

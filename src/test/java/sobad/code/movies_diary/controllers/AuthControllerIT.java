@@ -15,7 +15,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import sobad.code.movies_diary.exceptions.AppError;
-import sobad.code.movies_diary.dtos.user.UserLoginRequest;
+import sobad.code.movies_diary.dtos.user.UserDtoLoginRequest;
 import sobad.code.movies_diary.dtos.authentication.AuthTokenDtoResponse;
 import sobad.code.movies_diary.repositories.DeactivatedTokenRepository;
 import sobad.code.movies_diary.repositories.TokenRepository;
@@ -60,7 +60,7 @@ public class AuthControllerIT {
     void authCorrectUser() throws Exception {
         testUtils.createSampleUser();
 
-        UserLoginRequest userAuth = TestUtils.readJson(
+        UserDtoLoginRequest userAuth = TestUtils.readJson(
                 TestUtils.readFixture("auth/sampleAuth.json"),
                 new TypeReference<>() {
                 }
@@ -83,7 +83,7 @@ public class AuthControllerIT {
     @Test
     @Transactional
     void authUserWhichDoesNotRegistered() throws Exception {
-        UserLoginRequest userAuth = TestUtils.readJson(
+        UserDtoLoginRequest userAuth = TestUtils.readJson(
                 TestUtils.readFixture("auth/anotherAuth.json"),
                 new TypeReference<>() { }
         );
@@ -108,7 +108,7 @@ public class AuthControllerIT {
     void refreshToken() throws Exception {
         testUtils.createSampleUser();
 
-        UserLoginRequest userAuth = TestUtils.readJson(
+        UserDtoLoginRequest userAuth = TestUtils.readJson(
                 TestUtils.readFixture("auth/sampleAuth.json"),
                 new TypeReference<>() {
                 }
