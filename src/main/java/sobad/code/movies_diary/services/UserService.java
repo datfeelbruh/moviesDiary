@@ -16,27 +16,21 @@ import sobad.code.movies_diary.ImageUtils;
 import sobad.code.movies_diary.dtos.user.UserDtoAboutRequest;
 import sobad.code.movies_diary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.movies_diary.dtos.user.UserDtoResponse;
-import sobad.code.movies_diary.entities.ResetPasswordToken;
 import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.exceptions.PasswordException;
 import sobad.code.movies_diary.exceptions.UploadAvatarException;
-import sobad.code.movies_diary.exceptions.entiryExceptions.UpdateAnotherUserDataException;
-import sobad.code.movies_diary.exceptions.entiryExceptions.UserAlreadyExistException;
-import sobad.code.movies_diary.exceptions.entiryExceptions.UserNotFoundException;
-import sobad.code.movies_diary.exceptions.entiryExceptions.UserPasswordMismatchException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.CustomAccessDeniedException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityAlreadyExistException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityNotFoundException;
 import sobad.code.movies_diary.mappers.entitySerializers.UserSerializer;
 import sobad.code.movies_diary.repositories.ResetPasswordTokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static sobad.code.movies_diary.controllers.ImageController.IMAGE_CONTROLLER_PATH;
@@ -60,14 +54,14 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(
                 String.format("Пользователь с таким ID '%s' не найден", id)
         ));
     }
 
     public UserDtoResponse getUserById(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь с данным ID не найден."));
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с данным ID не найден."));
 
         return userSerializer.apply(user);
     }
@@ -92,10 +86,10 @@ public class UserService implements UserDetailsService {
         Optional<User> userInDbWithUsername = userRepository.findByUsername(authRegistrationRequest.getUsername());
         Optional<User> userInDbWithEmail = userRepository.findByEmail(authRegistrationRequest.getEmail());
         if (userInDbWithUsername.isPresent() || userInDbWithEmail.isPresent()) {
-            throw new UserAlreadyExistException("Пользователь с таким именем или email уже существует");
+            throw new EntityAlreadyExistException("Пользователь с таким именем или email уже существует");
         }
         if (!Objects.equals(authRegistrationRequest.getPassword(), authRegistrationRequest.getConfirmPassword())) {
-            throw new UserPasswordMismatchException("Пароль и потверждающие пароль не совпадают");
+            throw new PasswordException("Пароль и потверждающие пароль не совпадают");
         }
         User user = new User();
         user.setEmail(authRegistrationRequest.getEmail());
@@ -110,10 +104,10 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDtoResponse updateAbout(Long userId, UserDtoAboutRequest aboutRequest) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь с данным ID не найден."));
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с данным ID не найден."));
         User currentUser = getCurrentUser();
         if (!user.getId().equals(currentUser.getId())) {
-            throw new UpdateAnotherUserDataException("Нельзя обновить данные другого пользователя!");
+            throw new CustomAccessDeniedException("Нельзя обновить данные другого пользователя!");
         }
 
         user.setId(userId);

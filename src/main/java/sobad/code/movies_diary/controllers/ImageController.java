@@ -55,7 +55,7 @@ public class ImageController {
     @GetMapping(value = IMAGE_CONTROLLER_PATH + "/{imageName}")
     public ResponseEntity<?> testGetImage(@PathVariable(value = "imageName")
                                           @Parameter(description = "Ссылка на аватар пользователя",
-                                                  example = "api/image/{username}_avatar.ext")
+                                                  example = "{username}_avatar.ext")
                                               String imageName) throws IOException {
         File image = imageUtils.getImage(imageName);
         byte[] bytes = StreamUtils.copyToByteArray(image.toURI().toURL().openStream());

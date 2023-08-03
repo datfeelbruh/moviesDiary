@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import sobad.code.movies_diary.dtos.ResetPasswordDto;
 import sobad.code.movies_diary.entities.ResetPasswordToken;
 import sobad.code.movies_diary.entities.User;
-import sobad.code.movies_diary.exceptions.ResetPasswordException;
-import sobad.code.movies_diary.exceptions.entiryExceptions.UserNotFoundException;
+import sobad.code.movies_diary.exceptions.PasswordException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityNotFoundException;
 import sobad.code.movies_diary.repositories.ResetPasswordTokenRepository;
 import sobad.code.movies_diary.repositories.UserRepository;
 
@@ -33,7 +33,7 @@ public class ResetPasswordService {
 
     public Map<String, Object> createResetPasswordToken(String email) throws MessagingException, UnsupportedEncodingException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("Пользователь с данным email не найден."));
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с данным email не найден."));
 
         Date createdAt = Date.from(Instant.now());
         Date expiredAt = Date.from(Instant.now().plus(30, ChronoUnit.MINUTES));
@@ -56,7 +56,7 @@ public class ResetPasswordService {
     public Map<String, Object> updatePassword(ResetPasswordDto resetPasswordDto, String token) {
         ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findByToken(token).orElseThrow();
         if (resetPasswordToken.getExpiredAt().before(Date.from(Instant.now()))) {
-            throw new ResetPasswordException("Истек токен для ресета пароля. " +
+            throw new PasswordException("Истек токен для ресета пароля. " +
                     "Необходимо запросить смену пароля на почте повторно");
         }
         User user = resetPasswordToken.getUser();

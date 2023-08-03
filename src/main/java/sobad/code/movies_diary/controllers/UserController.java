@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import sobad.code.movies_diary.dtos.user.UserDtoAboutRequest;
@@ -98,8 +99,8 @@ public class UserController {
                     }
             )
     })
-    @PostMapping(value = USER_CONTROLLER_PATH + "/avatar")
-    public ResponseEntity<?> uploadAvatar(@RequestParam("image") MultipartFile multipartFile) throws IOException {
+    @PostMapping(value = USER_CONTROLLER_PATH + "/avatar", consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadAvatar(@RequestPart("image") MultipartFile multipartFile) throws IOException {
         return new ResponseEntity<>(userService.uploadImage(multipartFile), OK);
     }
 

@@ -12,7 +12,7 @@ import sobad.code.movies_diary.dtos.movie.UserMovie;
 import sobad.code.movies_diary.dtos.pages.UserMoviesPage;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
-import sobad.code.movies_diary.exceptions.entiryExceptions.MovieNotFoundException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityNotFoundException;
 import sobad.code.movies_diary.mappers.MovieMapper;
 import sobad.code.movies_diary.mappers.PageMapper;
 import sobad.code.movies_diary.mappers.entitySerializers.MovieDtoSerializer;
@@ -44,7 +44,7 @@ public class MovieService {
     public MovieCard getMovieById(Long id) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
         if (movieInDb.isEmpty()) {
-            throw new MovieNotFoundException(String.format("Фильм с данным id '%s' не найден", id));
+            throw new EntityNotFoundException(String.format("Фильм с данным id '%s' не найден", id));
         }
         Movie movie = movieInDb.get();
 

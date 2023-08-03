@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import sobad.code.movies_diary.exceptions.authenticationExceptions.JwtExpiredException;
+import sobad.code.movies_diary.exceptions.authenticationExceptions.CustomJwtExpiredException;
 import sobad.code.movies_diary.services.UserService;
 
 @Slf4j
@@ -58,7 +58,7 @@ public class JwtTokenUtils {
                     .getBody();
         } catch (ExpiredJwtException e) {
             log.error(e.getMessage());
-            throw new JwtExpiredException("Токен доступа истек, обновите токен доступа.");
+            throw new CustomJwtExpiredException("Токен доступа истек, обновите токен доступа.");
         } catch (MalformedJwtException e) {
             log.error(e.getMessage());
             throw new MalformedJwtException("Токен доступа некорректный.");

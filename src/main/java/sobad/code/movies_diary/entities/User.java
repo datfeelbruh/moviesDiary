@@ -9,6 +9,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,8 @@ public class User extends BaseModel {
     private String username;
     @Column(name = "avatar")
     private String avatar;
-    @Column(name = "about")
+    @Column(name = "about", columnDefinition = "TEXT")
+    @Size(max = 1000, message = "Описание слишком большое, краткость сестра таланта.")
     private String about;
     @Column(name = "password", nullable = false)
     private String password;

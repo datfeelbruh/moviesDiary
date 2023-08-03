@@ -3,7 +3,7 @@ package sobad.code.movies_diary;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import sobad.code.movies_diary.exceptions.AvatarNotFoundException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityAlreadyExistException;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class ImageUtils {
                 .filter(e -> e.getName().equals(imageName))
                 .findFirst();
 
-        return file.orElseThrow(() -> new AvatarNotFoundException("Аватар не найден."));
+        return file.orElseThrow(() -> new EntityAlreadyExistException("Аватар не найден."));
     }
     public void deletePreviousUserImage(String prefix) throws IOException {
         List<File> files = new ArrayList<>();

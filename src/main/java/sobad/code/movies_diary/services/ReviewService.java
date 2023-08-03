@@ -16,8 +16,8 @@ import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.Review;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.entiryExceptions.CustomAccessDeniedException;
-import sobad.code.movies_diary.exceptions.entiryExceptions.MovieNotFoundException;
-import sobad.code.movies_diary.exceptions.entiryExceptions.ReviewNotFoundException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityAlreadyExistException;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityNotFoundException;
 import sobad.code.movies_diary.jwt.JwtTokenUtils;
 import sobad.code.movies_diary.mappers.entitySerializers.ReviewSerializer;
 import sobad.code.movies_diary.repositories.MovieRepository;
@@ -40,10 +40,10 @@ public class ReviewService {
     public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest, HttpServletRequest request) {
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         if (reviewRepository.findAllByUserIdAndMovieId(user.getId(), reviewDtoRequest.getMovieId()).isPresent()) {
-            throw new ReviewNotFoundException("Ревью на этот фильм уже создано");
+            throw new EntityAlreadyExistException("Ревью на этот фильм уже создано");
         }
         Movie movie = movieRepository.findById(reviewDtoRequest.getMovieId())
-                .orElseThrow(() -> new MovieNotFoundException(
+                .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Фильм с данным id '%s' не найден", reviewDtoRequest.getMovieId()))
                 );
 
@@ -80,7 +80,7 @@ public class ReviewService {
     @Transactional
     public ReviewDto getReviewByUserIdAndMovieId(Long userId, Long movieId) {
         Review review = reviewRepository.findAllByUserIdAndMovieId(userId, movieId)
-                .orElseThrow(() -> new ReviewNotFoundException(
+                .orElseThrow(() -> new EntityNotFoundException(
                         String.format(
                                 "Ревью на фильм с id '%s' от пользователя с айди '%s' не найдено", userId, movieId)
                 ));
@@ -127,7 +127,7 @@ public class ReviewService {
     @Transactional
     public ReviewDto updateReview(Long reviewId, ReviewDtoUpdateRequest reviewDtoRequest) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(
+                .orElseThrow(() -> new EntityNotFoundException(
                     String.format("Ревью с данным id '%s' не найдено", reviewId)));
 
         review.setId(reviewId);
@@ -144,7 +144,7 @@ public class ReviewService {
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewNotFoundException(
+                .orElseThrow(() -> new EntityNotFoundException(
                         String.format(
                                 "Ревью с данным ID '%s' найдено", reviewId)
                 ));

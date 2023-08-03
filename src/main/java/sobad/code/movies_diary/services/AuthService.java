@@ -23,7 +23,7 @@ import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.exceptions.authenticationExceptions.BearerHeaderNotFound;
 import sobad.code.movies_diary.exceptions.authenticationExceptions.DeactivatedTokenException;
 import sobad.code.movies_diary.exceptions.authenticationExceptions.InvalidJwtSubject;
-import sobad.code.movies_diary.exceptions.authenticationExceptions.TokenNotFound;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityNotFoundException;
 import sobad.code.movies_diary.jwt.JwtTokenUtils;
 import sobad.code.movies_diary.jwt.JwtToken;
 import sobad.code.movies_diary.entities.Token;
@@ -178,7 +178,7 @@ public class AuthService {
             objectMapper.writeValue(response.getWriter(), appError);
 
         } else {
-            throw new TokenNotFound("Данный токен не зарегистрирован в приложении.");
+            throw new EntityNotFoundException("Данный токен не зарегистрирован в приложении.");
         }
     }
 }
