@@ -38,7 +38,7 @@ services:
       context: .
       dockerfile: Dockerfile
 
-    container_name: 'service-app'
+    container_name: 'service-backend'
     env_file:
       - .env
     ports:
