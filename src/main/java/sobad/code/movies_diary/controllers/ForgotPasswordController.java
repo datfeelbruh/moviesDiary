@@ -1,9 +1,11 @@
 package sobad.code.movies_diary.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.Getter;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sobad.code.movies_diary.dtos.ResetPasswordDto;
 import sobad.code.movies_diary.dtos.authentication.AuthTokenDtoResponse;
+import sobad.code.movies_diary.dtos.user.UserDtoResponse;
 import sobad.code.movies_diary.entities.User;
+import sobad.code.movies_diary.exceptions.AppError;
 import sobad.code.movies_diary.services.ResetPasswordService;
 import sobad.code.movies_diary.services.UserService;
 
@@ -39,14 +43,61 @@ public class ForgotPasswordController {
             """
             Вернет токен ресета пароля.
             """)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Токен ресета пароля.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Map.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Невозможно сгенирировать токен для данного email.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AppError.class)
+                            )
+                    }
+            )
+    })
     @GetMapping(value = FORGOT_PASSWORD_CONTROLLER_PATH_RESET_PASSWORD)
-    public ResponseEntity<?> sendResetRequest(@RequestParam String email) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<?> sendResetRequest(@RequestParam
+                                                  @Parameter(description = "Email адрес пользователя.",
+                                                          example = "{name}@{mail}.domain") String email)
+            throws MessagingException, UnsupportedEncodingException {
         return new ResponseEntity<>(resetPasswordService.createResetPasswordToken(email), OK);
     }
     @Operation(summary = "Запрос на ресет пароля.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Сообщение об изменении пароля.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Map.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Токен ресета пароля истек.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AppError.class)
+                            )
+                    }
+            )
+    })
     @PostMapping(value = FORGOT_PASSWORD_CONTROLLER_PATH_RESET_PASSWORD)
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto,
-                                @RequestParam String token) {
+                                @RequestParam @Parameter(description = "Токен смены пароля.") String token) {
         return ResponseEntity.ok(resetPasswordService.updatePassword(resetPasswordDto, token));
     }
 }

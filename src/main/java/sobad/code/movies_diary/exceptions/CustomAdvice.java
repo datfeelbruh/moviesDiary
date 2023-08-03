@@ -31,6 +31,16 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RestControllerAdvice
 @Slf4j
 public class CustomAdvice {
+    @ExceptionHandler(ResetPasswordException.class)
+    public ResponseEntity<AppError> resetPasswordTokenExpired(ResetPasswordException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(
+                        UNPROCESSABLE_ENTITY.value(),
+                        e.getMessage(),
+                        Instant.now().toString()));
+    }
     @ExceptionHandler(UpdateAnotherUserDataException.class)
     public ResponseEntity<AppError> updateAnotherUser(UpdateAnotherUserDataException e) {
         log.error(e.getMessage(), e);

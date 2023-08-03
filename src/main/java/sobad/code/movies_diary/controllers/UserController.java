@@ -1,12 +1,14 @@
 package sobad.code.movies_diary.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,10 @@ import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.IMAGE_GIF;
+import static org.springframework.http.MediaType.IMAGE_GIF_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
@@ -61,19 +67,70 @@ public class UserController {
                 }
             )
     })
-    @RequestMapping(value = USER_CONTROLLER_PATH, method = POST)
+    @PostMapping(value = USER_CONTROLLER_PATH)
     public ResponseEntity<?> createUser(@RequestBody UserRegistrationDtoRequest authRegistrationRequest) {
         UserDtoResponse userDto = userService.createUser(authRegistrationRequest);
         return new ResponseEntity<>(userDto, CREATED);
     }
 
+    @Operation(summary = "Загрузить аватар пользователя.", description = """
+            Эндпоинт предназначен для загрузки изображение через form-data. Поддерживает форматы: jpeg, jpg, png, gif.
+            """)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Обновленная информация о пользователе.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDtoResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Не удалось загрузить изображение.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AppError.class)
+                            )
+                    }
+            )
+    })
     @PostMapping(value = USER_CONTROLLER_PATH + "/avatar")
     public ResponseEntity<?> uploadAvatar(@RequestParam("image") MultipartFile multipartFile) throws IOException {
         return new ResponseEntity<>(userService.uploadImage(multipartFile), OK);
     }
 
+    @Operation(summary = "Обновить описание пользователя.", description = """
+            Эндпоинт предназначен для обновление поля about в сущности пользователя.
+            """)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Обновленная информация о пользователе.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDtoResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Не удалось обновить информацию о пользователе.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AppError.class)
+                            )
+                    }
+            )
+    })
     @PutMapping(value = USER_CONTROLLER_PATH + "/{userId}")
-    public ResponseEntity<?> updateAbout(@PathVariable(value = "userId") Long userId,
+    public ResponseEntity<?> updateAbout(@PathVariable(value = "userId")
+                                         @Parameter(description = "ID пользователя", example = "1") Long userId,
                                          @RequestBody UserDtoAboutRequest aboutRequest) {
         return new ResponseEntity<>(userService.updateAbout(userId, aboutRequest), OK);
     }
