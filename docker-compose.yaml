@@ -93,6 +93,7 @@ volumes:
   image-data:
   db-data:
   pgadmin-data:
+  web-root:
 
 networks:
   app-network:
