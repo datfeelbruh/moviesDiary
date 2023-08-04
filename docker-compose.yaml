@@ -94,6 +94,8 @@ volumes:
   db-data:
   pgadmin-data:
   web-root:
+  certbot-etc:
+  certbot-var:
 
 networks:
   app-network:
