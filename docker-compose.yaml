@@ -93,3 +93,7 @@ volumes:
   image-data:
   db-data:
   pgadmin-data:
+
+networks:
+  app-network:
+    driver: bridge
