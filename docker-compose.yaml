@@ -54,7 +54,6 @@ services:
       - "8000:8000"
     depends_on:
       - backend-db
-      - nginx
     volumes:
       - /c/Users/datfe/Pictures/service-images:/var/lib/image-data
 
