@@ -57,7 +57,7 @@ services:
     container_name: 'service-frontend'
 
     ports:
-      - 88:80
+      - 80:80
 
     depends_on:
       - backend
