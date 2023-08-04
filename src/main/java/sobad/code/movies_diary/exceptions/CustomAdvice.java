@@ -79,7 +79,9 @@ public class CustomAdvice {
         log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(UNAUTHORIZED)
-                .body(new AppError(UNAUTHORIZED.value(), e.getMessage(), Instant.now().toString()));
+                .body(new AppError(UNAUTHORIZED.value(),
+                        "Пользователь с такими данными не существует",
+                        Instant.now().toString()));
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
