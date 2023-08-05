@@ -1,15 +1,6 @@
 version: '3'
 
 services:
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    command: certonly --webroot --webroot-path=/var/www/html --email datfeelman@gmail.com --agree-tos --no-eff-email --force-renewal -d киноговно.рф -d www.киноговно.рф
-
   backend-db:
     image: 'postgres:15'
     restart: always
@@ -36,7 +27,6 @@ services:
       PGADMIN_LISTEN_ADDRESS: 0.0.0.0
     ports:
       - "5050:80"
-
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     env_file:
@@ -46,7 +36,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-
     container_name: 'service-backend'
     env_file:
       - .env
@@ -61,16 +50,27 @@ services:
     build:
       context: ./MD-frontend
       dockerfile: Dockerfile
-
     restart: always
     container_name: 'service-frontend'
-
     ports:
       - 80:80
       - 443:443
-
     depends_on:
       - backend
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email datfeelman@gmail.com --agree-tos --no-eff-email --staging -d xn--b1abohqcebc.xn--p1ai
+
 
 volumes:
   image-data:
