@@ -1,6 +1,7 @@
 package sobad.code.movies_diary.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ExternalApiService {
     @Value("${x_api_key}")
     private String apiKey;
@@ -45,7 +47,7 @@ public class ExternalApiService {
                 restTemplate.exchange(url, HttpMethod.GET, entity, MovieInfo.class);
 
         List<DocsItemMovieInfo> foundMovie = responseEntity.getBody().getDocs();
-
+        log.debug(foundMovie.toString());
         if (responseEntity.getBody().getDocs().isEmpty()) {
             return MoviePages.builder()
                     .movies(new ArrayList<>())

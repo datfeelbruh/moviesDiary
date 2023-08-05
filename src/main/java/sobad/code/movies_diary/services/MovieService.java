@@ -1,6 +1,7 @@
 package sobad.code.movies_diary.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieCustomRepositoryImpl movieCustomRepository;
@@ -53,9 +55,10 @@ public class MovieService {
 
     @Transactional
     public MoviePages getMoviesByName(String name, Boolean findOnKp, Integer page, Integer limit) {
+        log.info(findOnKp.toString());
         if (findOnKp) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
-
+            log.info(kpMovies.getMovies().toString());
             List<Movie> movies = kpMovies.getMovies().stream()
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
@@ -68,12 +71,13 @@ public class MovieService {
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-
+        log.info(moviePage.getContent().toString());
         return pageMapper.buildMoviePage(limit, page, moviePage);
     }
 
     @Transactional
     public MoviePagesShort getMoviesByNameShortInfo(String name, Boolean findOnKp, Integer page, Integer limit) {
+        log.info(findOnKp.toString());
         if (findOnKp) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
 
@@ -81,14 +85,14 @@ public class MovieService {
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
                     .toList();
-
+            log.info(kpMovies.getMovies().toString());
             movieRepository.saveAll(movies);
             return pageMapper.buildMoviePageShortFromKp(limit, page, kpMovies, movies);
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-
+        log.info(moviePage.getContent().toString());
         return pageMapper.buildMoviePageShort(limit, page, moviePage);
     }
 

@@ -3,6 +3,9 @@ server:
     include-stacktrace: never
 
 spring:
+  output:
+  ansi:
+    enabled: DETECT
   datasource:
     username: ${PG_USER}
     password: ${PG_PASSWORD}
@@ -21,3 +24,12 @@ jwt:
 image-directory: "/var/lib/image-data"
 
 x_api_key: ${X_API_KEY}
+
+logging:
+  file: logs/application-debug.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    org.hibernate: ERROR
