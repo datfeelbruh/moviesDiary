@@ -78,7 +78,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /root/movieDiary/dhparam/
+      device: /root/dhparam/
       o: bind
   image-data:
   db-data:
