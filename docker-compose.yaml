@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email datfeelman@gmail.com --agree-tos --no-eff-email --staging -d xn--b1abohqcebc.xn--p1ai -d www.xn--b1abohqcebc.xn--p1ai
+
+
   backend-db:
     image: 'postgres:15'
     restart: always
