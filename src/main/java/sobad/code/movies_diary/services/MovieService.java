@@ -55,10 +55,11 @@ public class MovieService {
 
     @Transactional
     public MoviePages getMoviesByName(String name, Boolean findOnKp, Integer page, Integer limit) {
-        log.info(findOnKp.toString());
+        log.info("ФЛАГ findKpOn = " + findOnKp.toString());
+        log.info("ЗАШЕЛ В СЕРВИС РАСШИРЕННОГО ПОИСКА");
         if (findOnKp) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
-            log.info("ИЩУ НА КП");
+            log.info("ИЩУ НА КП В МУВИ СЕРВИС РАСШИРЕННЫЙ ПОИСК");
             List<Movie> movies = kpMovies.getMovies().stream()
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
@@ -71,13 +72,14 @@ public class MovieService {
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-        log.info("ИЩУ НА КП");
+        log.info("ИЩУ В БАЗЕ");
         return pageMapper.buildMoviePage(limit, page, moviePage);
     }
 
     @Transactional
     public MoviePagesShort getMoviesByNameShortInfo(String name, Boolean findOnKp, Integer page, Integer limit) {
-        log.info(findOnKp.toString());
+        log.info("ФЛАГ findKpOn = " + findOnKp.toString());
+        log.info("ЗАШЕЛ В СЕРВИС КРАТКОГО ПОИСКА");
         if (findOnKp) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
 
@@ -85,14 +87,14 @@ public class MovieService {
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
                     .toList();
-            log.info("ИЩУ НА КП");
+            log.info("ИЩУ НА КП В МУВИ СЕРВИС КРАТКИЙ ПОИСК");
             movieRepository.saveAll(movies);
             return pageMapper.buildMoviePageShortFromKp(limit, page, kpMovies, movies);
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-        log.info("ИЩУ НА КП");
+        log.info("ИЩУ В БАЗЕ");
         return pageMapper.buildMoviePageShort(limit, page, moviePage);
     }
 

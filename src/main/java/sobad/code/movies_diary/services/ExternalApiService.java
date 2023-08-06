@@ -47,7 +47,7 @@ public class ExternalApiService {
                 restTemplate.exchange(url, HttpMethod.GET, entity, MovieInfo.class);
 
         List<DocsItemMovieInfo> foundMovie = responseEntity.getBody().getDocs();
-        log.debug("ИЩУ НА КП");
+        log.debug("ИЩУ НА КП В КИНОПОИСК СЕРВИС");
         if (responseEntity.getBody().getDocs().isEmpty()) {
             return MoviePages.builder()
                     .movies(new ArrayList<>())
