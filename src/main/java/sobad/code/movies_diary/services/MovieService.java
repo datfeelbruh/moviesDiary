@@ -58,7 +58,7 @@ public class MovieService {
         log.info(findOnKp.toString());
         if (findOnKp) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
-            log.info(kpMovies.getMovies().toString());
+            log.info("ИЩУ НА КП");
             List<Movie> movies = kpMovies.getMovies().stream()
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
@@ -71,7 +71,7 @@ public class MovieService {
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-        log.info(moviePage.getContent().toString());
+        log.info("ИЩУ НА КП");
         return pageMapper.buildMoviePage(limit, page, moviePage);
     }
 
@@ -85,14 +85,14 @@ public class MovieService {
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
                     .toList();
-            log.info(kpMovies.getMovies().toString());
+            log.info("ИЩУ НА КП");
             movieRepository.saveAll(movies);
             return pageMapper.buildMoviePageShortFromKp(limit, page, kpMovies, movies);
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-        log.info(moviePage.getContent().toString());
+        log.info("ИЩУ НА КП");
         return pageMapper.buildMoviePageShort(limit, page, moviePage);
     }
 
