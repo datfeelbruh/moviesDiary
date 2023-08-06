@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import sobad.code.movies_diary.dtos.movie.MovieDto;
 import sobad.code.movies_diary.dtos.pages.MoviePages;
+import sobad.code.movies_diary.exceptions.entiryExceptions.EntityNotFoundException;
 import sobad.code.movies_diary.mappers.externalApiSerializer.ExternalAPISerializer;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.DocsItemMovieInfo;
 import sobad.code.movies_diary.pojo.kinopoiskApiResponse.pojosMovieInfo.MovieInfo;
@@ -49,13 +50,7 @@ public class ExternalApiService {
         List<DocsItemMovieInfo> foundMovie = responseEntity.getBody().getDocs();
         log.debug("ИЩУ НА КП В КИНОПОИСК СЕРВИС");
         if (responseEntity.getBody().getDocs().isEmpty()) {
-            return MoviePages.builder()
-                    .movies(new ArrayList<>())
-                    .page(responseEntity.getBody().getPage())
-                    .pages(responseEntity.getBody().getPages())
-                    .total((long) responseEntity.getBody().getTotal())
-                    .limit(responseEntity.getBody().getLimit())
-                    .build();
+            throw new EntityNotFoundException("Фильмы для данного названия на Кинопоиске не найдены!");
         }
 
         List<MovieDto> movies = foundMovie.stream()
