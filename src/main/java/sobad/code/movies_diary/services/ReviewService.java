@@ -153,7 +153,7 @@ public class ReviewService {
         }
         reviewRepository.deleteById(reviewId);
     }
-
+    @Transactional
     public Double getAverageReviewRatingById(Long id) {
         Integer count = reviewRepository.countByMovieId(id);
         Integer countReviewToCalcAverage = 5;
@@ -163,8 +163,7 @@ public class ReviewService {
         Optional<Movie> movie = movieRepository.findById(id);
         return movie.map(Movie::getKgRating).orElse(null);
     }
-
-
+    @Transactional
     public Double getAverage(Long id) {
         Double avg = reviewRepository.getAvgRatingByMovieId(id);
         Movie movie = movieRepository.findById(id).get();
