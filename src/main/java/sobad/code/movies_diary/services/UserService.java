@@ -89,7 +89,7 @@ public class UserService implements UserDetailsService {
             throw new EntityAlreadyExistException("Пользователь с таким именем или email уже существует");
         }
         if (!Objects.equals(authRegistrationRequest.getPassword(), authRegistrationRequest.getConfirmPassword())) {
-            throw new PasswordException("Пароль и потверждающие пароль не совпадают");
+            throw new PasswordException("Пароль и потверждающий пароль не совпадают");
         }
         User user = new User();
         user.setEmail(authRegistrationRequest.getEmail());
