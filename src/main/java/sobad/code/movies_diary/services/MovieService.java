@@ -11,6 +11,7 @@ import sobad.code.movies_diary.dtos.pages.MoviePages;
 import sobad.code.movies_diary.dtos.pages.MoviePagesShort;
 import sobad.code.movies_diary.dtos.movie.UserMovie;
 import sobad.code.movies_diary.dtos.pages.UserMoviesPage;
+import sobad.code.movies_diary.entities.Genre;
 import sobad.code.movies_diary.entities.Movie;
 import sobad.code.movies_diary.entities.User;
 import sobad.code.movies_diary.exceptions.entiryExceptions.EntityNotFoundException;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service

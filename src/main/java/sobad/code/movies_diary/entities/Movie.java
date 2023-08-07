@@ -39,6 +39,8 @@ public class Movie {
     private Double kpRating;
     @Column(name = "imdb_rating")
     private Double imdbRating;
+    @Column(name = "kg_rating")
+    private Double kgRating;
     @Column(name = "poster_url")
     private String posterUrl;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
