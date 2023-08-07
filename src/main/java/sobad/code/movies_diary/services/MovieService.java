@@ -25,6 +25,7 @@ import sobad.code.movies_diary.repositories.dsl.filters.GenreFilter;
 import sobad.code.movies_diary.repositories.dsl.filters.TitleFilter;
 import sobad.code.movies_diary.repositories.dsl.filters.UserIdFilter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,12 +129,17 @@ public class MovieService {
                 .build();
     }
 
-    public Map<String, List<String>> getMoviesName() {
-        List<String> movies = movieRepository.findMoviesName();
-        Map<String, List<String>> response = new HashMap<>();
-        response.put("moviesTitles", movies);
-
+    public List<Map<String, String>> getMoviesName() {
+        Map<Long, String> movies = movieCustomRepository.getTitlesWithId();
+        List<Map<String, String>> response = new ArrayList<>();
+        movies.forEach((k, v) -> {
+            Map<String, String> movie = new HashMap<>();
+            movie.put("id", k.toString());
+            movie.put("title", v);
+            response.add(movie);
+        });
         return response;
     }
+
 
 }
