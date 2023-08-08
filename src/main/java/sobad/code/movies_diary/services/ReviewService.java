@@ -82,7 +82,7 @@ public class ReviewService {
         Review review = reviewRepository.findAllByUserIdAndMovieId(userId, movieId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format(
-                                "Ревью на фильм с id '%s' от пользователя с айди '%s' не найдено", userId, movieId)
+                                "Ревью на фильм с id '%s' от пользователя с айди '%s' не найдено", movieId, userId)
                 ));
 
         return reviewSerializer.apply(review);
