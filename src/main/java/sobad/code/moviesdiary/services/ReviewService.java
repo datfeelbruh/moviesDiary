@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.moviesdiary.dtos.MessageDto;
 import sobad.code.moviesdiary.dtos.review.ReviewDto;
 import sobad.code.moviesdiary.dtos.review.ReviewDtoRequest;
 import sobad.code.moviesdiary.dtos.pages.ReviewPages;
@@ -22,6 +23,8 @@ import sobad.code.moviesdiary.mappers.entity_serializers.ReviewSerializer;
 import sobad.code.moviesdiary.repositories.MovieRepository;
 import sobad.code.moviesdiary.repositories.ReviewRepository;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -139,7 +142,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void deleteReview(Long reviewId) {
+    public MessageDto deleteReview(Long reviewId) {
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Review review = reviewRepository.findById(reviewId)
@@ -151,6 +154,7 @@ public class ReviewService {
             throw new CustomAccessDeniedException("Вы не можете удалить ревью другого пользователя.");
         }
         reviewRepository.deleteById(reviewId);
+        return new MessageDto(200, "Ревью успешно удалено.", Date.from(Instant.now()).toString());
     }
     @Transactional
     public Double getAverageReviewRatingById(Long id) {
@@ -165,7 +169,8 @@ public class ReviewService {
     @Transactional
     public Double getAverage(Long id) {
         Double avg = reviewRepository.getAvgRatingByMovieId(id);
-        Movie movie = movieRepository.findById(id).get();
+        Movie movie = movieRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Фильм с данным ID не найден!"));
         movie.setId(id);
         movie.setKgRating(Math.round(avg * 10.0) / 10.0);
         movieRepository.save(movie);

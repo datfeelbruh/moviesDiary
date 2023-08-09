@@ -3,7 +3,6 @@ package sobad.code.moviesdiary.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,6 @@ import sobad.code.moviesdiary.exceptions.entiry_exceptions.CustomAccessDeniedExc
 import sobad.code.moviesdiary.exceptions.entiry_exceptions.EntityAlreadyExistException;
 import sobad.code.moviesdiary.exceptions.entiry_exceptions.EntityNotFoundException;
 import sobad.code.moviesdiary.mappers.entity_serializers.UserSerializer;
-import sobad.code.moviesdiary.repositories.ResetPasswordTokenRepository;
 import sobad.code.moviesdiary.repositories.UserRepository;
 
 import java.io.File;
@@ -32,7 +30,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static sobad.code.moviesdiary.controllers.ImageController.IMAGE_CONTROLLER_PATH;
 
@@ -135,7 +132,6 @@ public class UserService implements UserDetailsService {
                 link = IMAGE_CONTROLLER_PATH + link;
                 user.setAvatar(link);
                 userRepository.save(user);
-
                 return userSerializer.apply(user);
             }
             throw new UploadAvatarException("Неподдерживаемый тип файла.");

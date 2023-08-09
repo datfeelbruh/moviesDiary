@@ -8,7 +8,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.moviesdiary.dtos.MessageDto;
 import sobad.code.moviesdiary.dtos.ResetPasswordDto;
+import sobad.code.moviesdiary.dtos.tokens.ResetPasswordTokenDto;
 import sobad.code.moviesdiary.entities.ResetPasswordToken;
 import sobad.code.moviesdiary.entities.User;
 import sobad.code.moviesdiary.exceptions.PasswordException;
@@ -20,7 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -31,7 +32,8 @@ public class ResetPasswordService {
     private final UserRepository userRepository;
     private final ResetPasswordTokenRepository resetPasswordTokenRepository;
 
-    public Map<String, Object> createResetPasswordToken(String email) throws MessagingException, UnsupportedEncodingException {
+    public ResetPasswordTokenDto createResetPasswordToken(String email)
+            throws MessagingException, UnsupportedEncodingException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь с данным email не найден."));
 
@@ -49,15 +51,15 @@ public class ResetPasswordService {
         resetPasswordTokenRepository.save(resetPasswordToken);
         sendResetPasswordEmail("http://xn--b1abohqcebc.xn--p1ai/resetPassword?token="
                         + resetPasswordToken.getToken(), user.getEmail());
-        return Map.of("resetToken", resetPasswordToken.getToken());
+        return new ResetPasswordTokenDto(resetPasswordToken.getToken());
     }
 
     @Transactional
-    public Map<String, Object> updatePassword(ResetPasswordDto resetPasswordDto, String token) {
+    public MessageDto updatePassword(ResetPasswordDto resetPasswordDto, String token) {
         ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findByToken(token).orElseThrow();
         if (resetPasswordToken.getExpiredAt().before(Date.from(Instant.now()))) {
-            throw new PasswordException("Истек токен для ресета пароля. " +
-                    "Необходимо запросить смену пароля на почте повторно");
+            throw new PasswordException("Истек токен для ресета пароля. "
+                    + "Необходимо запросить смену пароля на почте повторно");
         }
         User user = resetPasswordToken.getUser();
 
@@ -65,10 +67,11 @@ public class ResetPasswordService {
         user.setPassword(passwordEncoder.encode(resetPasswordDto.getPassword()));
         userRepository.save(user);
         resetPasswordTokenRepository.delete(resetPasswordToken);
-        return Map.of("message", "Пароль успешно изменен.");
+        return new MessageDto(200, "Пароль успешно изменен", Date.from(Instant.now()).toString());
     }
 
-    private void sendResetPasswordEmail(String url, String email) throws MessagingException, UnsupportedEncodingException {
+    private void sendResetPasswordEmail(String url, String email)
+            throws MessagingException, UnsupportedEncodingException {
         String subject = "Сброс пароля на Movies Diary";
         String sender = "Movies Diary";
         String mailContent = "<a href=\"" + url + "\">Change password</a>";

@@ -17,7 +17,6 @@ sonar {
 		property("sonar.projectKey", "moviesDiary")
 		property("sonar.projectName", "moviesDiary")
 		property("sonar.host.url", "http://localhost:9000")
-		property("sonar.token", "sqp_e3ef37428bd900d13ee66e7e196f336a01de214d")
 	}
 }
 
@@ -37,7 +36,7 @@ group = 'sobad.code'
 version = '1.0'
 
 application {
-	mainClass = "sobad.code.movies_diary.MoviesDiaryApplication"
+	mainClass = "sobad.code.moviesdiary.MoviesDiaryApplication"
 }
 
 jar {

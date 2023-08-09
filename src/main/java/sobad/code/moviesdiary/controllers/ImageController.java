@@ -31,25 +31,25 @@ public class ImageController {
             Эндпоинт предназначен для получение аватара пользователя по уникальной ссылке на аватар.
             """)
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Страница аватара пользователя.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDtoResponse.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Страница аватара пользователя.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = UserDtoResponse.class)
+                        )
+                }
             ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Нет аватара для данной ссылки.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "422",
+            description = "Нет аватара для данной ссылки.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
     @GetMapping(value = IMAGE_CONTROLLER_PATH + "/{imageName}")

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
+import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
 import sobad.code.moviesdiary.dtos.pages.PageDto;
 import sobad.code.moviesdiary.dtos.pages.UserMoviesPage;
@@ -24,7 +25,6 @@ import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.services.MovieService;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -183,7 +183,7 @@ public class MovieController {
 
     @Operation(summary = "Получить названия фильмов для фичи в поисковой строке.")
     @GetMapping(value = MOVIE_CONTROLLER_PATH + "/moviesTitles")
-    public ResponseEntity<List<Map<String, String>>> findMoviesTitles() {
+    public ResponseEntity<List<MovieTitlesId>> findMoviesTitles() {
         return new ResponseEntity<>(movieService.getMoviesName(), OK);
     }
 }

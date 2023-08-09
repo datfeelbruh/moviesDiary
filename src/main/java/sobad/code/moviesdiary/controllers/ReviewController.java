@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sobad.code.moviesdiary.dtos.MessageDto;
 import sobad.code.moviesdiary.dtos.review.ReviewDto;
 import sobad.code.moviesdiary.dtos.review.ReviewDtoRequest;
 import sobad.code.moviesdiary.dtos.pages.ReviewPages;
@@ -37,11 +38,12 @@ public class ReviewController {
 
     @Operation(summary = "Создать ревью для фильма", description =
             """
-            RequestBody может содержать пустые поля review и rating, тогда фильм просто привяжется к пользователю
-            без оценки и ревью.
+            Ответ может содержать пустые поля review и rating,
+            тогда фильм просто привяжется к пользователю без оценки и ревью.
             \s
             Таким образом пользователь добавит себе его в профиль с возможность оценить после просмотра.
-            """)
+            """
+    )
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "201",
@@ -63,7 +65,8 @@ public class ReviewController {
             )
     })
     @PostMapping(value = REVIEW_CONTROLLER_PATH)
-    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDtoRequest reviewDtoRequest, HttpServletRequest request) {
+    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDtoRequest reviewDtoRequest,
+                                                  HttpServletRequest request) {
         return new ResponseEntity<>(reviewService.createReview(reviewDtoRequest, request), CREATED);
     }
     @Operation(summary = "Поиск ревью в базе данных приложения", description =
@@ -166,9 +169,9 @@ public class ReviewController {
             )
     })
     @DeleteMapping(value = REVIEW_CONTROLLER_PATH + "/{reviewId}")
-    public ResponseEntity<String> deleteReview(@PathVariable(value = "reviewId") @Parameter(description = "ID ревью",
-            example = "1") Long reviewId) {
-        reviewService.deleteReview(reviewId);
-        return ResponseEntity.ok("Ревью удалено");
+    public ResponseEntity<MessageDto> deleteReview(@PathVariable(value = "reviewId")
+                                                       @Parameter(description = "ID ревью", example = "1")
+                                                       Long reviewId) {
+        return new ResponseEntity<>(reviewService.deleteReview(reviewId), OK);
     }
 }

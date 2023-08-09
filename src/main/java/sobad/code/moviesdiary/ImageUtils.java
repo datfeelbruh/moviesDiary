@@ -3,7 +3,7 @@ package sobad.code.moviesdiary;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import sobad.code.moviesdiary.exceptions.entiry_exceptions.EntityAlreadyExistException;
+import sobad.code.moviesdiary.exceptions.entiry_exceptions.EntityNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +17,11 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class ImageUtils {
-    @Value("${image-directory}")
-    private String imageDirectory;
+    private final String imageDirectory;
+
+    public ImageUtils(@Value("${image-directory}") String imageDirectory) {
+        this.imageDirectory = imageDirectory;
+    }
 
     public File getImage(String imageName) {
         List<File> files = new ArrayList<>();
@@ -34,7 +37,7 @@ public class ImageUtils {
                 .filter(e -> e.getName().equals(imageName))
                 .findFirst();
 
-        return file.orElseThrow(() -> new EntityAlreadyExistException("Аватар не найден."));
+        return file.orElseThrow(() -> new EntityNotFoundException("Аватар не найден."));
     }
     public void deletePreviousUserImage(String prefix) throws IOException {
         List<File> files = new ArrayList<>();
@@ -60,12 +63,12 @@ public class ImageUtils {
 
     public String buildFile(String contentType, String username) {
         String type = contentType.substring(6);
-        return imageDirectory +
-                "/" +
-                username +
-                "_avatar" +
-                "." +
-                type;
+        return imageDirectory
+                + "/"
+                + username
+                + "_avatar"
+                + "."
+                + type;
     }
 
     public static boolean isSupportedContentType(String contentType) {

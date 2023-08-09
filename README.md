@@ -1,5 +1,5 @@
 # moviesDiary
-TODO...
+
 
 # Installation
 1. git clone --recurse-submodules --depth 1 https://github.com/datfeelbruh/moviesDiary.git

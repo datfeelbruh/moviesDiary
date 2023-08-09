@@ -1,21 +1,16 @@
 package sobad.code.moviesdiary.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import sobad.code.moviesdiary.dtos.user.UserDtoAboutRequest;
 import sobad.code.moviesdiary.dtos.user.UserDtoResponse;
 import sobad.code.moviesdiary.dtos.user.UserRegistrationDtoRequest;
@@ -28,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,7 +43,7 @@ class UserServiceTest {
     private RoleService roleService;
 
     @Test
-    void findByUsername_ReturnsValidUser() {
+    void findByUsername() {
         User user = new User();
         user.setId(1L);
         user.setUsername("username");

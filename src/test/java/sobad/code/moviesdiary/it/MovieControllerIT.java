@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import sobad.code.moviesdiary.dtos.movie.MovieCard;
+import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
 import sobad.code.moviesdiary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.moviesdiary.dtos.GenreDto;
 import sobad.code.moviesdiary.dtos.movie.MovieDto;
@@ -151,6 +153,42 @@ class MovieControllerIT {
                         .genres(genres1)
                         .build()
         );
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("sobad")
+    void getMovieById() throws Exception {
+        testUtils.createSampleUser();
+        Movie movie = movieRepository.findAll().get(0);
+
+        MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH + "/" + movie.getId());
+
+        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
+
+        String content = result.andReturn().getResponse().getContentAsString(UTF_8);
+        MovieCard movieCard = TestUtils.readJson(content, new TypeReference<>() { });
+
+        assertThat(movieCard).isNotNull();
+        assertThat(movieCard.getId()).isEqualTo(movie.getId());
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser("sobad")
+    void getMovieTitles() throws Exception {
+        testUtils.createSampleUser();
+        Movie movie = movieRepository.findAll().get(0);
+
+        MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH + "/moviesTitles");
+
+        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
+
+        String content = result.andReturn().getResponse().getContentAsString(UTF_8);
+        List<MovieTitlesId> moviesTitles = TestUtils.readJson(content, new TypeReference<>() { });
+
+        assertThat(moviesTitles.get(0).getId()).isNotNull();
+        assertThat(moviesTitles.get(0).getTitle()).isNotNull();
     }
 
     @Test
@@ -324,8 +362,10 @@ class MovieControllerIT {
         assertThat(response.getUser().getUsername()).isEqualTo(user.getUsername());
         assertThat(response.getMovies()).hasSize(1);
         assertThat(response.getMovies().get(0).getId()).isEqualTo(movie.getId());
-        assertThat(response.getMovies().get(0).getReview()).isEqualTo(reviewRepository.findAll().get(0).getUserReview());
-        assertThat(response.getMovies().get(0).getRating()).isEqualTo(reviewRepository.findAll().get(0).getRating());
+        assertThat(response.getMovies().get(0).getReview())
+                .isEqualTo(reviewRepository.findAll().get(0).getUserReview());
+        assertThat(response.getMovies().get(0).getRating())
+                .isEqualTo(reviewRepository.findAll().get(0).getRating());
     }
 
     @Test

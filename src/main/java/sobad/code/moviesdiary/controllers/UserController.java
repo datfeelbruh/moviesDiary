@@ -71,25 +71,25 @@ public class UserController {
             Эндпоинт для получения информации о пользователе.
             """)
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Существующий пользователь",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDtoResponse.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Существующий пользователь",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = UserDtoResponse.class)
+                        )
+                }
             ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Пользователь не найден.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "422",
+            description = "Пользователь не найден.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
     @GetMapping(value = USER_CONTROLLER_PATH + "/{userId}")
@@ -103,29 +103,30 @@ public class UserController {
             Эндпоинт предназначен для загрузки изображение через form-data. Поддерживает форматы: jpeg, jpg, png, gif.
             """)
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Обновленная информация о пользователе.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDtoResponse.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Обновленная информация о пользователе.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = UserDtoResponse.class)
+                        )
+                }
             ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Не удалось загрузить изображение.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "422",
+            description = "Не удалось загрузить изображение.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
     @PostMapping(value = USER_CONTROLLER_PATH + "/avatar", consumes = MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserDtoResponse> uploadAvatar(@RequestPart("image") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<UserDtoResponse> uploadAvatar(@RequestPart("image") MultipartFile multipartFile)
+            throws IOException {
         return new ResponseEntity<>(userService.uploadImage(multipartFile), OK);
     }
 
@@ -133,25 +134,25 @@ public class UserController {
             Эндпоинт предназначен для обновление поля about в сущности пользователя.
             """)
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Обновленная информация о пользователе.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UserDtoResponse.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Обновленная информация о пользователе.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = UserDtoResponse.class)
+                        )
+                }
             ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Не удалось обновить информацию о пользователе.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "422",
+            description = "Не удалось обновить информацию о пользователе.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
     @PutMapping(value = USER_CONTROLLER_PATH + "/{userId}")

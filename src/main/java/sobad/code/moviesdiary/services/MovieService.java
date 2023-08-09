@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
+import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
 import sobad.code.moviesdiary.dtos.pages.MoviePagesShort;
 import sobad.code.moviesdiary.dtos.movie.UserMovie;
@@ -24,7 +25,6 @@ import sobad.code.moviesdiary.repositories.dsl.filters.TitleFilter;
 import sobad.code.moviesdiary.repositories.dsl.filters.UserIdFilter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -127,13 +127,11 @@ public class MovieService {
         return userMoviesPage;
     }
 
-    public List<Map<String, String>> getMoviesName() {
+    public List<MovieTitlesId> getMoviesName() {
         Map<Long, String> movies = movieCustomRepository.getTitlesWithId();
-        List<Map<String, String>> response = new ArrayList<>();
+        List<MovieTitlesId> response = new ArrayList<>();
         movies.forEach((k, v) -> {
-            Map<String, String> movie = new HashMap<>();
-            movie.put("id", k.toString());
-            movie.put("title", v);
+            MovieTitlesId movie = new MovieTitlesId(k, v);
             response.add(movie);
         });
         return response;

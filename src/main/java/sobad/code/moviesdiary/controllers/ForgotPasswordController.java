@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sobad.code.moviesdiary.dtos.MessageDto;
 import sobad.code.moviesdiary.dtos.ResetPasswordDto;
+import sobad.code.moviesdiary.dtos.tokens.ResetPasswordTokenDto;
 import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.services.ResetPasswordService;
 import sobad.code.moviesdiary.services.UserService;
@@ -37,29 +39,29 @@ public class ForgotPasswordController {
             Вернет токен ресета пароля.
             """)
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Токен ресета пароля.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Map.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Токен ресета пароля.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = Map.class)
+                        )
+                }
             ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Невозможно сгенирировать токен для данного email.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "422",
+            description = "Невозможно сгенирировать токен для данного email.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
     @GetMapping(value = API_FORGOT_PASSWORD_RESET)
-    public ResponseEntity<Map<String, Object>> sendResetRequest(@RequestParam
+    public ResponseEntity<ResetPasswordTokenDto> sendResetRequest(@RequestParam
                                                   @Parameter(description = "Email адрес пользователя.",
                                                           example = "{name}@{mail}.domain") String email)
             throws MessagingException, UnsupportedEncodingException {
@@ -67,30 +69,31 @@ public class ForgotPasswordController {
     }
     @Operation(summary = "Запрос на ресет пароля.")
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Сообщение об изменении пароля.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = Map.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "200",
+            description = "Сообщение об изменении пароля.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = Map.class)
+                        )
+                }
             ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "Токен ресета пароля истек.",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = AppError.class)
-                            )
-                    }
+        @ApiResponse(
+            responseCode = "422",
+            description = "Токен ресета пароля истек.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
             )
     })
     @PostMapping(value = API_FORGOT_PASSWORD_RESET)
-    public ResponseEntity<Map<String, Object>> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto,
-                                @RequestParam @Parameter(description = "Токен смены пароля.") String token) {
+    public ResponseEntity<MessageDto> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto,
+                                                    @RequestParam
+                                                    @Parameter(description = "Токен смены пароля.") String token) {
         return ResponseEntity.ok(resetPasswordService.updatePassword(resetPasswordDto, token));
     }
 }
