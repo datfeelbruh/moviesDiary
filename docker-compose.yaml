@@ -77,7 +77,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /root/dhparam/
+      device: /dhparam/
       o: bind
   image-data:
   db-data:
