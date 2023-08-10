@@ -404,10 +404,17 @@ public class MovieControllerIT {
                 .password("s")
                 .confirmPassword("s")
                 .build();
+        UserRegistrationDtoRequest user6 = UserRegistrationDtoRequest.builder()
+                .username("user6")
+                .email("user6@mail.com")
+                .password("s")
+                .confirmPassword("s")
+                .build();
 
         testUtils.createUser(user3);
         testUtils.createUser(user4);
         testUtils.createUser(user5);
+        testUtils.createUser(user6);
 
         Movie movie = movieRepository.findAll().get(0);
 
@@ -486,6 +493,11 @@ public class MovieControllerIT {
         ResultActions findResult = mockMvc.perform(requestFindMovieInApp).andExpect(status().isOk());
         String appResultContent = findResult.andReturn().getResponse().getContentAsString(UTF_8);
         MoviePages moviePage = TestUtils.readJson(appResultContent, new TypeReference<>() { });
-        assertThat(moviePage.getMovies().get(0).getAverageRating()).isNotNull();
+        Double responseRating = moviePage.getMovies().get(0).getAverageRating();
+        Double dbRating = movieRepository.findById(moviePage.getMovies().get(0).getId()).get().getKgRating();
+        log.info(dbRating.toString());
+        assertThat(responseRating).isNotNull();
+        assertThat(dbRating).isNotNull();
+        assertThat(dbRating).isEqualTo(responseRating);
     }
 }

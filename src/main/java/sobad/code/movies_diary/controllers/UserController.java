@@ -74,6 +74,38 @@ public class UserController {
         return new ResponseEntity<>(userDto, CREATED);
     }
 
+    @Operation(summary = "Получить пользователя", description = """
+            Эндпоинт для получения информации о пользователе.
+            """)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Существующий пользователь",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDtoResponse.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Пользователь не найден.",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = AppError.class)
+                            )
+                    }
+            )
+    })
+    @GetMapping(value = USER_CONTROLLER_PATH + "/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable(value = "userId")
+                                         @Parameter(description = "ID пользователя", example = "1") Long userId) {
+        UserDtoResponse user = userService.getUserById(userId);
+        return new ResponseEntity<>(user, OK);
+    }
+
     @Operation(summary = "Загрузить аватар пользователя.", description = """
             Эндпоинт предназначен для загрузки изображение через form-data. Поддерживает форматы: jpeg, jpg, png, gif.
             """)

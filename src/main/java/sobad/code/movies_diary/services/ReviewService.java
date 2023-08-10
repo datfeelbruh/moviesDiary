@@ -25,12 +25,12 @@ import sobad.code.movies_diary.repositories.ReviewRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ReviewService {
-    private final JwtTokenUtils jwtTokenUtils;
     private final ReviewRepository reviewRepository;
     private final UserService userService;
     private final MovieRepository movieRepository;
@@ -153,19 +153,23 @@ public class ReviewService {
         }
         reviewRepository.deleteById(reviewId);
     }
-
+    @Transactional
     public Double getAverageReviewRatingById(Long id) {
         Integer count = reviewRepository.countByMovieId(id);
         Integer countReviewToCalcAverage = 5;
         if (count > 0 && count % countReviewToCalcAverage == 0) {
             return getAverage(id);
         }
-        return null;
+        Optional<Movie> movie = movieRepository.findById(id);
+        return movie.map(Movie::getKgRating).orElse(null);
     }
-
-
+    @Transactional
     public Double getAverage(Long id) {
         Double avg = reviewRepository.getAvgRatingByMovieId(id);
+        Movie movie = movieRepository.findById(id).get();
+        movie.setId(id);
+        movie.setKgRating(Math.round(avg * 10.0) / 10.0);
+        movieRepository.save(movie);
         return Math.round(avg * 10.0) / 10.0;
     }
 

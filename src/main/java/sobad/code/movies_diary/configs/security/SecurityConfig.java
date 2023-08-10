@@ -89,19 +89,7 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(ex -> {
-                    ex.authenticationEntryPoint(((request, response, authException) -> {
-                        response.setContentType(APPLICATION_JSON_VALUE);
-                        response.setCharacterEncoding(String.valueOf(UTF_8));
-                        response.setStatus(SC_FORBIDDEN);
-                        AppError appError = new AppError(
-                                SC_FORBIDDEN,
-                                "Авторизируйтесь для выполнения этого действия",
-                                Instant.now().toString());
-                        objectMapper.writeValue(response.getWriter(), appError);
-                    }));
-                });
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }

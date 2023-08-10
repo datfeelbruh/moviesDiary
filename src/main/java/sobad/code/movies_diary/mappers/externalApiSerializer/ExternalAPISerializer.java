@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class ExternalAPISerializer implements Function<DocsItemMovieInfo, MovieDto> {
     private final ReviewService reviewService;
     private final GenreService genreService;
-    private final UserService userService;
 
     @Override
     public MovieDto apply(DocsItemMovieInfo movieInfo) {

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findAllByMovieId(Long id, PageRequest pageRequest);
+    Review findDistinctByMovieId(Long movieId);
     Page<Review> findAllByUserId(Long id, PageRequest pageRequest);
     Optional<Review> findAllByUserIdAndMovieId(Long userId, Long movieId);
     @Query("SELECT r FROM Review r WHERE r.movie.id = :id ORDER BY id DESC LIMIT 4")

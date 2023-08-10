@@ -3,6 +3,7 @@ package sobad.code.movies_diary.repositories.dsl;
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.querydsl.BlazeJPAQuery;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,12 +18,31 @@ import sobad.code.movies_diary.repositories.dsl.filters.UserIdFilter;
 import static sobad.code.movies_diary.entities.QMovie.movie;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class MovieCustomRepositoryImpl {
     private final EntityManager entityManager;
     private final CriteriaBuilderFactory criteriaBuilderFactory;
+
+    public Map<Long, String> getTitlesWithId() {
+        Map<Long, String> map = (Map<Long, String>) entityManager.createQuery("""
+                SELECT m.id as id, m.title as title
+                FROM Movie m
+                ORDER BY m.title LIMIT 20
+                """, Tuple.class)
+                .getResultList()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                tuple -> ((Long) tuple.get("id")),
+                                tuple -> ((String) tuple.get("title"))
+                        )
+                );
+        return map;
+    }
 
     public PageImpl<Movie> findByGenreNameFilter(GenreFilter filter, Pageable pageable) {
         BlazeJPAQuery<Movie> query = new BlazeJPAQuery<>(entityManager, criteriaBuilderFactory)
