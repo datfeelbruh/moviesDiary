@@ -44,7 +44,7 @@ services:
     depends_on:
       - backend-db
     volumes:
-      - /c:/Users/datfe/Pictures/service-images:/var/lib/image-data
+      - /root/user_avatars:/var/lib/image-data
 
   frontend:
     build:
@@ -54,10 +54,34 @@ services:
     container_name: 'service-frontend'
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - backend
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+      - dhparam:/etc/ssl/certs
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email datfeelman@gmail.com --agree-tos --no-eff-email --force-renewal -d xn--b1abohqcebc.xn--p1ai
 
 volumes:
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /root/dhparam/
+      o: bind
   image-data:
   db-data:
   pgadmin-data:
+  web-root:
+  certbot-etc:
+  certbot-var:
