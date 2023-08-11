@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
@@ -19,10 +20,11 @@ import sobad.code.moviesdiary.mappers.MovieMapper;
 import sobad.code.moviesdiary.mappers.PageMapper;
 import sobad.code.moviesdiary.mappers.entity_serializers.MovieSerializer;
 import sobad.code.moviesdiary.repositories.MovieRepository;
-import sobad.code.moviesdiary.repositories.dsl.MovieCustomRepositoryImpl;
-import sobad.code.moviesdiary.repositories.dsl.filters.GenreFilter;
-import sobad.code.moviesdiary.repositories.dsl.filters.TitleFilter;
-import sobad.code.moviesdiary.repositories.dsl.filters.UserIdFilter;
+import sobad.code.moviesdiary.repositories.MovieCustomRepositoryImpl;
+import sobad.code.moviesdiary.repositories.ReviewCustomRepositoryImpl;
+import sobad.code.moviesdiary.repositories.filters.GenreFilter;
+import sobad.code.moviesdiary.repositories.filters.TitleFilter;
+import sobad.code.moviesdiary.repositories.filters.UserIdFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class MovieService {
     private final MovieMapper movieMapper;
     private final PageMapper pageMapper;
     private final UserService userService;
+    private final ReviewCustomRepositoryImpl reviewCustomRepository;
 
     public MovieCard getMovieById(Long id) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
@@ -137,5 +140,9 @@ public class MovieService {
         return response;
     }
 
+
+    public List<PopularMovieDto> getPopularMovies() {
+        return reviewCustomRepository.getPopularMovies();
+    }
 
 }

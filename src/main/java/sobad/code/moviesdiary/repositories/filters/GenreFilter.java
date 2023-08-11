@@ -1,4 +1,4 @@
-package sobad.code.moviesdiary.repositories.dsl.filters;
+package sobad.code.moviesdiary.repositories.filters;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

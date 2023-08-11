@@ -2,6 +2,7 @@ package sobad.code.moviesdiary.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
@@ -185,5 +187,26 @@ public class MovieController {
     @GetMapping(value = MOVIE_CONTROLLER_PATH + "/moviesTitles")
     public ResponseEntity<List<MovieTitlesId>> findMoviesTitles() {
         return new ResponseEntity<>(movieService.getMoviesName(), OK);
+    }
+
+    @Operation(summary = "Получить 5 фильмов с самым большим количеством ревью.", description =
+            """
+            Возвращается 5 фильмов с самым большим количеством ревью.
+            """)
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Фильмы из базы данных с самым большим количеством ревью.",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = PopularMovieDto.class))
+                        )
+                }
+            )
+    })
+    @GetMapping(value = MOVIE_CONTROLLER_PATH + "/popular")
+    public ResponseEntity<List<PopularMovieDto>> getPopularMovies() {
+        return new ResponseEntity<>(movieService.getPopularMovies(), OK);
     }
 }

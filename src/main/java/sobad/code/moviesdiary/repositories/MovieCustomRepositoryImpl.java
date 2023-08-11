@@ -1,4 +1,4 @@
-package sobad.code.moviesdiary.repositories.dsl;
+package sobad.code.moviesdiary.repositories;
 
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.querydsl.BlazeJPAQuery;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import sobad.code.moviesdiary.entities.Movie;
 import sobad.code.moviesdiary.entities.QReview;
 import sobad.code.moviesdiary.entities.QUser;
-import sobad.code.moviesdiary.repositories.dsl.filters.GenreFilter;
-import sobad.code.moviesdiary.repositories.dsl.filters.TitleFilter;
-import sobad.code.moviesdiary.repositories.dsl.filters.UserIdFilter;
+import sobad.code.moviesdiary.repositories.filters.GenreFilter;
+import sobad.code.moviesdiary.repositories.filters.TitleFilter;
+import sobad.code.moviesdiary.repositories.filters.UserIdFilter;
 
 import static sobad.code.moviesdiary.entities.QMovie.movie;
 
