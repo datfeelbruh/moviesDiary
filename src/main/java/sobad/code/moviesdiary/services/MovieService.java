@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
@@ -19,10 +20,11 @@ import sobad.code.moviesdiary.mappers.MovieMapper;
 import sobad.code.moviesdiary.mappers.PageMapper;
 import sobad.code.moviesdiary.mappers.entity_serializers.MovieSerializer;
 import sobad.code.moviesdiary.repositories.MovieRepository;
-import sobad.code.moviesdiary.repositories.dsl.MovieCustomRepositoryImpl;
-import sobad.code.moviesdiary.repositories.dsl.filters.GenreFilter;
-import sobad.code.moviesdiary.repositories.dsl.filters.TitleFilter;
-import sobad.code.moviesdiary.repositories.dsl.filters.UserIdFilter;
+import sobad.code.moviesdiary.repositories.MovieCustomRepositoryImpl;
+import sobad.code.moviesdiary.repositories.ReviewCustomRepositoryImpl;
+import sobad.code.moviesdiary.repositories.filters.GenreFilter;
+import sobad.code.moviesdiary.repositories.filters.TitleFilter;
+import sobad.code.moviesdiary.repositories.filters.UserIdFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class MovieService {
     private final MovieMapper movieMapper;
     private final PageMapper pageMapper;
     private final UserService userService;
+    private final ReviewCustomRepositoryImpl reviewCustomRepository;
 
     public MovieCard getMovieById(Long id) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
@@ -54,8 +57,11 @@ public class MovieService {
 
     @Transactional
     public MoviePages getMoviesByName(String name, Boolean findOnKp, Integer page, Integer limit) {
+        log.info("ФЛАГ findKpOn = " + findOnKp.toString());
+        log.info("ЗАШЕЛ В СЕРВИС РАСШИРЕННОГО ПОИСКА");
         if (Boolean.TRUE.equals(findOnKp)) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
+            log.info("ИЩУ НА КП В МУВИ СЕРВИС РАСШИРЕННЫЙ ПОИСК");
             List<Movie> movies = kpMovies.getMovies().stream()
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
@@ -68,11 +74,14 @@ public class MovieService {
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
+        log.info("ИЩУ В БАЗЕ");
         return pageMapper.buildMoviePage(limit, page, moviePage);
     }
 
     @Transactional
     public MoviePagesShort getMoviesByNameShortInfo(String name, Boolean findOnKp, Integer page, Integer limit) {
+        log.info("ФЛАГ findKpOn = " + findOnKp.toString());
+        log.info("ЗАШЕЛ В СЕРВИС КРАТКОГО ПОИСКА");
         if (Boolean.TRUE.equals(findOnKp)) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
 
@@ -80,6 +89,7 @@ public class MovieService {
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
                     .toList();
+            log.info("ИЩУ НА КП В МУВИ СЕРВИС КРАТКИЙ ПОИСК");
             movieRepository.saveAll(movies);
             return pageMapper.buildMoviePageShortFromKp(limit, page, kpMovies, movies);
         }
@@ -130,5 +140,9 @@ public class MovieService {
         return response;
     }
 
+
+    public List<PopularMovieDto> getPopularMovies() {
+        return reviewCustomRepository.getPopularMovies();
+    }
 
 }

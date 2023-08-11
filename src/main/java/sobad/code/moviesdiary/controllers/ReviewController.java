@@ -65,9 +65,8 @@ public class ReviewController {
             )
     })
     @PostMapping(value = REVIEW_CONTROLLER_PATH)
-    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDtoRequest reviewDtoRequest,
-                                                  HttpServletRequest request) {
-        return new ResponseEntity<>(reviewService.createReview(reviewDtoRequest, request), CREATED);
+    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDtoRequest reviewDtoRequest) {
+        return new ResponseEntity<>(reviewService.createReview(reviewDtoRequest), CREATED);
     }
     @Operation(summary = "Поиск ревью в базе данных приложения", description =
             """

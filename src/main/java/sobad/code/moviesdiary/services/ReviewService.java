@@ -1,6 +1,5 @@
 package sobad.code.moviesdiary.services;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -39,7 +38,7 @@ public class ReviewService {
     private final ReviewSerializer reviewSerializer;
 
     @Transactional
-    public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest, HttpServletRequest request) {
+    public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest) {
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         if (reviewRepository.findAllByUserIdAndMovieId(user.getId(), reviewDtoRequest.getMovieId()).isPresent()) {
             throw new EntityAlreadyExistException("Ревью на этот фильм уже создано");
