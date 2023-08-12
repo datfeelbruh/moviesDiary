@@ -20,18 +20,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.exceptions.ExceptionFilter;
 import sobad.code.moviesdiary.jwt.JwtAuthenticationFilter;
 
-import java.time.Instant;
 import java.util.Arrays;
 
-import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static sobad.code.moviesdiary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
 import static sobad.code.moviesdiary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
 import static sobad.code.moviesdiary.controllers.ForgotPasswordController.API_FORGOT_PASSWORD_RESET;
@@ -92,17 +87,7 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(((request, response, authException) -> {
-                    response.setContentType(APPLICATION_JSON_VALUE);
-                    response.setCharacterEncoding(String.valueOf(UTF_8));
-                    response.setStatus(SC_FORBIDDEN);
-                    AppError appError = new AppError(
-                            SC_FORBIDDEN,
-                            authException.getMessage(),
-                            Instant.now().toString());
-                    objectMapper.writeValue(response.getWriter(), appError);
-                })));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
