@@ -9,12 +9,14 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.Collection;
@@ -32,6 +34,7 @@ public class User extends BaseModel {
     @Email(message = "Email должен соотвестновать паттерну *@*.*")
     private String email;
     @Column(name = "username", unique = true, nullable = false)
+    @NotBlank(message = "Введите имя пользователя чтобы зарегистрироваться")
     private String username;
     @Column(name = "avatar")
     private String avatar;
@@ -39,6 +42,7 @@ public class User extends BaseModel {
     @Size(max = 1000, message = "Описание слишком большое, краткость сестра таланта.")
     private String about;
     @Column(name = "password", nullable = false)
+    @NotBlank(message = "Введите пароль чтобы зарегистрироваться")
     private String password;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(

@@ -26,6 +26,16 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RestControllerAdvice
 @Slf4j
 public class CustomAdvice {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<AppError> runtimeException(RuntimeException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(422)
+                .body(new AppError(
+                        UNPROCESSABLE_ENTITY.value(),
+                        e.getMessage(),
+                        Instant.now().toString()));
+    }
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<AppError> entityNotFound(EntityNotFoundException e) {
         log.error(e.getMessage(), e);
