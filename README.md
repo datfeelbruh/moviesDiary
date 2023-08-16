@@ -18,6 +18,7 @@ Frontend часть полностью написана [моим товарищ
 ### Структура базы данных
 ![alt-text](https://github.com/datfeelbruh/moviesDiary/blob/main/%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0%20%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86.png)
 ## Внутренний flow приложения
+![alt-text](https://github.com/datfeelbruh/moviesDiary/blob/main/%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%B0%20flow.drawio.png)
 Перед началом полноценного 
 ## Используемые технологии
 * Spring
