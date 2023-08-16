@@ -1,6 +1,3 @@
-[![Quality Gate Status](http://localhost:9000/api/project_badges/measure?project=moviesDiary&metric=alert_status&token=sqb_f8d1638b4b44d93ae3dc4512267ca13cf4bd776c)](http://localhost:9000/dashboard?id=moviesDiary)
-[![Coverage](http://localhost:9000/api/project_badges/measure?project=moviesDiary&metric=coverage&token=sqb_f8d1638b4b44d93ae3dc4512267ca13cf4bd776c)](http://localhost:9000/dashboard?id=moviesDiary)
-[![Maintainability Rating](http://localhost:9000/api/project_badges/measure?project=moviesDiary&metric=sqale_rating&token=sqb_f8d1638b4b44d93ae3dc4512267ca13cf4bd776c)](http://localhost:9000/dashboard?id=moviesDiary)
 # MovieDiary
 ## Что это за проект?
 Мой pet-project созданный самостоятельно по чтобы закрепить знания полученные при обучении по курсу Java 
