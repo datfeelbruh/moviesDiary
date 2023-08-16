@@ -14,5 +14,6 @@ public class ReviewDto {
     private Long id;
     private UserDtoResponse user;
     private Long movieId;
-    private UserReview userReview;
+    private String review;
+    private Double rating;
 }

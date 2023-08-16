@@ -20,7 +20,8 @@ public class ReviewSerializer implements Function<Review, ReviewDto> {
                 .id(review.getId())
                 .user(userService.getUserById(review.getUser().getId()))
                 .movieId(review.getMovie().getId())
-                .userReview(new UserReview(review.getUserReview(), review.getRating()))
+                .review(review.getUserReview())
+                .rating(review.getRating())
                 .build();
     }
 }
