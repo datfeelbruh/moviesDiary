@@ -19,6 +19,8 @@ Frontend часть полностью написана [моим товарищ
 ![alt-text](https://github.com/datfeelbruh/moviesDiary/blob/main/%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0%20%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86.png)
 ## Внутренний flow приложения
 ![alt-text](https://github.com/datfeelbruh/moviesDiary/blob/main/%D0%B4%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%B0%20flow.drawio.png)
+### Реализованный функционал
+Диаграмма выше лишь краткая инструкция как пользоваться приложением. С полной документацией можно ознакомиться по [ссылке](http://77.232.129.176/api-docs.html)
 ## Используемые технологии
 * Spring
   + Data
@@ -37,9 +39,10 @@ Frontend часть полностью написана [моим товарищ
 * Kinopoisk API
 
 # Installation
-1. git clone --recurse-submodules --depth 1 https://github.com/datfeelbruh/moviesDiary.git
+1. git clone --recurse-submodules --depth 1 --no-single-branch https://github.com/datfeelbruh/moviesDiary.git
 2. cd ./moviesDiary
-3. docker-compose up -d --build
+3. git checkout dev
+4. docker-compose up -d --build
 
 # Development
 Created with [spring](https://spring.io/) on [gradle](https://gradle.org/).
