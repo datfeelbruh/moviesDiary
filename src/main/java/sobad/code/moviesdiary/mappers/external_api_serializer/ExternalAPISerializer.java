@@ -40,8 +40,8 @@ public class ExternalAPISerializer implements Function<DocsItemMovieInfo, MovieD
                         .map(e -> new MovieReview(
                                 e.getId(),
                                 e.getUser(),
-                                e.getUserReview().getRating(),
-                                e.getUserReview().getReview())
+                                e.getRating(),
+                                e.getReview())
                         ).toList()
                 )
                 .build();

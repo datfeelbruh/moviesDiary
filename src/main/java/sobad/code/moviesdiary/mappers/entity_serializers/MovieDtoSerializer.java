@@ -36,8 +36,8 @@ public class MovieDtoSerializer implements Function<Movie, MovieDto> {
                                 .map(e -> new MovieReview(
                                         e.getId(),
                                         e.getUser(),
-                                        e.getUserReview().getRating(),
-                                        e.getUserReview().getReview())
+                                        e.getRating(),
+                                        e.getReview())
                                 ).toList()
                 )
                 .build();

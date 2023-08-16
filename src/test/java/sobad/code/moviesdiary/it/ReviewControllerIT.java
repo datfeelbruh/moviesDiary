@@ -346,12 +346,12 @@ class ReviewControllerIT {
 
         assertThat(sobadResponse.getUser().getId()).isEqualTo(sobad.getId());
         assertThat(sobadResponse.getMovieId()).isEqualTo(sobadMovie.getId());
-        assertThat(sobadResponse.getUserReview().getRating()).isEqualTo(10.0);
-        assertThat(sobadResponse.getUserReview().getReview()).isEqualTo("good");
+        assertThat(sobadResponse.getRating()).isEqualTo(10.0);
+        assertThat(sobadResponse.getReview()).isEqualTo("good");
         assertThat(datfeelResponse.getUser().getId()).isEqualTo(datfeel.getId());
         assertThat(datfeelResponse.getMovieId()).isEqualTo(datfeelMovie.getId());
-        assertThat(datfeelResponse.getUserReview().getRating()).isEqualTo(0.0);
-        assertThat(datfeelResponse.getUserReview().getReview()).isEqualTo("bad");
+        assertThat(datfeelResponse.getRating()).isEqualTo(0.0);
+        assertThat(datfeelResponse.getReview()).isEqualTo("bad");
     }
 
     @Test
@@ -448,8 +448,8 @@ class ReviewControllerIT {
 
         assertThat(review.getUserReview()).isNotNull();
         assertThat(review.getRating()).isNotNull();
-        assertThat(reviewDto.getUserReview().getReview()).isNotNull();
-        assertThat(reviewDto.getUserReview().getRating()).isNotNull();
+        assertThat(reviewDto.getReview()).isNotNull();
+        assertThat(reviewDto.getRating()).isNotNull();
     }
 
     @Test

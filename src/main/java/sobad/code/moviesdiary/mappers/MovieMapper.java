@@ -30,8 +30,8 @@ public class MovieMapper {
                         .collect(Collectors.toSet()))
                 .imdbRating(movie.getImdbRating())
                 .kpRating(movie.getKpRating())
-                .review(reviewByUser.getUserReview().getReview())
-                .rating(reviewByUser.getUserReview().getRating())
+                .review(reviewByUser.getReview())
+                .rating(reviewByUser.getRating())
                 .build();
     }
 
