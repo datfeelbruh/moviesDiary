@@ -2,6 +2,7 @@ package sobad.code.moviesdiary.repositories;
 
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.querydsl.BlazeJPAQuery;
+import com.querydsl.core.types.OrderSpecifier;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -74,13 +75,15 @@ public class MovieCustomRepositoryImpl {
     public PageImpl<Movie> findByUserIdFilter(UserIdFilter filter, Pageable pageable) {
         QUser user = QUser.user;
         QReview review = QReview.review;
+        OrderSpecifier<Long> order = review.id.desc();
 
         BlazeJPAQuery<Movie> query = new BlazeJPAQuery<>(entityManager, criteriaBuilderFactory)
                 .select(movie)
                 .from(movie)
                 .join(review).on(movie.id.eq(review.movie.id))
                 .join(user).on(user.id.eq(review.user.id))
-                .where(review.user.id.eq(filter.getUserId()));
+                .where(review.user.id.eq(filter.getUserId()))
+                .orderBy(order);
 
         long total = query.fetchCount();
         query.limit(pageable.getPageSize());
