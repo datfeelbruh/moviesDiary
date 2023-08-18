@@ -1,9 +1,12 @@
 package sobad.code.moviesdiary;
 
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import sobad.code.moviesdiary.hibernateSearch.Indexer;
 
 @SpringBootApplication
 public class MoviesDiaryApplication {
@@ -14,4 +17,5 @@ public class MoviesDiaryApplication {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

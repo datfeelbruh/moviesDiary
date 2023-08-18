@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -39,11 +40,11 @@ import static sobad.code.moviesdiary.controllers.AuthController.AUTH_CONTROLLER_
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Testcontainers
 @Slf4j
+@ActiveProfiles("test")
 class AuthControllerIT {
     @Container
     @ServiceConnection
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15");
-
     @Autowired
     private TestUtils testUtils;
     @Autowired

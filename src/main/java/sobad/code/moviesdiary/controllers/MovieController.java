@@ -23,6 +23,7 @@ import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
 import sobad.code.moviesdiary.dtos.pages.PageDto;
 import sobad.code.moviesdiary.dtos.pages.UserMoviesPage;
+import sobad.code.moviesdiary.entities.Movie;
 import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.services.MovieService;
 
@@ -66,10 +67,14 @@ public class MovieController {
     })
     @GetMapping(value = MOVIE_CONTROLLER_PATH + "/{movieId}")
     public ResponseEntity<MovieCard> getMovieById(@PathVariable("movieId")
-                                          @Parameter(description = "ID фильма", example = "1") Long movieId) {
-        MovieCard movie = movieService.getMovieById(movieId);
+                                          @Parameter(description = "ID фильма", example = "1") Long movieId,
+                                          @RequestParam(required = false, value = "findKp", defaultValue = "false")
+                                          @Parameter(description = "Поиск по кинопоиску. true - искать на кинопоиске, "
+                                                  + "false - в базе приложения.") Boolean findKp) {
+        MovieCard movie = movieService.getMovieById(movieId, findKp);
         return new ResponseEntity<>(movie, OK);
     }
+
 
     @Operation(summary = "Получить все фильмы пользователя", description =
             """
@@ -112,7 +117,7 @@ public class MovieController {
         return new ResponseEntity<>(movies, OK);
     }
 
-
+//
     @Operation(summary = "Универсальный поиск фильмов", description =
             """
            В этом методе можно составить запрос на получение фильма из базы приложения или через Кинопоиск API.
@@ -209,4 +214,5 @@ public class MovieController {
     public ResponseEntity<List<PopularMovieDto>> getPopularMovies() {
         return new ResponseEntity<>(movieService.getPopularMovies(), OK);
     }
+
 }

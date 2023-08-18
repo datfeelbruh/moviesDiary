@@ -45,7 +45,13 @@ public class MovieService {
     private final UserService userService;
     private final ReviewCustomRepositoryImpl reviewCustomRepository;
 
-    public MovieCard getMovieById(Long id) {
+    public MovieCard getMovieById(Long id, boolean findKp) {
+        if (findKp) {
+            MoviePages kpMovies = externalApiService.findMovieById(id);
+            Movie movie = movieSerializer.apply(kpMovies.getMovies().get(0));
+            movieRepository.save(movie);
+            return movieMapper.toMovieCard(movie);
+        }
         Optional<Movie> movieInDb =  movieRepository.findById(id);
         if (movieInDb.isEmpty()) {
             throw new EntityNotFoundException(String.format("Фильм с данным id '%s' не найден", id));
@@ -73,8 +79,7 @@ public class MovieService {
         }
 
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
-        Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-        log.info("ИЩУ В БАЗЕ");
+        Page<Movie> moviePage = movieCustomRepository.searchBy(name, pageRequest, "title");
         return pageMapper.buildMoviePage(limit, page, moviePage);
     }
 
@@ -93,10 +98,8 @@ public class MovieService {
             movieRepository.saveAll(movies);
             return pageMapper.buildMoviePageShortFromKp(limit, page, kpMovies, movies);
         }
-
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
-        Page<Movie> moviePage = movieCustomRepository.findByTitleFilter(new TitleFilter(name), pageRequest);
-        log.info("ИЩУ В БАЗЕ");
+        Page<Movie> moviePage = movieCustomRepository.searchBy(name, pageRequest, "title");
         return pageMapper.buildMoviePageShort(limit, page, moviePage);
     }
 

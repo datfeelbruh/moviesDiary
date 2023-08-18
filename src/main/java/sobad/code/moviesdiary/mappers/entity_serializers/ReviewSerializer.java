@@ -3,7 +3,6 @@ package sobad.code.moviesdiary.mappers.entity_serializers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import sobad.code.moviesdiary.dtos.review.ReviewDto;
-import sobad.code.moviesdiary.dtos.review.UserReview;
 import sobad.code.moviesdiary.entities.Review;
 import sobad.code.moviesdiary.services.UserService;
 
