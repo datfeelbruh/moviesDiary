@@ -46,16 +46,14 @@ public class MovieService {
     private final ReviewCustomRepositoryImpl reviewCustomRepository;
 
     public MovieCard getMovieById(Long id, boolean findKp) {
-        if (findKp) {
+        Optional<Movie> movieInDb =  movieRepository.findById(id);
+        if (findKp && movieInDb.isEmpty()) {
             MoviePages kpMovies = externalApiService.findMovieById(id);
             Movie movie = movieSerializer.apply(kpMovies.getMovies().get(0));
             movieRepository.save(movie);
             return movieMapper.toMovieCard(movie);
         }
-        Optional<Movie> movieInDb =  movieRepository.findById(id);
-        if (movieInDb.isEmpty()) {
-            throw new EntityNotFoundException(String.format("Фильм с данным id '%s' не найден", id));
-        }
+        log.info("не пошел  на кп");
         Movie movie = movieInDb.get();
 
         return movieMapper.toMovieCard(movie);
