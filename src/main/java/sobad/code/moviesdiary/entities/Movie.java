@@ -15,6 +15,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+
 import java.util.Set;
 
 @Getter
@@ -25,11 +28,13 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @Table(name = "movies")
+@Indexed
 public class Movie {
     @Id
     @Column(name = "kp_id", unique = true)
     private Long id;
     @Column(name = "title")
+    @FullTextField(name = "title", analyzer = "autocomplete_indexing", searchAnalyzer = "autocomplete_search")
     private String title;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;

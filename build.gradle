@@ -61,6 +61,8 @@ repositories {
 
 dependencies {
 	implementation (
+			'org.hibernate.search:hibernate-search-mapper-orm-orm6:6.2.1.Final',
+			'org.hibernate.search:hibernate-search-backend-lucene:6.2.1.Final',
 			'org.springframework.boot:spring-boot-starter-data-jpa',
 			'org.springframework.boot:spring-boot-starter-web',
 			'org.springframework.boot:spring-boot-starter-actuator',
@@ -73,10 +75,6 @@ dependencies {
 			'io.jsonwebtoken:jjwt-api:0.11.5',
 			'io.jsonwebtoken:jjwt-jackson:0.11.5',
 			'io.jsonwebtoken:jjwt-impl:0.11.5',
-			'com.blazebit:blaze-persistence-integration-querydsl-expressions-jakarta:1.6.9',
-			'com.blazebit:blaze-persistence-core-api-jakarta:1.6.9',
-			'com.blazebit:blaze-persistence-core-impl-jakarta:1.6.9',
-			'com.blazebit:blaze-persistence-integration-hibernate-6.2:1.6.9'
 	)
 	compileOnly (
 			'org.projectlombok:lombok'
@@ -86,7 +84,7 @@ dependencies {
 	)
 	runtimeOnly (
 			'org.postgresql:postgresql',
-			'com.h2database:h2'
+			'com.h2database:h2',
 	)
 	annotationProcessor (
 			'org.projectlombok:lombok',

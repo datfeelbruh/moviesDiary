@@ -63,4 +63,38 @@ public class ExternalApiService {
 
         return moviePages;
     }
+
+    public MoviePages findMovieById(Long id) {
+        String url = UriComponentsBuilder.newInstance()
+                .scheme("https")
+                .host("api.kinopoisk.dev")
+                .path("v1.3/movie")
+                .queryParam("selectFields", "id", "name", "year", "rating.kp",
+                        "rating.imdb", "poster.url", "genres.name", "description")
+                .queryParam("id", id.intValue())
+                .build()
+                .toUriString();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-API-KEY", apiKey);
+        HttpEntity<String> entity = new HttpEntity<>("body", headers);
+        ResponseEntity<MovieInfo> responseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, entity, MovieInfo.class);
+
+        List<DocsItemMovieInfo> foundMovie = responseEntity.getBody().getDocs();
+        if (responseEntity.getBody().getDocs().isEmpty()) {
+            throw new EntityNotFoundException("Фильмы с данным ID на Кинопоиске не найден!");
+        }
+
+        List<MovieDto> movies = foundMovie.stream()
+                .map(externalAPISerializer).toList();
+
+        MoviePages moviePages = new MoviePages(movies);
+        moviePages.setPage(responseEntity.getBody().getPage());
+        moviePages.setPages(responseEntity.getBody().getPages());
+        moviePages.setTotal((long) responseEntity.getBody().getTotal());
+        moviePages.setLimit(responseEntity.getBody().getLimit());
+
+        return moviePages;
+    }
 }
