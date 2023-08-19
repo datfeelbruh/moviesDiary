@@ -2,6 +2,7 @@ package sobad.code.moviesdiary.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
@@ -14,13 +15,13 @@ import java.util.List;
 public class ReviewCustomRepositoryImpl {
     private final EntityManager entityManager;
 
-    public List<PopularMovieDto> getPopularMovies() {
+    public List<PopularMovieDto> getPopularMovies(Integer count) {
         return entityManager.createQuery("""
                         SELECT r.movie as movie, COUNT(r.movie) as count
                         FROM Review r
                         GROUP BY r.movie
                         """, Tuple.class)
-                .setMaxResults(5)
+                .setMaxResults(count)
                 .getResultList()
                 .stream()
                 .map(tuple -> {

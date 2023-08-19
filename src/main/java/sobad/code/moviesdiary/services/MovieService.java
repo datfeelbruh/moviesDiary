@@ -142,8 +142,8 @@ public class MovieService {
     }
 
 
-    public List<PopularMovieDto> getPopularMovies() {
-        return reviewCustomRepository.getPopularMovies();
+    public List<PopularMovieDto> getPopularMovies(Integer count) {
+        return reviewCustomRepository.getPopularMovies(count);
     }
 
 }
