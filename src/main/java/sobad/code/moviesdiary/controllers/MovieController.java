@@ -211,8 +211,9 @@ public class MovieController {
             )
     })
     @GetMapping(value = MOVIE_CONTROLLER_PATH + "/popular")
-    public ResponseEntity<List<PopularMovieDto>> getPopularMovies() {
-        return new ResponseEntity<>(movieService.getPopularMovies(), OK);
+    public ResponseEntity<List<PopularMovieDto>> getPopularMovies(@RequestParam(required = false, defaultValue = "4")
+                                                                      Integer count) {
+        return new ResponseEntity<>(movieService.getPopularMovies(count), OK);
     }
 
 }
