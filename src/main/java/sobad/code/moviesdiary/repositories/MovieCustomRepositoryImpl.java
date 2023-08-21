@@ -1,5 +1,6 @@
 package sobad.code.moviesdiary.repositories;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -83,7 +84,8 @@ public class MovieCustomRepositoryImpl {
                 .from(movie)
                 .join(review).on(movie.id.eq(review.movie.id))
                 .join(user).on(user.id.eq(review.user.id))
-                .where(review.user.id.eq(filter.getUserId()));
+                .where(review.user.id.eq(filter.getUserId()))
+                .orderBy(review.id.desc());
 
         long total = query.fetchCount();
         query.limit(pageable.getPageSize());
