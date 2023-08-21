@@ -92,7 +92,7 @@ public class ReviewService {
     @Transactional
     public ReviewPages getReviewByMovieId(Long movieId, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
-        Page<Review> reviewPage = reviewRepository.findAllByMovieIdOrderByIdDesc(movieId, pageRequest);
+        Page<Review> reviewPage = reviewRepository.findAllByMovieId(movieId, pageRequest);
 
         List<ReviewDto> reviews = reviewPage.getContent().stream()
                 .map(reviewSerializer)

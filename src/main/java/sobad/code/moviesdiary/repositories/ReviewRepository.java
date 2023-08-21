@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    Page<Review> findAllByMovieIdOrderByIdDesc(Long id, PageRequest pageRequest);
+    Page<Review> findAllByMovieId(Long id, PageRequest pageRequest);
     Review findDistinctByMovieId(Long movieId);
     Page<Review> findAllByUserIdOrderByIdDesc(Long id, PageRequest pageRequest);
     Optional<Review> findAllByUserIdAndMovieId(Long userId, Long movieId);
