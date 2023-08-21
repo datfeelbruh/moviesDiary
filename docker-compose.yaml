@@ -15,7 +15,7 @@ services:
       - .env
     volumes:
       - ./infrastructure/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
-      - db-data:/var/lib/postgresql/data
+      - /root/db_data:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin4_container
@@ -28,7 +28,7 @@ services:
     ports:
       - "5050:80"
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - /root/pgadmin-data:/var/lib/pgadmin
     env_file:
       - .env
 
@@ -45,7 +45,7 @@ services:
       - backend-db
     volumes:
       - /root/user_avatars:/var/lib/image-data
-      - db_indexes:/var/lib/index-data
+      - /root/db_indexes:/var/lib/index-data
 
   frontend:
     build:
