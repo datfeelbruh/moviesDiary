@@ -13,6 +13,14 @@ spring:
 
   jpa:
     hibernate:
+      search:
+        enabled: true
+        backend:
+          analysis:
+            configurer: class:sobad.code.moviesdiary.hibernateSearch.MyAnalysisConfigurer
+          type: lucene
+          directory:
+            root: "/var/lib/index-data"
       ddl-auto: update
       show-sql: false
       connection:
