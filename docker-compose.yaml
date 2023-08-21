@@ -45,6 +45,7 @@ services:
       - backend-db
     volumes:
       - /root/user_avatars:/var/lib/image-data
+      - db_indexes:/var/lib/index-data
 
   frontend:
     build:
@@ -85,3 +86,4 @@ volumes:
   web-root:
   certbot-etc:
   certbot-var:
+  db_indexes:
