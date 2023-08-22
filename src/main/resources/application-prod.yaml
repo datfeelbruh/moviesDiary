@@ -12,19 +12,20 @@ spring:
     url: ${PG_DB}
 
   jpa:
-    hibernate:
-      search:
-        enabled: true
-        backend:
-          analysis:
-            configurer: class:sobad.code.moviesdiary.hibernateSearch.MyAnalysisConfigurer
-          type: lucene
-          directory:
-            root: "/var/lib/index_data"
-      ddl-auto: update
-      show-sql: false
-      connection:
-        auto-commit: false
+    properties:
+      hibernate:
+        ddl-auto: update
+        show-sql: false
+        connection:
+          auto-commit: false
+        search:
+          enabled: true
+          backend:
+            analysis:
+              configurer: class:sobad.code.moviesdiary.hibernateSearch.MyAnalysisConfigurer
+            type: lucene
+            directory:
+              root: "/var/lib/index_data"
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}

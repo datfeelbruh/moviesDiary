@@ -34,7 +34,7 @@ public class Movie {
     @Column(name = "kp_id", unique = true)
     private Long id;
     @Column(name = "title")
-    @FullTextField(name = "title")
+    @FullTextField(name = "title", analyzer = "autocomplete_indexing", searchAnalyzer = "autocomplete_search")
     private String title;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
