@@ -18,4 +18,11 @@ public class MoviesDiaryApplication {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public ApplicationRunner buildIndex(Indexer indexer) throws Exception {
+        return (ApplicationArguments args) -> {
+            indexer.indexData("sobad.code.moviesdiary.entities.Movie");
+        };
+    }
+
 }
