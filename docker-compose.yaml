@@ -3,19 +3,16 @@ version: '3'
 services:
   backend-db:
     image: 'postgres:15'
-    restart: always
+    restart: unless-stopped
     ports:
       - "5432:5432"
     container_name: "service-db"
     environment:
-      - "POSTGRES_USER=${PG_USER}"
-      - "POSTGRES_PASSWORD=${PG_PASSWORD}"
-      - "POSTGRES_DB=${PG_DB}"
-    env_file:
-      - .env
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
     volumes:
-      - ./infrastructure/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
-      - /root/db_data:/var/lib/postgresql/data
+      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/test.sql
+      - db-data:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin4_container
@@ -28,7 +25,7 @@ services:
     ports:
       - "5050:80"
     volumes:
-      - /root/pgadmin-data:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin
     env_file:
       - .env
 
@@ -44,8 +41,7 @@ services:
     depends_on:
       - backend-db
     volumes:
-      - /root/user_avatars:/var/lib/image-data
-      - /root/db_indexes:/var/lib/index-data
+      - db-index:/var/lib/index_data
 
   frontend:
     build:
@@ -55,24 +51,11 @@ services:
     container_name: 'service-frontend'
     ports:
       - 80:80
-      - 443:443
     depends_on:
       - backend
-    volumes:
-      - web-root:/var/www/html
-      - ssl:/etc/ssl
 
 volumes:
-  ssl:
-    driver: local
-    driver_opts:
-      type: none
-      device: /root/etc/ssl
-      o: bind
   image-data:
   db-data:
   pgadmin-data:
-  web-root:
-  certbot-etc:
-  certbot-var:
-  db_indexes:
+  db-index:
