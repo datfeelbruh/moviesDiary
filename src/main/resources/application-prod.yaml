@@ -19,7 +19,6 @@ spring:
         connection:
           auto-commit: false
         search:
-          enabled: true
           backend:
             analysis:
               configurer: class:sobad.code.moviesdiary.hibernateSearch.MyAnalysisConfigurer
