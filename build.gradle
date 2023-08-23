@@ -62,6 +62,7 @@ repositories {
 dependencies {
 	implementation (
 			'org.hibernate.search:hibernate-search-mapper-orm-orm6:6.2.1.Final',
+			'net.lbruun.springboot:preliquibase-spring-boot-starter:1.1.1',
 			'org.hibernate.search:hibernate-search-backend-lucene:6.2.1.Final',
 			'org.springframework.boot:spring-boot-starter-data-jpa',
 			'org.springframework.boot:spring-boot-starter-web',
@@ -124,9 +125,9 @@ liquibase {
 			url 'jdbc:postgresql://localhost:5432/movies_diary'
 			username "datfeel"
 			password "asedur81"
-			referenceUrl 'hibernate:spring:movies_diary.entities.' +
-					'?dialect=org.hibernate.dialect.PostgreSQL10Dialect' +
-					'&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy'
+			referenceUrl 'hibernate:spring:sobad.code.movies_diary.entities' +
+					'?dialect=org.hibernate.dialect.PostgreSQLDialect' +
+					'&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
 		}
 	}
 }

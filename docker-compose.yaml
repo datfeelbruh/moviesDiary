@@ -11,7 +11,7 @@ services:
       - POSTGRES_USER=${PG_USER}
       - POSTGRES_PASSWORD=${PG_PASSWORD}
     volumes:
-      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/test.sql
+      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - db-data:/var/lib/postgresql/data
 
   pgadmin:

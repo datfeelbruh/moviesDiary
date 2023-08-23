@@ -26,6 +26,9 @@ spring:
           starttls:
             enable: true
 
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
 jwt:
   expiration: 24
@@ -33,7 +36,3 @@ jwt:
 springdoc:
   swagger-ui:
     path: /api-docs.html
-
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yaml

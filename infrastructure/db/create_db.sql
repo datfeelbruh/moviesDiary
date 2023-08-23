@@ -1,1 +1,1 @@
-create database movies_diary;
+CREATE DATABASE movies_diary;
