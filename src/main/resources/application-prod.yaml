@@ -14,7 +14,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        ddl-auto: update
+        ddl-auto: create-drop
         show-sql: false
         connection:
           auto-commit: false
