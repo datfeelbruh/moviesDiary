@@ -112,17 +112,20 @@ dependencies {
 			'info.picocli:picocli:4.7.1',
 			'org.liquibase.ext:liquibase-hibernate6:4.21.1',
 			'org.springframework.boot:spring-boot-starter-data-jpa',
-			'com.h2database:h2',
+			'org.postgresql:postgresql',
+			'com.h2database:h2'
 	)
 }
 
 liquibase {
 	activities {
 		main {
-			changeLogFile 'src/main/resources/db/changelog/changelog-master.yaml'
-			url 'jdbc:h2:./test'
-			referenceUrl 'hibernate:spring:movies_diary.entities' +
-					'?dialect=org.hibernate.dialect.H2Dialect' +
+			changeLogFile 'src/main/resources/db/changelog/db.changelog-master.yaml'
+			url 'jdbc:postgresql://localhost:5432/movies_diary'
+			username "datfeel"
+			password "asedur81"
+			referenceUrl 'hibernate:spring:movies_diary.entities.' +
+					'?dialect=org.hibernate.dialect.PostgreSQL10Dialect' +
 					'&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy'
 		}
 	}

@@ -1,14 +1,16 @@
 spring:
   datasource:
-    username: " "
-    password: " "
-    url: "jdbc:h2:./test"
+    driverClassName: org.postgresql.Driver
+    username: "datfeel"
+    password: "asedur81"
+    url: "jdbc:postgresql://localhost:5432/movies_diary"
     show-sql: true
 
   jpa:
+    hibernate:
+      ddl-auto: create
     properties:
       hibernate:
-        ddl-auto: update
         search:
           enabled: true
           backend:

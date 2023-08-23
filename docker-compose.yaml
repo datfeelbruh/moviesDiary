@@ -3,18 +3,15 @@ version: '3'
 services:
   backend-db:
     image: 'postgres:15'
-    restart: always
+    restart: unless-stopped
     ports:
       - "5432:5432"
     container_name: "service-db"
     environment:
-      - "POSTGRES_USER=${PG_USER}"
-      - "POSTGRES_PASSWORD=${PG_PASSWORD}"
-      - "POSTGRES_DB=${PG_DB}"
-    env_file:
-      - .env
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
     volumes:
-      - ./infrastructure/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/test.sql
       - db-data:/var/lib/postgresql/data
 
   pgadmin:
