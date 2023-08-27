@@ -53,8 +53,11 @@ services:
       - 80:80
     depends_on:
       - backend
+    volumes:
+      - ssl:/root/etc/ssl
 
 volumes:
+  ssl:
   image-data:
   db-data:
   pgadmin-data:
