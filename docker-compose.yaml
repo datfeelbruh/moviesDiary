@@ -41,6 +41,7 @@ services:
     depends_on:
       - backend-db
     volumes:
+      - /root/user_avatars:/var/lib/image-data
       - db-index:/var/lib/index_data
 
   frontend:
