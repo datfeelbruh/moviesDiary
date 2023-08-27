@@ -54,7 +54,8 @@ public class MovieService {
             return movieMapper.toMovieCard(movie);
         }
         log.info("не пошел  на кп");
-        Movie movie = movieInDb.get();
+        Movie movie = movieInDb.orElseThrow(() ->
+                new EntityNotFoundException(String.format("Фильм с данным ID: '%s' не найден!", id)));
 
         return movieMapper.toMovieCard(movie);
     }

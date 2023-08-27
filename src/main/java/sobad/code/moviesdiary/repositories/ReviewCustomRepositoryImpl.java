@@ -29,7 +29,7 @@ public class ReviewCustomRepositoryImpl {
                     return PopularMovieDto.builder()
                             .id(movie.getId())
                             .title(movie.getTitle())
-                            .poster(movie.getPosterUrl())
+                            .posterUrl(movie.getPosterUrl())
                             .reviewCount((Long) tuple.get("count"))
                             .build();
                 })

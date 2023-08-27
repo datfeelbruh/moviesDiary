@@ -13,5 +13,5 @@ public class PopularMovieDto {
     private Long reviewCount;
     private Long id;
     private String title;
-    private String poster;
+    private String posterUrl;
 }
