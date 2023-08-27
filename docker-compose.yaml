@@ -54,7 +54,7 @@ services:
     depends_on:
       - backend
     volumes:
-      - ssl:/root/etc/ssl
+      - ssl:/etc/ssl
 
 volumes:
   ssl:
