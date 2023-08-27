@@ -55,6 +55,7 @@ services:
       - backend
     volumes:
       - ssl:/etc/ssl
+      - web-root:/var/www/html
 
 volumes:
   ssl:
@@ -65,5 +66,6 @@ volumes:
       o: bind
   image-data:
   db-data:
+  web-root:
   pgadmin-data:
   db-index:
