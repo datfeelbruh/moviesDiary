@@ -58,6 +58,11 @@ services:
 
 volumes:
   ssl:
+    driver: local
+    driver_opts:
+      type: none
+      device: /root/etc/ssl
+      o: bind
   image-data:
   db-data:
   pgadmin-data:
