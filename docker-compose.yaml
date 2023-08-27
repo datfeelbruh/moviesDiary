@@ -42,6 +42,7 @@ services:
       - backend-db
     volumes:
       - db-index:/var/lib/index_data
+      - /c:/Users/datfe/Pictures/service-images:/var/lib/image-data
 
   frontend:
     build:
