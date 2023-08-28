@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.entities.Movie;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -33,6 +34,7 @@ public class ReviewCustomRepositoryImpl {
                             .reviewCount((Long) tuple.get("count"))
                             .build();
                 })
+                .sorted(Comparator.comparing(PopularMovieDto::getReviewCount))
                 .toList();
     }
 }
