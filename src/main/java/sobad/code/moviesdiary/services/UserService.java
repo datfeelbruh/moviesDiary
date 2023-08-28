@@ -3,6 +3,8 @@ package sobad.code.moviesdiary.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import sobad.code.moviesdiary.ImageUtils;
 import sobad.code.moviesdiary.dtos.user.UserDtoAboutRequest;
 import sobad.code.moviesdiary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.moviesdiary.dtos.user.UserDtoResponse;
+import sobad.code.moviesdiary.entities.Movie;
 import sobad.code.moviesdiary.entities.User;
 import sobad.code.moviesdiary.exceptions.PasswordException;
 import sobad.code.moviesdiary.exceptions.UploadAvatarException;
@@ -137,5 +140,13 @@ public class UserService implements UserDetailsService {
             throw new UploadAvatarException("Неподдерживаемый тип файла.");
         }
         throw new UploadAvatarException("Файл пустой!");
+    }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+
+    public Page<Movie> getUserFavorites(Long userId, PageRequest pageRequest) {
+        return userRepository.getFavorites(userId, pageRequest);
     }
 }
