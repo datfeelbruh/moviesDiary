@@ -1,6 +1,6 @@
 package sobad.code.moviesdiary.repositories;
 
-import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ListPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import sobad.code.moviesdiary.entities.Movie;
+import sobad.code.moviesdiary.entities.QMovie;
 import sobad.code.moviesdiary.entities.QReview;
 import sobad.code.moviesdiary.entities.QUser;
 import sobad.code.moviesdiary.repositories.filters.GenreFilter;

@@ -9,14 +9,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import sobad.code.moviesdiary.dtos.movie.MovieDto;
 import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
@@ -117,7 +120,23 @@ public class MovieController {
         return new ResponseEntity<>(movies, OK);
     }
 
-//
+    @PostMapping(value = MOVIE_CONTROLLER_PATH + "/favorites")
+    public ResponseEntity<MovieCard> addToFavorite(@RequestParam Long movieId) {
+        MovieCard movieCard = movieService.addToFavorite(movieId);
+        return new ResponseEntity<>(movieCard, OK);
+    }
+
+    @GetMapping(value = MOVIE_CONTROLLER_PATH + "/favorites")
+    public ResponseEntity<List<MovieCard>> getFavorites(
+            @RequestParam Long userId,
+            @RequestParam(required = false, value = "page", defaultValue = "1")
+            @Parameter(description = "Страница выборки.") Integer page,
+            @RequestParam(required = false, value = "limit", defaultValue = "10")
+            @Parameter(description = "Количество элементов на странице.") Integer limit) {
+        List<MovieCard> movies = movieService.getFavorites(userId, page, limit);
+        return new ResponseEntity<>(movies, OK);
+    }
+
     @Operation(summary = "Универсальный поиск фильмов", description =
             """
            В этом методе можно составить запрос на получение фильма из базы приложения или через Кинопоиск API.

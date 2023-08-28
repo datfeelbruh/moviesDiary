@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.moviesdiary.dtos.movie.MovieDto;
 import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
@@ -18,10 +19,12 @@ import sobad.code.moviesdiary.entities.User;
 import sobad.code.moviesdiary.exceptions.entiry_exceptions.EntityNotFoundException;
 import sobad.code.moviesdiary.mappers.MovieMapper;
 import sobad.code.moviesdiary.mappers.PageMapper;
+import sobad.code.moviesdiary.mappers.entity_serializers.MovieDtoSerializer;
 import sobad.code.moviesdiary.mappers.entity_serializers.MovieSerializer;
 import sobad.code.moviesdiary.repositories.MovieRepository;
 import sobad.code.moviesdiary.repositories.MovieCustomRepositoryImpl;
 import sobad.code.moviesdiary.repositories.ReviewCustomRepositoryImpl;
+import sobad.code.moviesdiary.repositories.UserRepository;
 import sobad.code.moviesdiary.repositories.filters.GenreFilter;
 import sobad.code.moviesdiary.repositories.filters.TitleFilter;
 import sobad.code.moviesdiary.repositories.filters.UserIdFilter;
@@ -39,11 +42,32 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieCustomRepositoryImpl movieCustomRepository;
     private final MovieSerializer movieSerializer;
+    private final MovieDtoSerializer movieDtoSerializer;
     private final ExternalApiService externalApiService;
     private final MovieMapper movieMapper;
     private final PageMapper pageMapper;
     private final UserService userService;
     private final ReviewCustomRepositoryImpl reviewCustomRepository;
+
+    public MovieCard addToFavorite(Long movieId) {
+        User user = userService.getCurrentUser();
+        Movie movie = movieRepository.findById(movieId).orElseThrow(() ->
+                new EntityNotFoundException(String.format("Фильм с данным ID: '%s' не найден!", movieId)));
+        user.getFavorites().add(movie);
+        userService.updateUser(user);
+
+        return movieMapper.toMovieCard(movie);
+    }
+
+    public List<MovieCard> getFavorites(Long userId, Integer page, Integer limit) {
+        User user = userService.findById(userId);
+        PageRequest pageRequest = PageRequest.of(page - 1, limit);
+        Page<Movie> movies = userService.getUserFavorites(userId, pageRequest);
+
+        return movies.getContent().stream()
+                .map(movieMapper::toMovieCard)
+                .toList();
+    }
 
     public MovieCard getMovieById(Long id, boolean findKp) {
         Optional<Movie> movieInDb =  movieRepository.findById(id);
@@ -53,7 +77,6 @@ public class MovieService {
             movieRepository.save(movie);
             return movieMapper.toMovieCard(movie);
         }
-        log.info("не пошел  на кп");
         Movie movie = movieInDb.orElseThrow(() ->
                 new EntityNotFoundException(String.format("Фильм с данным ID: '%s' не найден!", id)));
 
