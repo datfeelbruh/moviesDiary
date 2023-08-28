@@ -12,7 +12,7 @@ services:
       - POSTGRES_PASSWORD=${PG_PASSWORD}
     volumes:
       - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/test.sql
-      - db-data:/var/lib/postgresql/data
+      - /root/db-data:/var/lib/postgresql/data
 
   pgadmin:
     container_name: pgadmin4_container
@@ -25,7 +25,7 @@ services:
     ports:
       - "5050:80"
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - /root/pgadmin-data:/var/lib/pgadmin
     env_file:
       - .env
 
@@ -42,7 +42,7 @@ services:
       - backend-db
     volumes:
       - /root/user_avatars:/var/lib/image-data
-      - db-index:/var/lib/index_data
+      - /root/db-indexes:/var/lib/index_data
 
   frontend:
     build:
@@ -55,18 +55,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - ssl:/etc/ssl
+      - /root/etc/ssl:/etc/ssl
       - web-root:/var/www/html
 
 volumes:
-  ssl:
-    driver: local
-    driver_opts:
-      type: none
-      device: /root/etc/ssl
-      o: bind
-  image-data:
-  db-data:
   web-root:
-  pgadmin-data:
-  db-index:
