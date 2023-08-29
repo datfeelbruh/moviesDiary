@@ -146,6 +146,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    @Transactional
     public Page<Movie> getUserFavorites(Long userId, PageRequest pageRequest) {
         return userRepository.getFavorites(userId, pageRequest);
     }

@@ -1,4 +1,31 @@
 spring:
-  sql:
-    init:
-      mode: always
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        search:
+          enabled: true
+          backend:
+            analysis:
+              configurer: class:sobad.code.moviesdiary.hibernateSearch.MyAnalysisConfigurer
+            type: lucene
+            directory:
+              root: "C:\\Users\\datfe\\Pictures\\service-images"
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+jwt:
+  secret-key: fdsflksdncvkjlsnadklvBJKASBVKJLBASDLJFNSDVBAJKhjfvsdhjfvashjbvjhcavsfdvdsKJSDLBAKOALknkdfsansakl
+
+x_api_key: 1HKFM1Z-X6S4PW0-MWSCWN5-V80PF7Z
+
+image-directory: "C:\\Users\\datfe\\Pictures\\service-images"

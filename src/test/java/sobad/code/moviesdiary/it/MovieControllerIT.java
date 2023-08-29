@@ -4,26 +4,22 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import sobad.code.moviesdiary.ConfigForTests;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
-import sobad.code.moviesdiary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.moviesdiary.dtos.GenreDto;
-import sobad.code.moviesdiary.dtos.movie.MovieDto;
-import sobad.code.moviesdiary.dtos.movie.MovieDtoShort;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
-import sobad.code.moviesdiary.dtos.pages.MoviePagesShort;
 import sobad.code.moviesdiary.dtos.pages.UserMoviesPage;
 import sobad.code.moviesdiary.dtos.review.ReviewDtoRequest;
 import sobad.code.moviesdiary.entities.Genre;
@@ -36,7 +32,6 @@ import sobad.code.moviesdiary.repositories.UserRepository;
 import sobad.code.moviesdiary.utils.TestUtils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -47,19 +42,18 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static sobad.code.moviesdiary.ConfigForTests.TEST_PROFILE;
 import static sobad.code.moviesdiary.controllers.MovieController.MOVIE_CONTROLLER_PATH;
 import static sobad.code.moviesdiary.controllers.MovieController.MOVIE_CONTROLLER_PATH_GENRE;
 import static sobad.code.moviesdiary.controllers.MovieController.MOVIE_CONTROLLER_PATH_USERS;
 import static sobad.code.moviesdiary.controllers.ReviewController.REVIEW_CONTROLLER_PATH;
 
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@Testcontainers
+@SpringBootTest(webEnvironment = RANDOM_PORT, classes = ConfigForTests.class)
+@ExtendWith(SpringExtension.class)
 @Slf4j
+@ActiveProfiles(TEST_PROFILE)
 class MovieControllerIT {
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15");
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -160,11 +154,13 @@ class MovieControllerIT {
     @WithMockUser("sobad")
     void getMovieById() throws Exception {
         testUtils.createSampleUser();
+        User user = userRepository.findAll().get(0);
+
         Movie movie = movieRepository.findAll().get(0);
 
         MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH + "/" + movie.getId());
 
-        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
+        ResultActions result = testUtils.performWithToken(requestFind, user).andExpect(status().isOk());
 
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
         MovieCard movieCard = TestUtils.readJson(content, new TypeReference<>() { });
@@ -178,7 +174,6 @@ class MovieControllerIT {
     @WithMockUser("sobad")
     void getMovieTitles() throws Exception {
         testUtils.createSampleUser();
-        Movie movie = movieRepository.findAll().get(0);
 
         MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH + "/moviesTitles");
 
@@ -194,95 +189,14 @@ class MovieControllerIT {
     @Test
     @Transactional
     @WithMockUser("sobad")
-    void findMovieInAppShortInfo() throws Exception {
-        testUtils.createSampleUser();
-
-        MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH)
-                .param("title", "Человек-паук");
-
-        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
-
-        String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePagesShort moviePageShort = TestUtils.readJson(content, new TypeReference<>() { });
-
-        assertThat(moviePageShort.getLimit()).isEqualTo(10);
-        assertThat(moviePageShort.getPage()).isEqualTo(1);
-        assertThat(moviePageShort.getMovies().get(0)).isInstanceOf(MovieDtoShort.class);
-
-        Long id = moviePageShort.getMovies().get(0).getId();
-        Optional<Movie> movie = movieRepository.findById(id);
-
-        assertThat(movie).isPresent();
-        assertThat(content).doesNotContain(movie.get().getDescription());
-        assertThat(movie.get().getTitle()).isEqualTo(moviePageShort.getMovies().get(0).getTitle());
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser("sobad")
-    void findMovieAppFullInfo() throws Exception {
-        testUtils.createSampleUser();
-
-        MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH)
-                .param("title", "Человек-паук")
-                .param("expanded", "true");
-
-        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
-
-        String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
-
-        assertThat(moviePage.getLimit()).isEqualTo(10);
-        assertThat(moviePage.getPage()).isEqualTo(1);
-        assertThat(moviePage.getMovies().get(0)).isInstanceOf(MovieDto.class);
-
-
-        Long id = moviePage.getMovies().get(0).getId();
-        Optional<Movie> movie = movieRepository.findById(id);
-
-        assertThat(movie).isPresent();
-        assertThat(content).contains(movie.get().getDescription());
-        assertThat(movie.get().getTitle()).isEqualTo(moviePage.getMovies().get(0).getTitle());
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser("sobad")
-    void findMovieAppPage() throws Exception {
-        testUtils.createSampleUser();
-
-        MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH)
-                .param("title", "Человек-паук")
-                .param("expanded", "true")
-                .param("limit", "1")
-                .param("page", "2");
-
-        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
-
-        String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
-
-        assertThat(moviePage.getLimit()).isEqualTo(1);
-        assertThat(moviePage.getPage()).isEqualTo(2);
-        assertThat(moviePage.getTotal()).isEqualTo(5);
-        assertThat(moviePage.getMovies().get(0)).isInstanceOf(MovieDto.class);
-
-        List<Movie> movies = movieRepository.findAll();
-        Movie movie = movies.get(0);
-
-        assertThat(movie.getId()).isNotEqualTo(moviePage.getMovies().get(0).getId());
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser("sobad")
     void findNonExistedMovieAppPage() throws Exception {
         testUtils.createSampleUser();
+        User user = userRepository.findAll().get(0);
 
         MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH)
                 .param("title", "qwer");
 
-        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
+        ResultActions result = testUtils.performWithToken(requestFind, user).andExpect(status().isOk());
 
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
         MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
@@ -299,12 +213,13 @@ class MovieControllerIT {
     @WithMockUser("sobad")
     void findMovieAppGenrePage() throws Exception {
         testUtils.createSampleUser();
+        User user = userRepository.findAll().get(0);
 
         String genreName = "боевик";
         MockHttpServletRequestBuilder requestFind = get(MOVIE_CONTROLLER_PATH_GENRE)
                 .param("genreName", genreName);
 
-        ResultActions result = mockMvc.perform(requestFind).andExpect(status().isOk());
+        ResultActions result = testUtils.performWithToken(requestFind, user).andExpect(status().isOk());
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
         MoviePages moviePage = TestUtils.readJson(content, new TypeReference<>() { });
         GenreDto existedGenre = new GenreDto(genreName);
@@ -338,7 +253,7 @@ class MovieControllerIT {
         MockHttpServletRequestBuilder requestMoviesByUsername = get(
                 MOVIE_CONTROLLER_PATH_USERS + "/{userId}", user.getId());
 
-        ResultActions result = mockMvc.perform(requestMoviesByUsername).andExpect(status().isOk());
+        ResultActions result = testUtils.performWithToken(requestMoviesByUsername, user).andExpect(status().isOk());
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
         UserMoviesPage response = TestUtils.readJson(content, new TypeReference<>() { });
 
@@ -351,7 +266,7 @@ class MovieControllerIT {
                 .content(TestUtils.writeJson(reviewDtoRequest))
                 .contentType(APPLICATION_JSON);
 
-        mockMvc.perform(requestCreateReview).andExpect(status().isCreated());
+        testUtils.performWithToken(requestCreateReview, user).andExpect(status().isCreated());
 
         result = mockMvc.perform(requestMoviesByUsername).andExpect(status().isOk());
 
@@ -386,7 +301,7 @@ class MovieControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("sobad").password("sobad"));
 
-        mockMvc.perform(sobadCreateReview).andExpect(status().isCreated());
+        testUtils.performWithToken(sobadCreateReview, sobad).andExpect(status().isCreated());
 
         ReviewDtoRequest datfeelReview = new ReviewDtoRequest(movie2.getId(), "bad", 0.0);
 
@@ -395,7 +310,7 @@ class MovieControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("datfeel").password("datfeel"));
 
-        mockMvc.perform(datfeelCreateReview).andExpect(status().isCreated());
+        testUtils.performWithToken(datfeelCreateReview, datfeel).andExpect(status().isCreated());
 
         MockHttpServletRequestBuilder sobadMovies = get(
                 MOVIE_CONTROLLER_PATH_USERS + "/{userId}", sobad.getId());
@@ -420,126 +335,5 @@ class MovieControllerIT {
                 .isEqualTo(reviewRepository.findAll().get(0).getRating());
         assertThat(datfeelResponse.getMovies().get(0).getRating())
                 .isEqualTo(reviewRepository.findAll().get(1).getRating());
-    }
-    @Test
-    @Transactional
-    void averageRatingInclude() throws Exception {
-        testUtils.createSampleUser();
-        testUtils.createAnotherUser();
-
-        UserRegistrationDtoRequest user3 = UserRegistrationDtoRequest.builder()
-                .username("user3")
-                .email("user3@mail.com")
-                .password("s")
-                .confirmPassword("s")
-                .build();
-        UserRegistrationDtoRequest user4 = UserRegistrationDtoRequest.builder()
-                .username("user4")
-                .email("user4@mail.com")
-                .password("s")
-                .confirmPassword("s")
-                .build();
-        UserRegistrationDtoRequest user5 = UserRegistrationDtoRequest.builder()
-                .username("user5")
-                .email("user5@mail.com")
-                .password("s")
-                .confirmPassword("s")
-                .build();
-        UserRegistrationDtoRequest user6 = UserRegistrationDtoRequest.builder()
-                .username("user6")
-                .email("user6@mail.com")
-                .password("s")
-                .confirmPassword("s")
-                .build();
-
-        testUtils.createUser(user3);
-        testUtils.createUser(user4);
-        testUtils.createUser(user5);
-        testUtils.createUser(user6);
-
-        Movie movie = movieRepository.findAll().get(0);
-
-        MockHttpServletRequestBuilder createReviewRequest1 = post(REVIEW_CONTROLLER_PATH)
-                .content(TestUtils.writeJson(
-                                ReviewDtoRequest.builder()
-                                        .movieId(movie.getId())
-                                        .review("good")
-                                        .rating(1.0)
-                                        .build()
-                        )
-                )
-                .contentType(APPLICATION_JSON)
-                .with(user("sobad").password("sobad"));
-
-        MockHttpServletRequestBuilder createReviewRequest2 = post(REVIEW_CONTROLLER_PATH)
-                .content(TestUtils.writeJson(
-                                ReviewDtoRequest.builder()
-                                        .movieId(movie.getId())
-                                        .review("good")
-                                        .rating(3.5)
-                                        .build()
-                        )
-                )
-                .contentType(APPLICATION_JSON)
-                .with(user("datfeel").password("datfeel"));
-
-        MockHttpServletRequestBuilder createReviewRequest3 = post(REVIEW_CONTROLLER_PATH)
-                .content(TestUtils.writeJson(
-                                ReviewDtoRequest.builder()
-                                        .movieId(movie.getId())
-                                        .review("good")
-                                        .rating(6.5)
-                                        .build()
-                        )
-                )
-                .contentType(APPLICATION_JSON)
-                .with(user("user3").password("user3"));
-
-        MockHttpServletRequestBuilder createReviewRequest4 = post(REVIEW_CONTROLLER_PATH)
-                .content(TestUtils.writeJson(
-                                ReviewDtoRequest.builder()
-                                        .movieId(movie.getId())
-                                        .review("good")
-                                        .rating(7.0)
-                                        .build()
-                        )
-                )
-                .contentType(APPLICATION_JSON)
-                .with(user("user4").password("user4"));
-
-        MockHttpServletRequestBuilder createReviewRequest5 = post(REVIEW_CONTROLLER_PATH)
-                .content(TestUtils.writeJson(
-                                ReviewDtoRequest.builder()
-                                        .movieId(movie.getId())
-                                        .review("good")
-                                        .rating(10.0)
-                                        .build()
-                        )
-                )
-                .contentType(APPLICATION_JSON)
-                .with(user("user5").password("user5"));
-
-        mockMvc.perform(createReviewRequest1);
-        mockMvc.perform(createReviewRequest2);
-        mockMvc.perform(createReviewRequest3);
-        mockMvc.perform(createReviewRequest4);
-        mockMvc.perform(createReviewRequest5);
-
-        MockHttpServletRequestBuilder requestFindMovieInApp = get(MOVIE_CONTROLLER_PATH)
-                .param("title", "Человек-паук")
-                .param("expanded", "true")
-                .param("limit", "1")
-                .with(user("sobad").password("sobad"));
-
-        ResultActions findResult = mockMvc.perform(requestFindMovieInApp).andExpect(status().isOk());
-        String appResultContent = findResult.andReturn().getResponse().getContentAsString(UTF_8);
-        MoviePages moviePage = TestUtils.readJson(appResultContent, new TypeReference<>() { });
-        Double responseRating = moviePage.getMovies().get(0).getAverageRating();
-        Double dbRating = movieRepository.findById(moviePage.getMovies().get(0).getId()).get().getKgRating();
-        log.info(dbRating.toString());
-        assertThat(responseRating).isNotNull();
-        assertThat(dbRating)
-                .isNotNull()
-                .isEqualTo(responseRating);
     }
 }

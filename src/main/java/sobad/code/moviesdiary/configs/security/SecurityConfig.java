@@ -55,6 +55,7 @@ public class SecurityConfig {
             new AntPathRequestMatcher(API_FORGOT_PASSWORD_RESET + "/**", POST.toString()),
             new AntPathRequestMatcher(API_FORGOT_PASSWORD_RESET + "/**", GET.toString()),
             new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH + "/popular", GET.toString()),
+            new AntPathRequestMatcher(MOVIE_CONTROLLER_PATH + "/favorites", GET.toString()),
             new AntPathRequestMatcher("/h2/**"),
             new AntPathRequestMatcher("/swagger-ui/**"),
             new AntPathRequestMatcher("/swagger-ui.html"),

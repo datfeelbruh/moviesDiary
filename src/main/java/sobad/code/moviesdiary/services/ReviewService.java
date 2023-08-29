@@ -43,6 +43,7 @@ public class ReviewService {
         if (reviewRepository.findAllByUserIdAndMovieId(user.getId(), reviewDtoRequest.getMovieId()).isPresent()) {
             throw new EntityAlreadyExistException("Ревью на этот фильм уже создано");
         }
+
         Movie movie = movieRepository.findById(reviewDtoRequest.getMovieId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Фильм с данным id '%s' не найден", reviewDtoRequest.getMovieId()))

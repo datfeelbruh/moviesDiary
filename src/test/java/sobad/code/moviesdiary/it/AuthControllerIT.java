@@ -3,18 +3,17 @@ package sobad.code.moviesdiary.it;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import sobad.code.moviesdiary.ConfigForTests;
 import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.dtos.user.UserDtoLoginRequest;
 import sobad.code.moviesdiary.dtos.authentication.AuthTokenDtoResponse;
@@ -32,19 +31,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static sobad.code.moviesdiary.ConfigForTests.TEST_PROFILE;
 import static sobad.code.moviesdiary.controllers.AuthController.AUTH_CONTROLLER_LOGIN_PATH;
 import static sobad.code.moviesdiary.controllers.AuthController.AUTH_CONTROLLER_REFRESH_TOKEN_PATH;
 
 
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@Testcontainers
+@SpringBootTest(webEnvironment = RANDOM_PORT, classes = ConfigForTests.class)
+@ExtendWith(SpringExtension.class)
 @Slf4j
-@ActiveProfiles("test")
+@ActiveProfiles(TEST_PROFILE)
 class AuthControllerIT {
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15");
     @Autowired
     private TestUtils testUtils;
     @Autowired

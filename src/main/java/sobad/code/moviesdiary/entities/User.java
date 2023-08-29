@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,5 +54,5 @@ public class User extends BaseModel {
     )
     private Collection<Role> roles;
     @OneToMany
-    private List<Movie> favorites;
+    private List<Movie> favorites = new ArrayList<>();
 }

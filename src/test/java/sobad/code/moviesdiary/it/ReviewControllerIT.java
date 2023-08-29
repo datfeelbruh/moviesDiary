@@ -4,18 +4,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import sobad.code.moviesdiary.ConfigForTests;
 import sobad.code.moviesdiary.dtos.review.ReviewDto;
 import sobad.code.moviesdiary.dtos.review.ReviewDtoRequest;
 import sobad.code.moviesdiary.dtos.pages.ReviewPages;
@@ -41,16 +41,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static sobad.code.moviesdiary.ConfigForTests.TEST_PROFILE;
 import static sobad.code.moviesdiary.controllers.ReviewController.REVIEW_CONTROLLER_PATH;
 
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@Testcontainers
+@SpringBootTest(webEnvironment = RANDOM_PORT, classes = ConfigForTests.class)
+@ExtendWith(SpringExtension.class)
 @Slf4j
+@ActiveProfiles(TEST_PROFILE)
 class ReviewControllerIT {
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15");
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -151,7 +150,7 @@ class ReviewControllerIT {
     @WithMockUser("sobad")
     void createReview() throws Exception {
         testUtils.createSampleUser();
-
+        User user = userRepository.findAll().get(0);
         Movie movie = movieRepository.findAll().get(0);
 
         MockHttpServletRequestBuilder createReviewRequest = post(REVIEW_CONTROLLER_PATH)
@@ -165,7 +164,7 @@ class ReviewControllerIT {
                 )
                 .contentType(APPLICATION_JSON);
 
-        ResultActions result = mockMvc.perform(createReviewRequest);
+        ResultActions result = testUtils.performWithToken(createReviewRequest, user);
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
         ReviewDto response = TestUtils.readJson(content, new TypeReference<>() { });
 
@@ -197,7 +196,7 @@ class ReviewControllerIT {
                 .with(user("sobad").password("sobad"));
 
 
-        MockHttpServletRequestBuilder createDatfeelRReview = post(REVIEW_CONTROLLER_PATH)
+        MockHttpServletRequestBuilder createDatfeelReview = post(REVIEW_CONTROLLER_PATH)
                 .content(TestUtils.writeJson(
                                 ReviewDtoRequest.builder()
                                         .movieId(datfeelMovie.getId())
@@ -209,8 +208,8 @@ class ReviewControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("datfeel").password("datfeel"));
 
-        mockMvc.perform(createSobadReview);
-        mockMvc.perform(createDatfeelRReview);
+        testUtils.performWithToken(createSobadReview, sobad);
+        testUtils.performWithToken(createDatfeelReview, datfeel);
 
         MockHttpServletRequestBuilder getReviewBySobad = get(REVIEW_CONTROLLER_PATH)
                 .param("userId", String.valueOf(sobad.getId()))
@@ -220,11 +219,12 @@ class ReviewControllerIT {
                 .param("userId", String.valueOf(datfeel.getId()))
                 .with(user("datfeel").password("datfeel"));
 
-        ResultActions sobadResult = mockMvc.perform(getReviewBySobad).andExpect(status().isOk());
+        ResultActions sobadResult = testUtils.performWithToken(getReviewBySobad, sobad).andExpect(status().isOk());
 
         String sobadContent = sobadResult.andReturn().getResponse().getContentAsString(UTF_8);
 
-        ResultActions datfeelResult = mockMvc.perform(getReviewByDatfeel).andExpect(status().isOk());
+        ResultActions datfeelResult = testUtils.performWithToken(getReviewByDatfeel, datfeel)
+                .andExpect(status().isOk());
 
         String datfeelContent = datfeelResult.andReturn().getResponse().getContentAsString(UTF_8);
         ReviewPages sobadResponse = TestUtils.readJson(sobadContent, new TypeReference<>() { });
@@ -243,6 +243,8 @@ class ReviewControllerIT {
     void getReviewByMovie() throws Exception {
         testUtils.createSampleUser();
         testUtils.createAnotherUser();
+        User sobad = userRepository.findAll().get(0);
+        User datfeel = userRepository.findAll().get(1);
 
         Movie movie = movieRepository.findAll().get(0);
 
@@ -258,7 +260,7 @@ class ReviewControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("sobad").password("sobad"));
 
-        mockMvc.perform(createSobadReview);
+        testUtils.performWithToken(createSobadReview, sobad);
 
         MockHttpServletRequestBuilder createDatfeelReview = post(REVIEW_CONTROLLER_PATH)
                 .content(TestUtils.writeJson(
@@ -272,13 +274,13 @@ class ReviewControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("datfeel").password("datfeel"));
 
-        mockMvc.perform(createDatfeelReview);
+        testUtils.performWithToken(createDatfeelReview, datfeel);
 
         MockHttpServletRequestBuilder getReviewByMovie = get(REVIEW_CONTROLLER_PATH)
                 .param("movieId", String.valueOf(movie.getId()))
                 .with(user("sobad").password("sobad"));
 
-        ResultActions getResult = mockMvc.perform(getReviewByMovie).andExpect(status().isOk());
+        ResultActions getResult = testUtils.performWithToken(getReviewByMovie, sobad).andExpect(status().isOk());
         String content = getResult.andReturn().getResponse().getContentAsString(UTF_8);
         ReviewPages response = TestUtils.readJson(content, new TypeReference<>() { });
 
@@ -312,7 +314,7 @@ class ReviewControllerIT {
                 .with(user("sobad").password("sobad"));
 
 
-        MockHttpServletRequestBuilder createDatfeelRReview = post(REVIEW_CONTROLLER_PATH)
+        MockHttpServletRequestBuilder createDatfeelReview = post(REVIEW_CONTROLLER_PATH)
                 .content(TestUtils.writeJson(
                                 ReviewDtoRequest.builder()
                                         .movieId(datfeelMovie.getId())
@@ -324,8 +326,8 @@ class ReviewControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("datfeel").password("datfeel"));
 
-        mockMvc.perform(createSobadReview);
-        mockMvc.perform(createDatfeelRReview);
+        testUtils.performWithToken(createSobadReview, sobad);
+        testUtils.performWithToken(createDatfeelReview, datfeel);
 
         MockHttpServletRequestBuilder getReviewBySobad = get(REVIEW_CONTROLLER_PATH)
                 .param("userId", String.valueOf(sobad.getId()))
@@ -337,9 +339,10 @@ class ReviewControllerIT {
                 .param("movieId", String.valueOf(datfeelMovie.getId()))
                 .with(user("datfeel").password("datfeel"));
 
-        ResultActions sobadResult = mockMvc.perform(getReviewBySobad).andExpect(status().isOk());
+        ResultActions sobadResult = testUtils.performWithToken(getReviewBySobad, sobad).andExpect(status().isOk());
         String sobadContent = sobadResult.andReturn().getResponse().getContentAsString(UTF_8);
-        ResultActions datfeelResult = mockMvc.perform(getReviewByDatfeel).andExpect(status().isOk());
+        ResultActions datfeelResult = testUtils.performWithToken(getReviewByDatfeel, datfeel)
+                .andExpect(status().isOk());
         String datfeelContent = datfeelResult.andReturn().getResponse().getContentAsString(UTF_8);
         ReviewDto sobadResponse = TestUtils.readJson(sobadContent, new TypeReference<>() { });
         ReviewDto datfeelResponse = TestUtils.readJson(datfeelContent, new TypeReference<>() { });
@@ -390,13 +393,13 @@ class ReviewControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("datfeel").password("datfeel"));
 
-        mockMvc.perform(createSobadReview);
-        mockMvc.perform(createDatfeelReview);
+        testUtils.performWithToken(createSobadReview, sobad);
+        testUtils.performWithToken(createDatfeelReview, datfeel);
 
         MockHttpServletRequestBuilder getAllRequest = get(REVIEW_CONTROLLER_PATH)
                 .with(user("sobad").password("sobad"));
 
-        ResultActions getAllResult = mockMvc.perform(getAllRequest).andExpect(status().isOk());
+        ResultActions getAllResult = testUtils.performWithToken(getAllRequest, sobad).andExpect(status().isOk());
 
         String content = getAllResult.andReturn().getResponse().getContentAsString(UTF_8);
 
@@ -412,7 +415,7 @@ class ReviewControllerIT {
     @WithMockUser("sobad")
     void updateReview() throws Exception {
         testUtils.createSampleUser();
-
+        User user = userRepository.findAll().get(0);
         Movie movie = movieRepository.findAll().get(0);
 
         MockHttpServletRequestBuilder createReviewRequest = post(REVIEW_CONTROLLER_PATH)
@@ -424,7 +427,7 @@ class ReviewControllerIT {
                 )
                 .contentType(APPLICATION_JSON);
 
-        mockMvc.perform(createReviewRequest).andExpect(status().isCreated());
+        testUtils.performWithToken(createReviewRequest, user).andExpect(status().isCreated());
         Review review = reviewRepository.findAll().get(0);
 
         assertThat(review.getUserReview()).isNull();
@@ -442,7 +445,7 @@ class ReviewControllerIT {
                         )
                         .contentType(APPLICATION_JSON);
 
-        ResultActions updateResult = mockMvc.perform(updateReviewRequest).andExpect(status().isOk());
+        ResultActions updateResult = testUtils.performWithToken(updateReviewRequest, user).andExpect(status().isOk());
         String content = updateResult.andReturn().getResponse().getContentAsString(UTF_8);
         ReviewDto reviewDto = TestUtils.readJson(content, new TypeReference<>() { });
 
@@ -457,7 +460,7 @@ class ReviewControllerIT {
     @WithMockUser("sobad")
     void deleteReview() throws Exception {
         testUtils.createSampleUser();
-
+        User user = userRepository.findAll().get(0);
         Movie movie = movieRepository.findAll().get(0);
 
         MockHttpServletRequestBuilder createReviewRequest = post(REVIEW_CONTROLLER_PATH)
@@ -470,18 +473,19 @@ class ReviewControllerIT {
                         )
                 )
                 .contentType(APPLICATION_JSON);
-        mockMvc.perform(createReviewRequest).andExpect(status().isCreated());
+        testUtils.performWithToken(createReviewRequest, user).andExpect(status().isCreated());
 
         Review review = reviewRepository.findAll().get(0);
         MockHttpServletRequestBuilder deleteReviewRequest =
                 delete(REVIEW_CONTROLLER_PATH + "/" + review.getId());
 
-        mockMvc.perform(deleteReviewRequest).andExpect(status().isOk());
+        testUtils.performWithToken(deleteReviewRequest, user).andExpect(status().isOk());
 
         MockHttpServletRequestBuilder getReviewByMovieAfterDelete = get(REVIEW_CONTROLLER_PATH)
                 .param("movieId", String.valueOf(movie.getId()));
 
-        ResultActions getResultAfterDelete = mockMvc.perform(getReviewByMovieAfterDelete).andExpect(status().isOk());
+        ResultActions getResultAfterDelete = testUtils.performWithToken(getReviewByMovieAfterDelete, user)
+                .andExpect(status().isOk());
         String contentAfterDelete = getResultAfterDelete.andReturn().getResponse().getContentAsString(UTF_8);
         ReviewPages responseAfterDelete = TestUtils.readJson(contentAfterDelete, new TypeReference<>() { });
 
@@ -492,6 +496,8 @@ class ReviewControllerIT {
     void deleteReviewFromAnotherUser() throws Exception {
         testUtils.createSampleUser();
         testUtils.createAnotherUser();
+        User sobad = userRepository.findAll().get(0);
+        User datfeel = userRepository.findAll().get(1);
 
         Movie movie = movieRepository.findAll().get(0);
         MockHttpServletRequestBuilder createReviewRequest = post(REVIEW_CONTROLLER_PATH)
@@ -506,14 +512,14 @@ class ReviewControllerIT {
                 .contentType(APPLICATION_JSON)
                 .with(user("sobad").password("sobad"));
 
-        mockMvc.perform(createReviewRequest).andExpect(status().isCreated());
+        testUtils.performWithToken(createReviewRequest, sobad).andExpect(status().isCreated());
 
         Review review = reviewRepository.findAll().get(0);
         MockHttpServletRequestBuilder deleteReviewRequest =
                 delete(REVIEW_CONTROLLER_PATH + "/" + review.getId())
                 .with(user("datfeel").password("datfeel"));
 
-        mockMvc.perform(deleteReviewRequest).andExpect(status().isForbidden());
+        testUtils.performWithToken(deleteReviewRequest, datfeel).andExpect(status().isForbidden());
 
         assertThat(reviewRepository.findAll()).hasSize(1);
     }

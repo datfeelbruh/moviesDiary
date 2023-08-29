@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -120,21 +121,71 @@ public class MovieController {
         return new ResponseEntity<>(movies, OK);
     }
 
+    @Operation(summary = "Добавить фильм в избранное")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Данные фильма добавленного в избранное",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = MovieCard.class)
+                        )
+                }
+            ),
+        @ApiResponse(
+            responseCode = "422",
+            description = "Фильм с таким ID не найден",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = AppError.class)
+                        )
+                }
+        )
+    })
     @PostMapping(value = MOVIE_CONTROLLER_PATH + "/favorites")
-    public ResponseEntity<MovieCard> addToFavorite(@RequestParam Long movieId) {
+    public ResponseEntity<MovieCard> addToFavorite(@RequestParam
+                                                   @Parameter(description = "ID фильма", example = "1") Long movieId) {
         MovieCard movieCard = movieService.addToFavorite(movieId);
         return new ResponseEntity<>(movieCard, OK);
     }
 
+    @Operation(summary = "Получить список избранных фильмов")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Список фильмов из избранного пользователя",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(implementation = MovieCard.class))
+                    )
+                }
+            )
+    })
     @GetMapping(value = MOVIE_CONTROLLER_PATH + "/favorites")
     public ResponseEntity<List<MovieCard>> getFavorites(
-            @RequestParam Long userId,
+            @RequestParam
+            @Parameter(description = "ID пользователя", example = "1") Long userId,
             @RequestParam(required = false, value = "page", defaultValue = "1")
             @Parameter(description = "Страница выборки.") Integer page,
             @RequestParam(required = false, value = "limit", defaultValue = "10")
             @Parameter(description = "Количество элементов на странице.") Integer limit) {
         List<MovieCard> movies = movieService.getFavorites(userId, page, limit);
         return new ResponseEntity<>(movies, OK);
+    }
+
+    @Operation(summary = "Удалить фильм из избранного")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200"
+        )
+    })
+    @DeleteMapping(value = MOVIE_CONTROLLER_PATH + "/favorites")
+    public void deleteFromFavorite(@RequestParam
+                                   @Parameter(description = "ID фильма", example = "1") Long movieId) {
+         movieService.deleteFromFavorites(movieId);
     }
 
     @Operation(summary = "Универсальный поиск фильмов", description =
