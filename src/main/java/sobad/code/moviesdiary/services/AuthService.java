@@ -48,8 +48,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-    @Value("${jwt.expiration}")
-    private long jwtAccessTokenExpiration;
     private final UserService userService;
     private final TokenRepository tokenRepository;
     private final DeactivatedTokenRepository deactivatedTokenRepository;
@@ -68,18 +66,7 @@ public class AuthService {
         UserDetails userDetails = userService.loadUserByUsername(authLoginRequest.getUsername());
         User user = userService.findByUsername(userDetails.getUsername());
 
-        JwtToken accessToken = JwtToken.builder()
-                .id(UUID.randomUUID())
-                .subject(userDetails.getUsername())
-                .userId(user.getId())
-                .authorities(userDetails.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .toList())
-                .createdAt(Instant.now())
-                .expiredAt(Instant.now().plus(jwtAccessTokenExpiration, DAYS))
-                .build();
-
-
+        JwtToken accessToken = jwtTokenUtils.createToken(user, userDetails);
         String accessTokenString = accessTokenSerializer.apply(accessToken);
 
         Token tokens = Token.builder()
@@ -110,21 +97,7 @@ public class AuthService {
                         Date.from(Instant.now()))
                 );
 
-                Claims claims = jwtTokenUtils.extractAllClaims(jwtToken);
-                String subject = jwtTokenUtils.extractUsername(jwtToken);
-                List<String> roles = jwtTokenUtils.extractRoles(jwtToken);
-                Long userId = claims.get("userId", Long.class);
-
-                JwtToken accessToken = JwtToken.builder()
-                        .id(UUID.randomUUID())
-                        .subject(subject)
-                        .userId(userId)
-                        .authorities(roles)
-                        .createdAt(Instant.now())
-                        .expiredAt(Instant.now().plus(jwtAccessTokenExpiration, DAYS))
-                        .build();
-
-
+                JwtToken accessToken = jwtTokenUtils.refreshToken(jwtToken);
                 String accessTokenString = accessTokenSerializer.apply(accessToken);
 
                 Token tokens = Token.builder()

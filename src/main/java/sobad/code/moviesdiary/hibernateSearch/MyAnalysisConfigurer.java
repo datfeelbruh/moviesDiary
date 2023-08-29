@@ -19,8 +19,11 @@ public class MyAnalysisConfigurer implements LuceneAnalysisConfigurer {
                         .param("maxGramSize", "10");
 
         context.analyzer("autocomplete_search").custom()
-                .tokenizer( WhitespaceTokenizerFactory.class )
-                .tokenFilter( LowerCaseFilterFactory.class )
-                .tokenFilter( ASCIIFoldingFilterFactory.class );
+                .tokenizer(WhitespaceTokenizerFactory.class)
+                .tokenFilter(LowerCaseFilterFactory.class)
+                .tokenFilter(ASCIIFoldingFilterFactory.class)
+                .tokenFilter(EdgeNGramFilterFactory.class)
+                        .param("minGramSize", "1")
+                        .param("maxGramSize", "10");
     }
 }

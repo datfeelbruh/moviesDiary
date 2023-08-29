@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -42,13 +43,13 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieCustomRepositoryImpl movieCustomRepository;
     private final MovieSerializer movieSerializer;
-    private final MovieDtoSerializer movieDtoSerializer;
     private final ExternalApiService externalApiService;
     private final MovieMapper movieMapper;
     private final PageMapper pageMapper;
     private final UserService userService;
     private final ReviewCustomRepositoryImpl reviewCustomRepository;
 
+    @Transactional
     public MovieCard addToFavorite(Long movieId) {
         User user = userService.getCurrentUser();
         Movie movie = movieRepository.findById(movieId).orElseThrow(() ->
@@ -58,15 +59,23 @@ public class MovieService {
 
         return movieMapper.toMovieCard(movie);
     }
-
+    @Transactional
     public List<MovieCard> getFavorites(Long userId, Integer page, Integer limit) {
-        User user = userService.findById(userId);
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
         Page<Movie> movies = userService.getUserFavorites(userId, pageRequest);
 
         return movies.getContent().stream()
                 .map(movieMapper::toMovieCard)
                 .toList();
+    }
+    public void deleteFromFavorites(Long movieId) {
+        User user = userService.getCurrentUser();
+        List<Movie> updatedFavorites = user.getFavorites().stream()
+                .filter(e -> !e.getId().equals(movieId))
+                .collect(Collectors.toList());
+
+        user.setFavorites(updatedFavorites);
+        userService.updateUser(user);
     }
 
     public MovieCard getMovieById(Long id, boolean findKp) {
