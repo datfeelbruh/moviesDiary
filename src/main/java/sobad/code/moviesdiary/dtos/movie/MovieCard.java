@@ -24,4 +24,5 @@ public class MovieCard {
     private Double averageRating;
     private Set<GenreDto> genres;
     private String posterUrl;
+    private Boolean isFavorite;
 }

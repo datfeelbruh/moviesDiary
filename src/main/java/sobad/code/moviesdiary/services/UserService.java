@@ -150,4 +150,10 @@ public class UserService implements UserDetailsService {
     public Page<Movie> getUserFavorites(Long userId, PageRequest pageRequest) {
         return userRepository.getFavorites(userId, pageRequest);
     }
+
+    public boolean isFavoriteMovieForCurrentUser(Long userId, Long movieId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return user.getFavorites().stream()
+                .anyMatch(e -> e.getId().equals(movieId));
+    }
 }

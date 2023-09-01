@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -26,7 +27,7 @@ public class ExceptionFilter extends OncePerRequestFilter {
         boolean isPrivateUrl = !PUBLIC_URLS.matches(request);
 
         if (authHeader == null && isPrivateUrl) {
-            AppError appError = new AppError(
+            ResponseMessage appError = new ResponseMessage(
                     FORBIDDEN.value(),
                     "Авторизируйтесь для выполнения этого запроса.",
                     Instant.now().toString());

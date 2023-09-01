@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.user.UserDtoAboutRequest;
 import sobad.code.moviesdiary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.moviesdiary.dtos.user.UserDtoResponse;
-import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.services.UserService;
 
 import java.io.IOException;
@@ -56,7 +56,7 @@ public class UserController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
@@ -87,7 +87,7 @@ public class UserController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
@@ -119,7 +119,7 @@ public class UserController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
@@ -150,7 +150,7 @@ public class UserController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )

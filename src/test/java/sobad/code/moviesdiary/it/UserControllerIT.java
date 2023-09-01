@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import sobad.code.moviesdiary.ConfigForTests;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.user.UserDtoAboutRequest;
 import sobad.code.moviesdiary.entities.User;
-import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.dtos.user.UserRegistrationDtoRequest;
 import sobad.code.moviesdiary.dtos.user.UserDtoResponse;
 import sobad.code.moviesdiary.repositories.UserRepository;
@@ -95,7 +95,7 @@ class UserControllerIT {
 
         resultActions.andExpect(status().isUnprocessableEntity());
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError response = TestUtils.readJson(content, new TypeReference<>() { });
+        ResponseMessage response = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(userRepository.findAll()).hasSize(1);
         assertThat(response.getMessage()).contains("Пользователь с таким именем или email уже существует");
@@ -120,7 +120,7 @@ class UserControllerIT {
 
         resultActions.andExpect(status().isUnprocessableEntity());
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError response = TestUtils.readJson(content, new TypeReference<>() { });
+        ResponseMessage response = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(userRepository.findAll()).isEmpty();
         assertThat(userRepository.findByUsername(user.getUsername())).isEmpty();
@@ -163,7 +163,7 @@ class UserControllerIT {
 
         ResultActions result = testUtilsIT.performWithToken(request, user).andExpect(status().isUnprocessableEntity());
         String content = result.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError response = TestUtils.readJson(content, new TypeReference<>() { });
+        ResponseMessage response = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(response).isNotNull();
     }
@@ -206,7 +206,7 @@ class UserControllerIT {
 
         resultActions.andExpect(status().isForbidden());
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError response = TestUtils.readJson(content, new TypeReference<>() { });
+        ResponseMessage response = TestUtils.readJson(content, new TypeReference<>() { });
 
         assertThat(response).isNotNull();
         assertThat(userRepository.findAll().get(0).getAbout()).isNull();

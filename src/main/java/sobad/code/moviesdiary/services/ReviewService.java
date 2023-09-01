@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sobad.code.moviesdiary.dtos.MessageDto;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.review.ReviewDto;
 import sobad.code.moviesdiary.dtos.review.ReviewDtoRequest;
 import sobad.code.moviesdiary.dtos.pages.ReviewPages;
@@ -142,7 +142,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public MessageDto deleteReview(Long reviewId) {
+    public ResponseMessage deleteReview(Long reviewId) {
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Review review = reviewRepository.findById(reviewId)
@@ -154,7 +154,7 @@ public class ReviewService {
             throw new CustomAccessDeniedException("Вы не можете удалить ревью другого пользователя.");
         }
         reviewRepository.deleteById(reviewId);
-        return new MessageDto(200, "Ревью успешно удалено.", Date.from(Instant.now()).toString());
+        return new ResponseMessage(200, "Ревью успешно удалено.", Date.from(Instant.now()).toString());
     }
     @Transactional
     public Double getAverageReviewRatingById(Long id) {

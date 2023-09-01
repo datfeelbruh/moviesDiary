@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import sobad.code.moviesdiary.ImageUtils;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.user.UserDtoResponse;
-import sobad.code.moviesdiary.exceptions.AppError;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class ImageController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )

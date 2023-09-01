@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import sobad.code.moviesdiary.ConfigForTests;
-import sobad.code.moviesdiary.dtos.MessageDto;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.ResetPasswordDto;
 import sobad.code.moviesdiary.dtos.tokens.ResetPasswordTokenDto;
 import sobad.code.moviesdiary.entities.User;
@@ -90,9 +90,9 @@ class ForgotPasswordControllerIT {
 
         ResultActions updateResult = mockMvc.perform(updatePassword).andExpect(status().isOk());
         String updateContent = updateResult.andReturn().getResponse().getContentAsString(UTF_8);
-        MessageDto messageDto = TestUtils.readJson(updateContent, new TypeReference<>() { });
+        ResponseMessage responseMessage = TestUtils.readJson(updateContent, new TypeReference<>() { });
 
-        assertThat(messageDto).isNotNull();
+        assertThat(responseMessage).isNotNull();
         assertThat(userRepository.findAll().get(0).getPassword()).isNotEqualTo(user.getPassword());
     }
 }

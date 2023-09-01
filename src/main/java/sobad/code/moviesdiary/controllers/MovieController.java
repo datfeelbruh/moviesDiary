@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,15 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sobad.code.moviesdiary.dtos.movie.MovieDto;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
+import sobad.code.moviesdiary.dtos.pages.FavoritesMoviesPage;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
 import sobad.code.moviesdiary.dtos.pages.PageDto;
 import sobad.code.moviesdiary.dtos.pages.UserMoviesPage;
-import sobad.code.moviesdiary.entities.Movie;
-import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.services.MovieService;
 
 import java.util.List;
@@ -64,7 +62,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
@@ -103,7 +101,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
@@ -139,7 +137,7 @@ public class MovieController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
         )
@@ -165,27 +163,44 @@ public class MovieController {
             )
     })
     @GetMapping(value = MOVIE_CONTROLLER_PATH + "/favorites")
-    public ResponseEntity<List<MovieCard>> getFavorites(
+    public ResponseEntity<FavoritesMoviesPage> getFavorites(
             @RequestParam
             @Parameter(description = "ID пользователя", example = "1") Long userId,
             @RequestParam(required = false, value = "page", defaultValue = "1")
             @Parameter(description = "Страница выборки.") Integer page,
             @RequestParam(required = false, value = "limit", defaultValue = "10")
             @Parameter(description = "Количество элементов на странице.") Integer limit) {
-        List<MovieCard> movies = movieService.getFavorites(userId, page, limit);
+        FavoritesMoviesPage movies = movieService.getFavorites(userId, page, limit);
         return new ResponseEntity<>(movies, OK);
     }
 
     @Operation(summary = "Удалить фильм из избранного")
     @ApiResponses(value = {
         @ApiResponse(
-            responseCode = "200"
-        )
+            responseCode = "200",
+            description = "Фильм с таким ID удален из избранного",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ResponseMessage.class)
+                        )
+                }
+            ),
+        @ApiResponse(
+            responseCode = "422",
+            description = "Фильм с таким ID не найден",
+            content = {
+                @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(implementation = ResponseMessage.class)
+                        )
+                }
+            )
     })
     @DeleteMapping(value = MOVIE_CONTROLLER_PATH + "/favorites")
-    public void deleteFromFavorite(@RequestParam
+    public ResponseEntity<ResponseMessage> deleteFromFavorite(@RequestParam
                                    @Parameter(description = "ID фильма", example = "1") Long movieId) {
-         movieService.deleteFromFavorites(movieId);
+         return new ResponseEntity<>(movieService.deleteFromFavorites(movieId), OK);
     }
 
     @Operation(summary = "Универсальный поиск фильмов", description =
