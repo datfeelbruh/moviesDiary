@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.movie.MovieDto;
 import sobad.code.moviesdiary.dtos.movie.PopularMovieDto;
 import sobad.code.moviesdiary.dtos.movie.MovieCard;
 import sobad.code.moviesdiary.dtos.movie.MovieTitlesId;
+import sobad.code.moviesdiary.dtos.pages.FavoritesMoviesPage;
 import sobad.code.moviesdiary.dtos.pages.MoviePages;
 import sobad.code.moviesdiary.dtos.pages.MoviePagesShort;
 import sobad.code.moviesdiary.dtos.movie.UserMovie;
@@ -19,20 +23,19 @@ import sobad.code.moviesdiary.entities.User;
 import sobad.code.moviesdiary.exceptions.entiry_exceptions.EntityNotFoundException;
 import sobad.code.moviesdiary.mappers.MovieMapper;
 import sobad.code.moviesdiary.mappers.PageMapper;
-import sobad.code.moviesdiary.mappers.entity_serializers.MovieDtoSerializer;
 import sobad.code.moviesdiary.mappers.entity_serializers.MovieSerializer;
 import sobad.code.moviesdiary.repositories.MovieRepository;
 import sobad.code.moviesdiary.repositories.MovieCustomRepositoryImpl;
 import sobad.code.moviesdiary.repositories.ReviewCustomRepositoryImpl;
-import sobad.code.moviesdiary.repositories.UserRepository;
 import sobad.code.moviesdiary.repositories.filters.GenreFilter;
-import sobad.code.moviesdiary.repositories.filters.TitleFilter;
 import sobad.code.moviesdiary.repositories.filters.UserIdFilter;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -57,48 +60,61 @@ public class MovieService {
         user.getFavorites().add(movie);
         userService.updateUser(user);
 
-        return movieMapper.toMovieCard(movie);
+        return movieMapper.toMovieCard(movie, user.getId());
     }
     @Transactional
-    public List<MovieCard> getFavorites(Long userId, Integer page, Integer limit) {
+    public FavoritesMoviesPage getFavorites(Long userId, Integer page, Integer limit) {
         PageRequest pageRequest = PageRequest.of(page - 1, limit);
-        Page<Movie> movies = userService.getUserFavorites(userId, pageRequest);
+        Page<Movie> moviesPage = userService.getUserFavorites(userId, pageRequest);
 
-        return movies.getContent().stream()
-                .map(movieMapper::toMovieCard)
+        List<MovieCard> movies = moviesPage.getContent().stream()
+                .map(e -> movieMapper.toMovieCard(e, userId))
                 .toList();
+
+        FavoritesMoviesPage moviePages = new FavoritesMoviesPage(movies);
+        moviePages.setPage(page);
+        moviePages.setPages(moviesPage.getTotalPages());
+        moviePages.setTotal(moviesPage.getTotalElements());
+        moviePages.setLimit(limit);
+
+        return moviePages;
     }
-    public void deleteFromFavorites(Long movieId) {
+
+    public ResponseMessage deleteFromFavorites(Long movieId) {
         User user = userService.getCurrentUser();
-        List<Movie> updatedFavorites = user.getFavorites().stream()
+        Set<Movie> updatedFavorites = user.getFavorites().stream()
                 .filter(e -> !e.getId().equals(movieId))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         user.setFavorites(updatedFavorites);
         userService.updateUser(user);
+
+        return ResponseMessage.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(String.format("Фильм с ID: '%s' успешно удален из избранного.", movieId))
+                .timestamp(Instant.now().toString())
+                .build();
     }
 
     public MovieCard getMovieById(Long id, boolean findKp) {
+        User user = userService.getCurrentUser();
         Optional<Movie> movieInDb =  movieRepository.findById(id);
         if (findKp && movieInDb.isEmpty()) {
             MoviePages kpMovies = externalApiService.findMovieById(id);
             Movie movie = movieSerializer.apply(kpMovies.getMovies().get(0));
             movieRepository.save(movie);
-            return movieMapper.toMovieCard(movie);
+            return movieMapper.toMovieCard(movie, user.getId());
         }
         Movie movie = movieInDb.orElseThrow(() ->
                 new EntityNotFoundException(String.format("Фильм с данным ID: '%s' не найден!", id)));
 
-        return movieMapper.toMovieCard(movie);
+        return movieMapper.toMovieCard(movie, user.getId());
     }
 
     @Transactional
     public MoviePages getMoviesByName(String name, Boolean findOnKp, Integer page, Integer limit) {
-        log.info("ФЛАГ findKpOn = " + findOnKp.toString());
-        log.info("ЗАШЕЛ В СЕРВИС РАСШИРЕННОГО ПОИСКА");
         if (Boolean.TRUE.equals(findOnKp)) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
-            log.info("ИЩУ НА КП В МУВИ СЕРВИС РАСШИРЕННЫЙ ПОИСК");
             List<Movie> movies = kpMovies.getMovies().stream()
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
@@ -116,8 +132,6 @@ public class MovieService {
 
     @Transactional
     public MoviePagesShort getMoviesByNameShortInfo(String name, Boolean findOnKp, Integer page, Integer limit) {
-        log.info("ФЛАГ findKpOn = " + findOnKp.toString());
-        log.info("ЗАШЕЛ В СЕРВИС КРАТКОГО ПОИСКА");
         if (Boolean.TRUE.equals(findOnKp)) {
             MoviePages kpMovies = externalApiService.findMovieByName(name, page, limit);
 
@@ -125,7 +139,6 @@ public class MovieService {
                     .filter(e -> movieRepository.findById(e.getId()).isEmpty())
                     .map(movieSerializer)
                     .toList();
-            log.info("ИЩУ НА КП В МУВИ СЕРВИС КРАТКИЙ ПОИСК");
             movieRepository.saveAll(movies);
             return pageMapper.buildMoviePageShortFromKp(limit, page, kpMovies, movies);
         }

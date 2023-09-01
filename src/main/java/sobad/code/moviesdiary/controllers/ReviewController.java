@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,12 +17,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import sobad.code.moviesdiary.dtos.MessageDto;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.review.ReviewDto;
 import sobad.code.moviesdiary.dtos.review.ReviewDtoRequest;
 import sobad.code.moviesdiary.dtos.pages.ReviewPages;
 import sobad.code.moviesdiary.dtos.review.ReviewDtoUpdateRequest;
-import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.services.ReviewService;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -60,7 +58,7 @@ public class ReviewController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class))
+                        schema = @Schema(implementation = ResponseMessage.class))
                 }
             )
     })
@@ -94,7 +92,7 @@ public class ReviewController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class))
+                        schema = @Schema(implementation = ResponseMessage.class))
             }
             ),
     })
@@ -141,7 +139,7 @@ public class ReviewController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class))
+                        schema = @Schema(implementation = ResponseMessage.class))
             }
             )
     })
@@ -163,12 +161,12 @@ public class ReviewController {
                 content = {
                     @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = AppError.class))
+                            schema = @Schema(implementation = ResponseMessage.class))
                     }
             )
     })
     @DeleteMapping(value = REVIEW_CONTROLLER_PATH + "/{reviewId}")
-    public ResponseEntity<MessageDto> deleteReview(@PathVariable(value = "reviewId")
+    public ResponseEntity<ResponseMessage> deleteReview(@PathVariable(value = "reviewId")
                                                        @Parameter(description = "ID ревью", example = "1")
                                                        Long reviewId) {
         return new ResponseEntity<>(reviewService.deleteReview(reviewId), OK);

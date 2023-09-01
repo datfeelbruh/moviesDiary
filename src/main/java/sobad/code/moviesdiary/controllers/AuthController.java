@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import sobad.code.moviesdiary.exceptions.AppError;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.user.UserDtoLoginRequest;
 
 import sobad.code.moviesdiary.dtos.authentication.AuthTokenDtoResponse;
@@ -53,7 +53,7 @@ public class AuthController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
@@ -83,7 +83,7 @@ public class AuthController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )

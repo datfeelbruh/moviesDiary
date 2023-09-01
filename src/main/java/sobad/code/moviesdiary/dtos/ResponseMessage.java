@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MessageDto {
+public class ResponseMessage {
     private int statusCode;
     private String message;
     private String timestamp;

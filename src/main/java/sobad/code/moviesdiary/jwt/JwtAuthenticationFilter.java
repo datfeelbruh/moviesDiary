@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import sobad.code.moviesdiary.exceptions.AppError;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.repositories.DeactivatedTokenRepository;
 import sobad.code.moviesdiary.services.UserService;
 
@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {
-                AppError appError = new AppError(
+                ResponseMessage appError = new ResponseMessage(
                         FORBIDDEN.value(),
                         "Токен не валиден",
                         Instant.now().toString());

@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 import sobad.code.moviesdiary.ConfigForTests;
-import sobad.code.moviesdiary.exceptions.AppError;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.user.UserDtoLoginRequest;
 import sobad.code.moviesdiary.dtos.authentication.AuthTokenDtoResponse;
 import sobad.code.moviesdiary.repositories.DeactivatedTokenRepository;
@@ -95,7 +95,7 @@ class AuthControllerIT {
         resultActions.andExpect(status().isUnauthorized());
 
         String content = resultActions.andReturn().getResponse().getContentAsString(UTF_8);
-        AppError appError = TestUtils.readJson(content, new TypeReference<>() { });
+        ResponseMessage appError = TestUtils.readJson(content, new TypeReference<>() { });
 
 
         assertThat(appError.getStatusCode()).isEqualTo(UNAUTHORIZED.value());

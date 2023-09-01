@@ -8,6 +8,7 @@ import sobad.code.moviesdiary.dtos.movie.UserMovie;
 import sobad.code.moviesdiary.dtos.review.ReviewDto;
 import sobad.code.moviesdiary.entities.Movie;
 import sobad.code.moviesdiary.services.ReviewService;
+import sobad.code.moviesdiary.services.UserService;
 
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieMapper {
     private final ReviewService reviewService;
+    private final UserService userService;
 
     public UserMovie toUserMovieDto(Movie movie, Long userId) {
         ReviewDto reviewByUser = reviewService.getReviewByUserIdAndMovieId(userId, movie.getId());
@@ -35,7 +37,7 @@ public class MovieMapper {
                 .build();
     }
 
-    public MovieCard toMovieCard(Movie movie) {
+    public MovieCard toMovieCard(Movie movie, Long userId) {
         return MovieCard.builder()
                 .id(movie.getId())
                 .description(movie.getDescription())
@@ -48,6 +50,7 @@ public class MovieMapper {
                         .collect(Collectors.toSet()))
                 .imdbRating(movie.getImdbRating())
                 .kpRating(movie.getKpRating())
+                .isFavorite(userService.isFavoriteMovieForCurrentUser(userId, movie.getId()))
                 .build();
     }
 }

@@ -1,25 +1,22 @@
 package sobad.code.moviesdiary.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.user.UserDtoLoginRequest;
 import sobad.code.moviesdiary.dtos.authentication.AuthTokenDtoResponse;
 import sobad.code.moviesdiary.entities.DeactivatedToken;
 import sobad.code.moviesdiary.entities.User;
-import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.exceptions.authentication_exceptions.BearerHeaderNotFound;
 import sobad.code.moviesdiary.exceptions.authentication_exceptions.DeactivatedTokenException;
 import sobad.code.moviesdiary.exceptions.authentication_exceptions.InvalidJwtSubject;
@@ -34,12 +31,9 @@ import sobad.code.moviesdiary.repositories.TokenRepository;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -138,7 +132,7 @@ public class AuthService {
             authentication.setAuthenticated(false);
             SecurityContextHolder.clearContext();
 
-            AppError appError = new AppError(
+            ResponseMessage appError = new ResponseMessage(
                     FORBIDDEN.value(),
                     "Вы успешно вышли из профиля",
                     Instant.now().toString());

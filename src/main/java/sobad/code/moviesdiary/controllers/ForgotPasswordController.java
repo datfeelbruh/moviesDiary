@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import sobad.code.moviesdiary.dtos.MessageDto;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.ResetPasswordDto;
 import sobad.code.moviesdiary.dtos.tokens.ResetPasswordTokenDto;
-import sobad.code.moviesdiary.exceptions.AppError;
 import sobad.code.moviesdiary.services.ResetPasswordService;
 import sobad.code.moviesdiary.services.UserService;
 
@@ -55,7 +54,7 @@ public class ForgotPasswordController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
@@ -85,14 +84,14 @@ public class ForgotPasswordController {
             content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = AppError.class)
+                        schema = @Schema(implementation = ResponseMessage.class)
                         )
                 }
             )
     })
     @PostMapping(value = API_FORGOT_PASSWORD_RESET)
-    public ResponseEntity<MessageDto> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto,
-                                                    @RequestParam
+    public ResponseEntity<ResponseMessage> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto,
+                                                         @RequestParam
                                                     @Parameter(description = "Токен смены пароля.") String token) {
         return ResponseEntity.ok(resetPasswordService.updatePassword(resetPasswordDto, token));
     }

@@ -22,7 +22,9 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -55,5 +57,5 @@ public class User extends BaseModel {
     )
     private Collection<Role> roles;
     @OneToMany
-    private List<Movie> favorites = new ArrayList<>();
+    private Set<Movie> favorites = new HashSet<>();
 }

@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sobad.code.moviesdiary.dtos.MessageDto;
+import sobad.code.moviesdiary.dtos.ResponseMessage;
 import sobad.code.moviesdiary.dtos.ResetPasswordDto;
 import sobad.code.moviesdiary.dtos.tokens.ResetPasswordTokenDto;
 import sobad.code.moviesdiary.entities.ResetPasswordToken;
@@ -55,7 +55,7 @@ public class ResetPasswordService {
     }
 
     @Transactional
-    public MessageDto updatePassword(ResetPasswordDto resetPasswordDto, String token) {
+    public ResponseMessage updatePassword(ResetPasswordDto resetPasswordDto, String token) {
         ResetPasswordToken resetPasswordToken = resetPasswordTokenRepository.findByToken(token).orElseThrow();
         if (resetPasswordToken.getExpiredAt().before(Date.from(Instant.now()))) {
             throw new PasswordException("Истек токен для ресета пароля. "
@@ -67,7 +67,7 @@ public class ResetPasswordService {
         user.setPassword(passwordEncoder.encode(resetPasswordDto.getPassword()));
         userRepository.save(user);
         resetPasswordTokenRepository.delete(resetPasswordToken);
-        return new MessageDto(200, "Пароль успешно изменен", Date.from(Instant.now()).toString());
+        return new ResponseMessage(200, "Пароль успешно изменен", Date.from(Instant.now()).toString());
     }
 
     private void sendResetPasswordEmail(String url, String email)
