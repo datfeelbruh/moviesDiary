@@ -34,7 +34,6 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
-@ToString
 public class User extends BaseModel {
     @Column(name = "email", unique = true, nullable = false)
     @Email(message = "Email должен соотвестновать паттерну *@*.*")
@@ -50,7 +49,6 @@ public class User extends BaseModel {
     @Column(name = "password", nullable = false)
     @NotBlank(message = "Введите пароль чтобы зарегистрироваться")
     private String password;
-    @ToString.Exclude
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",

@@ -70,18 +70,7 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<User> users = userRepository.findAll();
-        log.info(users.toString());
-        users
-                .forEach(e -> log.info(e.getUsername() + ":" + e.getEmail()));
-        Optional<User> user1 = users.stream()
-                        .filter(e -> e.getUsername().equals(username + " "))
-                        .findFirst();
-        log.info(String.valueOf(user1.isPresent()));
-        log.info(username);
         User user = findByUsername(username);
-//        log.info(user.getUsername());
-//        log.info(user.getPassword());
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
