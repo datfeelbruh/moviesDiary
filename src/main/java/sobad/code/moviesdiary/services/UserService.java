@@ -75,7 +75,9 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<User> users = userRepository.findAll();
-        System.out.println(users);
+        log.info(users.toString());
+        users
+                .forEach(e -> log.info(e.getUsername()));
         Optional<User> user1 = users.stream()
                         .filter(e -> e.getUsername().equals(username))
                         .findFirst();
