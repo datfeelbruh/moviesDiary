@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService {
         List<User> users = userRepository.findAll();
         log.info(users.toString());
         users
-                .forEach(e -> log.info(e.getUsername()));
+                .forEach(e -> log.info(e.getUsername() + ":" + e.getEmail()));
         Optional<User> user1 = users.stream()
                         .filter(e -> e.getUsername().equals(username))
                         .findFirst();
