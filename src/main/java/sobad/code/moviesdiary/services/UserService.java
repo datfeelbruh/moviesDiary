@@ -48,6 +48,10 @@ public class UserService implements UserDetailsService {
 
 
     public User findByUsername(String username) {
+        log.info(username);
+        User user = userRepository.findByUsername(username).orElse(null);
+        log.info(user.getPassword());
+        log.info(user.getUsername());
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("Пользователь с таким именем '%s' не найден", username)
         ));
@@ -71,7 +75,9 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
-
+        log.info(user.getUsername());
+        log.info(user.getPassword());
+        log.info(username);
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),

@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,7 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RestControllerAdvice
 @Slf4j
 public class CustomAdvice {
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseMessage> runtimeException(RuntimeException e) {
         log.error(e.getMessage(), e);
