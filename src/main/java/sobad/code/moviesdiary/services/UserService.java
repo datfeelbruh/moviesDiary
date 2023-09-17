@@ -48,10 +48,6 @@ public class UserService implements UserDetailsService {
 
 
     public User findByUsername(String username) {
-        log.info(username);
-        User user = userRepository.findByUsername(username).orElse(null);
-        log.info(user.getPassword());
-        log.info(user.getUsername());
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("Пользователь с таким именем '%s' не найден", username)
         ));
@@ -79,7 +75,7 @@ public class UserService implements UserDetailsService {
         users
                 .forEach(e -> log.info(e.getUsername() + ":" + e.getEmail()));
         Optional<User> user1 = users.stream()
-                        .filter(e -> e.getUsername().equals(username))
+                        .filter(e -> e.getUsername().equals(username + " "))
                         .findFirst();
         log.info(String.valueOf(user1.isPresent()));
         log.info(username);
