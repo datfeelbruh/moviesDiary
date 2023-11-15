@@ -21,6 +21,7 @@ public class ReviewCustomRepositoryImpl {
                         SELECT r.movie as movie, COUNT(r.movie) as count
                         FROM Review r
                         GROUP BY r.movie
+                        ORDER BY count DESC
                         """, Tuple.class)
                 .setMaxResults(count)
                 .getResultList()
@@ -34,7 +35,7 @@ public class ReviewCustomRepositoryImpl {
                             .reviewCount((Long) tuple.get("count"))
                             .build();
                 })
-                .sorted(Comparator.comparing(PopularMovieDto::getReviewCount))
+//                .sorted(Comparator.comparing(PopularMovieDto::getReviewCount))
                 .toList();
     }
 }
